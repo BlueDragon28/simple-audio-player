@@ -14,4 +14,8 @@ ApplicationWindow {
             Action { text: qsTr("Quit"); onTriggered: root.close(); }
         }
     }
+
+    Content {
+        anchors.fill: parent
+    }
 }
