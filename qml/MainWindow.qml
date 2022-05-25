@@ -15,7 +15,17 @@ ApplicationWindow {
         }
     }
 
+    // Main content of the window.
     Content {
         anchors.fill: parent
+    }
+
+    // Player control.
+    footer: ToolBar {
+        height: 35
+
+        PlayerControl {
+            anchors.fill: parent
+        }
     }
 }
