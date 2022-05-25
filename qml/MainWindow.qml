@@ -7,5 +7,11 @@ ApplicationWindow {
     visibility: Window.Maximized
     visible: true
 
-    
+    // Menu bar at the top of the program.
+    menuBar: MenuBar {
+        Menu {
+            title: qsTr("&File")
+            Action { text: qsTr("Quit"); onTriggered: root.close(); }
+        }
+    }
 }
