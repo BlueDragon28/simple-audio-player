@@ -7,6 +7,9 @@ import SimpleAudioPlayer 1.0
 Item {
     id: root
 
+    // Store the type of the selected item.
+    property int sectionType: sectionList.model.get(sectionList.currentIndex).type
+
     Rectangle {
         anchors.fill: parent
         color: "white"

@@ -22,6 +22,13 @@ Item {
             id: content
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            /*
+            Bind the sectionType of sidePanel to this one.
+            Every time the sectionType of sidePanel will change,
+            the content of AudioFile will also change.
+            */
+            sectionType: sidePanel.sectionType
         }
     }
 }

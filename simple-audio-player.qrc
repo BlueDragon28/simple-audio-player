@@ -5,5 +5,7 @@
         <file>qml/SidePanel.qml</file>
         <file>qml/AudioFileContent.qml</file>
         <file>qml/PlayerControl.qml</file>
+        <file>qml/FileSystemView.qml</file>
+        <file>qml/MusicContent.qml</file>
     </qresource>
 </RCC>
