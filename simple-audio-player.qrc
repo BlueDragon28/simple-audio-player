@@ -8,5 +8,6 @@
         <file>qml/FileSystemView.qml</file>
         <file>qml/MusicContent.qml</file>
         <file>qml/FolderPathLineEdit.qml</file>
+        <file>qml/FileSystemRowContent.qml</file>
     </qresource>
 </RCC>

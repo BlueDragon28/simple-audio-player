@@ -63,9 +63,13 @@ Item {
             }
         }
 
-        Label {
-            anchors.centerIn: parent
-            text: "File System"
+        // The content of the file system is displayed here.
+        FileSystemRowContent {
+            id: fileSystemContent
+            anchors.top: topBar.bottom
+            anchors.left: parent.left
+            width: parent.width
+            height: parent.height - topBar.height
         }
     }
 }
