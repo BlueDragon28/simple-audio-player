@@ -51,6 +51,13 @@ Item {
                     id: folderPath
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
+                    /*
+                    The path displayed is synchronized with the path of fileSystemContent.
+                    Every time the path of folderPath is changing, the path of fileSystemContent is changed too.
+                    */
+                    text: fileSystemContent.path
+                    onAccepted: fileSystemContent.updatePath()
                 }
 
                 // Go to the folder.
@@ -59,6 +66,8 @@ Item {
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     text: "s"
+
+                    onClicked: fileSystemContent.updatePath()
                 }
             }
         }
@@ -68,8 +77,14 @@ Item {
             id: fileSystemContent
             anchors.top: topBar.bottom
             anchors.left: parent.left
-            width: parent.width
+            anchors.leftMargin: 4
+            width: parent.width - 8
             height: parent.height - topBar.height
+
+            // This function update the path of the fileSystemContent.
+            function updatePath() {
+                path = folderPath.text
+            }
         }
     }
 }

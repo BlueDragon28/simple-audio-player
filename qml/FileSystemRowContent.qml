@@ -10,8 +10,30 @@ The user can start a music from there.
 Item {
     id: root
 
-    Label {
-        text: "super"
-        anchors.centerIn: parent
+    property alias path: fileSystemModel.path
+
+    ListView {
+        id: fileSystemView
+        anchors.fill: parent
+        clip: true
+
+        /*
+        This model store the directories and files list inside a folder.
+        */
+        model: FileSystemModel {
+            id: fileSystemModel
+            path: "/"
+        }
+
+        delegate: fileSystemDelegate
+        spacing: 5
+    }
+
+    Component {
+        id: fileSystemDelegate
+
+        Label {
+            text: name
+        }
     }
 }
