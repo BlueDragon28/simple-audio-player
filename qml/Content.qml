@@ -4,6 +4,8 @@ import QtQuick.Layouts 6.2
 
 /*
 This is the content of the MainWindow.
+This is the item displayed inside the main window.
+Its displaying a side panel and an audio content view.
 */
 Item {
     id: root

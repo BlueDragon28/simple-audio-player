@@ -2,6 +2,10 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 
+/*
+The main window of the application.
+The basic content (menu, toolbar and the center content are displayed).
+*/
 ApplicationWindow {
     id: root
     visibility: Window.Maximized
