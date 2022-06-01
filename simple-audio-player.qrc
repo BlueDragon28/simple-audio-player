@@ -7,5 +7,6 @@
         <file>qml/PlayerControl.qml</file>
         <file>qml/FileSystemView.qml</file>
         <file>qml/MusicContent.qml</file>
+        <file>qml/FolderPathLineEdit.qml</file>
     </qresource>
 </RCC>

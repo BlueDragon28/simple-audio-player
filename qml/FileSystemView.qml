@@ -47,8 +47,8 @@ Item {
                     text: ">"
                 }
 
-                Rectangle {
-                    color: "white"
+                FolderPathLineEdit {
+                    id: folderPath
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
