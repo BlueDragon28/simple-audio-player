@@ -14,6 +14,55 @@ Item {
         anchors.fill: parent
         color: "white"
 
+        // This toolbar hold the button and the folder location to navigate inside the file system.
+        ToolBar {
+            id: topBar
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+            width: parent.width
+            height: rowLayout.height + 8
+
+            RowLayout {
+                id: rowLayout
+                anchors.top: parent.top
+                anchors.left: parent.left
+                width: parent.width
+                anchors.topMargin: 4
+                anchors.bottomMargin: 4
+
+                // Previous folder.
+                Button {
+                    id: prevBtn
+                    Layout.fillWidth: false
+                    Layout.preferredWidth: height
+                    text: "<"
+                }
+
+                // Return back to the last next folder if possible.
+                Button {
+                    id: nextBtn
+                    Layout.fillWidth: false
+                    Layout.preferredWidth: height
+                    text: ">"
+                }
+
+                Rectangle {
+                    color: "white"
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+
+                // Go to the folder.
+                Button {
+                    id: searchBtn
+                    Layout.fillWidth: false
+                    Layout.preferredWidth: height
+                    text: "s"
+                }
+            }
+        }
+
         Label {
             anchors.centerIn: parent
             text: "File System"
