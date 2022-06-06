@@ -68,7 +68,11 @@ void FileSystemModel::updateList()
         beginRemoveRows(QModelIndex(), 0, rowCount());
         endRemoveRows();
 
-        m_fileList = m_dir.entryInfoList();
+        /*
+        Get the list of folders and files inside the directory width the directory displayed first and
+        without the . and .. directories.
+        */
+        m_fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
 
         beginInsertRows(QModelIndex(), 0, m_fileList.size());
         endInsertRows();
