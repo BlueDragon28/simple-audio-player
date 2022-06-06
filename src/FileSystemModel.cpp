@@ -86,7 +86,7 @@ Get the path of the folder displayed.
 */
 QString FileSystemModel::path() const
 {
-    return m_dir.path();
+    return m_dir.absolutePath();
 }
 
 /*
