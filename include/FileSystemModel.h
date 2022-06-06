@@ -20,7 +20,8 @@ public:
     enum FileSystemRole
     {
         NAME = Qt::UserRole+1,
-        FILE_PATH
+        FILE_PATH,
+        ABSOLUTE_FILE_PATH,
     };
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;

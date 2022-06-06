@@ -13,6 +13,7 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     QHash<int, QByteArray> roles;
     roles[NAME] = "name";
     roles[FILE_PATH] = "filePath";
+    roles[ABSOLUTE_FILE_PATH] = "absoluteFilePath";
     return roles;
 }
 
@@ -44,14 +45,15 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
     {
         if (role == NAME)
         {
-            //return fileName(this->index("/home/", 0));
-            //return fileName(index);
-            //return "test";
             return m_fileList.at(index.row()).fileName();
         }
         else if (role == FILE_PATH)
         {
-            //return filePath(index);
+            return m_fileList.at(index.row()).filePath();
+        }
+        else if (role == ABSOLUTE_FILE_PATH)
+        {
+            return m_fileList.at(index.row()).absoluteFilePath();
         }
     }
 
