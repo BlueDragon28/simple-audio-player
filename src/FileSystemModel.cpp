@@ -14,6 +14,7 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     roles[NAME] = "name";
     roles[FILE_PATH] = "filePath";
     roles[ABSOLUTE_FILE_PATH] = "absoluteFilePath";
+    roles[IS_DIR] = "isDir";
     return roles;
 }
 
@@ -54,6 +55,15 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
         else if (role == ABSOLUTE_FILE_PATH)
         {
             return m_fileList.at(index.row()).absoluteFilePath();
+        }
+        /*
+        Is the item is a folder or a file.
+        This is necerrary to be able to known what to do
+        when the user select the item.
+        */
+        else if (role == IS_DIR)
+        {
+            return m_fileList.at(index.row()).isDir();
         }
     }
 

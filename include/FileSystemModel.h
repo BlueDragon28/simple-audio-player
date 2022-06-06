@@ -22,6 +22,7 @@ public:
         NAME = Qt::UserRole+1,
         FILE_PATH,
         ABSOLUTE_FILE_PATH,
+        IS_DIR,
     };
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
