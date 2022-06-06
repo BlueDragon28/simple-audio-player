@@ -42,7 +42,7 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.column() == 0 &&
         index.row() >= 0 && index.row() < rowCount() &&
-        (role == NAME || role == FILE_PATH))
+        (role == NAME || role == FILE_PATH || role == ABSOLUTE_FILE_PATH || role == IS_DIR))
     {
         if (role == NAME)
         {
