@@ -13,10 +13,17 @@ Item {
     property alias path: fileSystemModel.path
 
     /*
-    Move to the parent of the current directory
+    Move to the parent of the current directory.
     */
     function cdUp() {
         fileSystemModel.cdUp()
+    }
+
+    /*
+    Move to the last opened directory (if any).
+    */
+    function cdDown() {
+        fileSystemModel.cdDown()
     }
 
     ListView {

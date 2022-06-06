@@ -111,6 +111,7 @@ void FileSystemModel::setPath(const QString& path)
         if (dir.isReadable())
         {
             m_dir = dir;
+            m_lastDirsList.clear();
             emit pathChanged();
         }
     }
@@ -121,8 +122,20 @@ Move to the children directory of the current directory.
 */
 void FileSystemModel::cd(const QString& dir)
 {
+    QString curDirName = m_dir.dirName();
     if (m_dir.cd(dir))
     {
+        // If whe move to the parent directory, store the name of the current dir inside the m_lastDirsList list.
+        if (dir == "..")
+        {
+            m_lastDirsList.append(curDirName);
+        }
+        // Otherwise, clear the m_lastDirsList list.
+        else
+        {
+            m_lastDirsList.clear();
+        }
+
         updateList();
         emit pathChanged();
     }
@@ -134,4 +147,20 @@ Move to the parent directory of the current directory.
 void FileSystemModel::cdUp()
 {
     cd("..");
+}
+
+/*
+Move to the previously opened directory (if any).
+*/
+void FileSystemModel::cdDown()
+{
+    if (!m_lastDirsList.isEmpty())
+    {
+        if (m_dir.cd(*m_lastDirsList.crbegin()))
+        {
+            m_lastDirsList.removeLast();
+            updateList();
+            emit pathChanged();
+        }
+    }
 }

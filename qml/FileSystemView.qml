@@ -48,6 +48,9 @@ Item {
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     text: ">"
+
+                    // When clicked, move the FileSystemRowContent to the last opened directory (if any).
+                    onClicked: fileSystemContent.cdDown()
                 }
 
                 FolderPathLineEdit {

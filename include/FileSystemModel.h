@@ -59,6 +59,11 @@ public slots:
     */
     void cdUp();
 
+    /*
+    Move to the previously opened directory (if any).
+    */
+    void cdDown();
+
 private:
     /*
     When the directory path of the file system change, updating the list.
@@ -67,6 +72,9 @@ private:
 
     QDir m_dir;
     QFileInfoList m_fileList;
+
+    // This list store the list of all the last opened directories.
+    QStringList m_lastDirsList;
 };
 
 #endif // SIMPLEAUDIOLIBRARY_FILESYSTEMMODEL_H_
