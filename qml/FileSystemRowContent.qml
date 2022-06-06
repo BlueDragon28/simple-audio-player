@@ -12,6 +12,13 @@ Item {
 
     property alias path: fileSystemModel.path
 
+    /*
+    Move to the parent of the current directory
+    */
+    function cdUp() {
+        fileSystemModel.cdUp()
+    }
+
     ListView {
         id: fileSystemView
         anchors.fill: parent

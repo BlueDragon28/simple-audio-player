@@ -54,6 +54,11 @@ public slots:
     */
     void cd(const QString& dir);
 
+    /*
+    Move to the parent directory of the current directory.
+    */
+    void cdUp();
+
 private:
     /*
     When the directory path of the file system change, updating the list.

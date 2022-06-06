@@ -127,3 +127,11 @@ void FileSystemModel::cd(const QString& dir)
         emit pathChanged();
     }
 }
+
+/*
+Move to the parent directory of the current directory.
+*/
+void FileSystemModel::cdUp()
+{
+    cd("..");
+}

@@ -37,6 +37,9 @@ Item {
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     text: "<"
+
+                    // When clicked, move the FileSystemRowContent to the parent directory.
+                    onClicked: fileSystemContent.cdUp()
                 }
 
                 // Return back to the last next folder if possible.
