@@ -115,3 +115,15 @@ void FileSystemModel::setPath(const QString& path)
         }
     }
 }
+
+/*
+Move to the children directory of the current directory.
+*/
+void FileSystemModel::cd(const QString& dir)
+{
+    if (m_dir.cd(dir))
+    {
+        updateList();
+        emit pathChanged();
+    }
+}

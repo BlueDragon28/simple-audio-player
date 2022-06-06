@@ -51,6 +51,16 @@ Item {
                 
                 // When clicked, change the current index of the fileSystemView
                 onClicked: fileSystemView.currentIndex = index
+
+                /*
+                When the user double click on an item, if its a directory, move the view inside
+                this directory.
+                */
+                onDoubleClicked: {
+                    if (isDir) {
+                        fileSystemModel.cd(name)
+                    }
+                }
             }
         }
     }

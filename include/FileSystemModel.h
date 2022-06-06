@@ -49,6 +49,11 @@ signals:
 public slots:
     QVariantMap get(int index) const;
 
+    /*
+    Move to the children directory of the current directory.
+    */
+    void cd(const QString& dir);
+
 private:
     /*
     When the directory path of the file system change, updating the list.
