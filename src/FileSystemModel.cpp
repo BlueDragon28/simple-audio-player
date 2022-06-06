@@ -136,7 +136,6 @@ void FileSystemModel::cd(const QString& dir)
             m_lastDirsList.clear();
         }
 
-        updateList();
         emit pathChanged();
     }
 }
@@ -159,7 +158,6 @@ void FileSystemModel::cdDown()
         if (m_dir.cd(*m_lastDirsList.crbegin()))
         {
             m_lastDirsList.removeLast();
-            updateList();
             emit pathChanged();
         }
     }
