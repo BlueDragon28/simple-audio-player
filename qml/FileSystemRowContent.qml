@@ -26,6 +26,15 @@ Item {
         }
 
         delegate: fileSystemDelegate
+        
+        // Highlith the selected item by the user.
+        highlight: Rectangle {
+            color: "lightsteelblue"
+        }
+        // The time needed for the highlight to resize to the size of the delegate. 
+        highlightResizeDuration: 500
+        highlightMoveDuration: 150
+
         spacing: 5
     }
 
@@ -33,7 +42,16 @@ Item {
         id: fileSystemDelegate
 
         Label {
+            width: fileSystemView.width
             text: name
+
+            // Mouse area to change the selection of the fileSystemView.
+            MouseArea {
+                anchors.fill: parent
+                
+                // When clicked, change the current index of the fileSystemView
+                onClicked: fileSystemView.currentIndex = index
+            }
         }
     }
 }
