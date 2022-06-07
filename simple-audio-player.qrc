@@ -9,5 +9,7 @@
         <file>qml/MusicContent.qml</file>
         <file>qml/FolderPathLineEdit.qml</file>
         <file>qml/FileSystemRowContent.qml</file>
+
+        <file>js/simple-audio-library.js</file>
     </qresource>
 </RCC>
