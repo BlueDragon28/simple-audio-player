@@ -11,11 +11,25 @@ Item {
 
     property alias enabled: btn.enabled
 
+    // This two functions change the text inside the btn.
+    function playing() {
+        btn.text = "| |"
+    }
+
+    function stopping() {
+        btn.text = ">"
+    }
+
+    signal clicked()
+
     Button {
         id: btn
         anchors.fill: parent
         enabled: false
 
         text: ">"
+
+        // When clicked, redirect the signal to the root item.
+        onClicked: root.clicked()
     }
 }
