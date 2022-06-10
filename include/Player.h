@@ -136,6 +136,11 @@ signals:
     */
     void streamStopping();
 
+    /*
+    Signal called when the is ready getter is changed.
+    */
+    void isReadyChanged(bool isReady);
+
 private:
     /*
     This methods are wrapped between the event system of the simple-audio-libray and Qt.
@@ -147,6 +152,7 @@ private:
     void salStreamPaused();
     void salStreamPlaying();
     void salStreamStopping();
+    void salIsReadyChanged(bool isReady);
 
     // Instance of SAL.
     SAL::AudioPlayer* m_player;

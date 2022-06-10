@@ -15,6 +15,7 @@ Player::Player(QObject* parent) :
     m_player->callback().addStreamPausedCallback(std::bind(&Player::salStreamPaused, this));
     m_player->callback().addStreamPlayingCallback(std::bind(&Player::salStreamPlaying, this));
     m_player->callback().addStreamStoppingCallback(std::bind(&Player::salStreamStopping, this));
+    m_player->callback().addIsReadyChangedCallback(std::bind(&Player::salIsReadyChanged, this, std::placeholders::_1));
 }
 
 /*
@@ -175,4 +176,9 @@ void Player::salStreamPlaying()
 void Player::salStreamStopping()
 {
     emit streamStopping();
+}
+
+void Player::salIsReadyChanged(bool isReady)
+{
+    emit isReadyChanged(isReady);
 }
