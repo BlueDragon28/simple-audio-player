@@ -40,37 +40,37 @@ public:
     /*
     Return true if simple-audio-library is initialized.
     */
-    Q_INVOKABLE bool isRunning();
+    Q_INVOKABLE bool isRunning() const;
 
     /*
     Return true if simple-audio-library is playing an audio file.
     */
-    Q_INVOKABLE bool isPlaying();
+    Q_INVOKABLE bool isPlaying() const;
 
     /*
     Is simple-audio-library is ready to play (or is playing) files.
     */
-    Q_INVOKABLE bool isReady();
+    Q_INVOKABLE bool isReady() const;
 
     /*
     Return current stream size.
     */
-    Q_INVOKABLE size_t streamSize(SizeType type = FRAMES);
+    Q_INVOKABLE size_t streamSize(SizeType type = FRAMES) const;
 
     /*
     Return current stream position.
     */
-    Q_INVOKABLE size_t streamPos(SizeType type = FRAMES);
+    Q_INVOKABLE size_t streamPos(SizeType type = FRAMES) const;
 
     /*
     Check if a file is readable by the simple-audio-library.
     */
-    Q_INVOKABLE int isReadable(const QString& filePath);
+    Q_INVOKABLE int isReadable(const QString& filePath) const;
 
     /*
     Return a list of strings of all the available files formats readable by the simple-audio-library.
     */
-    Q_INVOKABLE QList<QString> supportedFormats();
+    Q_INVOKABLE QList<QString> supportedFormats() const;
 
 public slots:
     /*

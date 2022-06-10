@@ -37,7 +37,7 @@ Player* Player::instance()
 /*
 Return true if simple-audio-library is initialized.
 */
-bool Player::isRunning()
+bool Player::isRunning() const
 {
     return m_player->isRunning();
 }
@@ -45,7 +45,7 @@ bool Player::isRunning()
 /*
 Return true if simple-audio-library is playing an audio file.
 */
-bool Player::isPlaying()
+bool Player::isPlaying() const
 {
     return m_player->isPlaying();
 }
@@ -53,7 +53,7 @@ bool Player::isPlaying()
 /*
 Is simple-audio-library is ready to play (or is playing) files.
 */
-bool Player::isReady()
+bool Player::isReady() const
 {
     return m_player->isReady();
 }
@@ -61,7 +61,7 @@ bool Player::isReady()
 /*
 Return current stream size.
 */
-size_t Player::streamSize(SizeType type)
+size_t Player::streamSize(SizeType type) const
 {
     if (type == FRAMES)
         return m_player->streamSizeInFrames();
@@ -72,7 +72,7 @@ size_t Player::streamSize(SizeType type)
 /*
 Return current stream position.
 */
-size_t Player::streamPos(SizeType type)
+size_t Player::streamPos(SizeType type) const
 {
     if (type == FRAMES)
         return m_player->streamPosInFrames();
@@ -83,7 +83,7 @@ size_t Player::streamPos(SizeType type)
 /*
 Check if a file is readable by the simple-audio-library.
 */
-int Player::isReadable(const QString& filePath)
+int Player::isReadable(const QString& filePath) const
 {
     return m_player->isReadable(filePath.toStdString());
 }
@@ -91,7 +91,7 @@ int Player::isReadable(const QString& filePath)
 /*
 Return a list of strings of all the available files formats readable by the simple-audio-library.
 */
-QList<QString> Player::supportedFormats()
+QList<QString> Player::supportedFormats() const
 {
     std::vector<std::string> stlList = m_player->supportedFormats();
     QList<QString> qtList(stlList.size());
