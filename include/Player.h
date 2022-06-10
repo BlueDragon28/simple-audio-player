@@ -62,6 +62,16 @@ public:
     */
     Q_INVOKABLE size_t streamPos(SizeType type = FRAMES);
 
+    /*
+    Check if a file is readable by the simple-audio-library.
+    */
+    Q_INVOKABLE int isReadable(const QString& filePath);
+
+    /*
+    Return a list of strings of all the available files formats readable by the simple-audio-library.
+    */
+    Q_INVOKABLE QList<QString> supportedFormats();
+
 public slots:
     /*
     Open an audio file.

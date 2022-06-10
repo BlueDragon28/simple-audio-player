@@ -81,6 +81,26 @@ size_t Player::streamPos(SizeType type)
 }
 
 /*
+Check if a file is readable by the simple-audio-library.
+*/
+int Player::isReadable(const QString& filePath)
+{
+    return m_player->isReadable(filePath.toStdString());
+}
+
+/*
+Return a list of strings of all the available files formats readable by the simple-audio-library.
+*/
+QList<QString> Player::supportedFormats()
+{
+    std::vector<std::string> stlList = m_player->supportedFormats();
+    QList<QString> qtList(stlList.size());
+    for (int i = 0; i < qtList.size(); i++)
+        qtList[i] = QString::fromStdString(stlList.at(i));
+    return qtList;
+}
+
+/*
 Open an audio file.
 */
 void Player::open(const QString& filePath)
