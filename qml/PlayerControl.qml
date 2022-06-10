@@ -11,11 +11,9 @@ Item {
         anchors.fill: parent
 
         // Play pause button.
-        Button {
+        PlayPauseButton {
             id: playBtn
-            text: ">"
-            enabled: false
-
+            
             Layout.fillWidth: false
             Layout.fillHeight: true
             Layout.preferredHeight: parent.height
