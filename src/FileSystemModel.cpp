@@ -105,7 +105,7 @@ Do nothing if the path is invalid.
 */
 void FileSystemModel::setPath(const QString& path)
 {
-    if (!path.isEmpty())
+    if (!path.isEmpty() && path != m_dir.path())
     {
         QDir dir = QDir(path);
         if (dir.isReadable())
