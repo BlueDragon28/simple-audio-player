@@ -19,3 +19,42 @@ function playPause() {
         SAL.Player.play()
     }
 }
+
+/*
+Function parsing seconds into a string of hours, minutes and seconds.
+*/
+function parseTime(time) {
+    var strTime = "";
+
+    // Parse hours.
+    if (time >= 3600) {
+        var t = String(Math.floor(time / 3600))
+        time = Math.floor(time % 3600)
+        if (t.length == 1) {
+            t = "0" + t
+        }
+        strTime += t + ":"
+    }
+
+    // Parse minutes.
+    if (time >= 60) {
+        var t = String(Math.floor(time / 60))
+        time = Math.floor(time % 60)
+        if (t.length == 1) {
+            t = "0" + t
+        }
+        strTime += t + ":"
+    }
+    
+    // Parse seconds.
+    var t = String(time)
+    if (strTime.length == 0) {
+        strTime += "00:"
+    }
+    if (t.length == 1) {
+        t = "0" + t
+    }
+    strTime += t
+
+    return strTime
+}

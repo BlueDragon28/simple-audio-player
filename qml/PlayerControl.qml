@@ -24,6 +24,18 @@ Item {
             onClicked: SAL.playPause()
         }
 
+        // Label showing the position time of the stream.
+        Label {
+            id: position
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+
+            verticalAlignment: Qt.AlignVCenter
+
+            text: "00:00"
+        }
+
         // Stream position slider
         StreamSlider {
             id: streamSlider
@@ -65,6 +77,10 @@ Item {
 
         function onStreamPosChangeInFrames(streamPos) {
             streamSlider.value = streamPos
+        }
+
+        function onStreamPosChangeInSeconds(streamPos) {
+            position.text = SAL.parseTime(streamPos)
         }
     }
 }
