@@ -10,6 +10,7 @@
         <file>qml/FolderPathLineEdit.qml</file>
         <file>qml/FileSystemRowContent.qml</file>
         <file>qml/PlayPauseButton.qml</file>
+        <file>qml/StreamSlider.qml</file>
 
         <file>js/simple-audio-library.js</file>
     </qresource>

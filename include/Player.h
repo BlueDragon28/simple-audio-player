@@ -113,13 +113,13 @@ signals:
     Signal called every time the simple-audio-library audio backend (PortAudio) fill is buffer.
     The parameter is the stream position in frames.
     */
-    void streamPosChangeInFrames(size_t streamPos);
+    void streamPosChangeInFrames(unsigned long streamPos);
 
     /*
     Signal called every seconds (when a file is playing).
     The parameter is the stream position in seconds.
     */
-    void streamPosChangeInSeconds(size_t streamPos);
+    void streamPosChangeInSeconds(unsigned long streamPos);
 
     /*
     Signal called when the stream is paused.

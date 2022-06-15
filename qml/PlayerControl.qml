@@ -23,6 +23,19 @@ Item {
             // Play or pause when the button is clicked.
             onClicked: SAL.playPause()
         }
+
+        // Stream position slider
+        StreamSlider {
+            id: streamSlider
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            // When the slider is moved by the user, seek the new position in the stream.
+            onMoved: {
+                Player.seek(value)
+            }
+        }
     }
 
     // Connect to the Player singleton object and listening to the signals.
@@ -31,6 +44,7 @@ Item {
 
         function onIsReadyChanged(isReady) {
             playBtn.enabled = isReady
+            streamSlider.enabled = isReady
         }
 
         function onStreamPlaying() {
@@ -43,6 +57,14 @@ Item {
 
         function onStreamStopping() {
             playBtn.stopping()
+        }
+
+        function onStartNewFile(filePath) {
+            streamSlider.to = Player.streamSize()
+        }
+
+        function onStreamPosChangeInFrames(streamPos) {
+            streamSlider.value = streamPos
         }
     }
 }
