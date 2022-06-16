@@ -48,6 +48,17 @@ Item {
                 Player.seek(value)
             }
         }
+
+        Label {
+            id: duration
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+
+            verticalAlignment: Qt.AlignVCenter
+
+            text: "00:00"
+        }
     }
 
     // Connect to the Player singleton object and listening to the signals.
@@ -73,6 +84,7 @@ Item {
 
         function onStartNewFile(filePath) {
             streamSlider.to = Player.streamSize()
+            duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
         }
 
         function onStreamPosChangeInFrames(streamPos) {
