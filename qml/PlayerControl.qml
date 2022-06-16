@@ -87,6 +87,13 @@ Item {
             duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
         }
 
+        function onEndFile(filePath) {
+            streamSlider.value = 0
+            streamSlider.to = 0
+            position.text = "00:00"
+            duration.text = "00:00"
+        }
+
         function onStreamPosChangeInFrames(streamPos) {
             streamSlider.value = streamPos
         }
