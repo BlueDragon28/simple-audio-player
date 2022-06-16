@@ -8,6 +8,10 @@ import "qrc:///js/simple-audio-library.js" as SAL
 Item {
     id: root
 
+    FontMetrics {
+        id: timeMetrics
+    }
+
     RowLayout {
         anchors.fill: parent
 
@@ -34,6 +38,9 @@ Item {
             verticalAlignment: Qt.AlignVCenter
 
             text: "00:00"
+
+            // Set the fixed size of the label based on the number of caracters.
+            Layout.preferredWidth: timeMetrics.averageCharacterWidth * text.length
         }
 
         // Stream position slider
@@ -58,6 +65,9 @@ Item {
             verticalAlignment: Qt.AlignVCenter
 
             text: "00:00"
+
+            // Set the fixed size of the label based on the number of caracters.
+            Layout.preferredWidth: timeMetrics.averageCharacterWidth * text.length
         }
     }
 
