@@ -17,6 +17,8 @@ class Player : public QObject
     Player(QObject* parent = nullptr);
 
 public:
+    ~Player();
+
     /*
     Get stream size in frames or in seconds.
     */

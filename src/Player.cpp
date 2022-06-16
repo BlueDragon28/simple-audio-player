@@ -18,6 +18,12 @@ Player::Player(QObject* parent) :
     m_player->callback().addIsReadyChangedCallback(std::bind(&Player::salIsReadyChanged, this, std::placeholders::_1));
 }
 
+Player::~Player()
+{
+    // Destroy the simple-audio-library instance.
+    SAL::AudioPlayer::deinit();
+}
+
 /*
 Static function to instanciate the singleton.
 */
