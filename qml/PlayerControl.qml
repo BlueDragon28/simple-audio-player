@@ -1,6 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
+import SimpleAudioPlayer 1.0
 import SAL 1.0
 import "qrc:///js/simple-audio-library.js" as SAL
 
@@ -90,6 +91,7 @@ Item {
 
         function onStreamStopping() {
             playBtn.stopping()
+            PlayingList.clear()
         }
 
         function onStartNewFile(filePath) {
@@ -102,6 +104,7 @@ Item {
             streamSlider.to = 0
             position.text = "00:00"
             duration.text = "00:00"
+            PlayingList.next()
         }
 
         function onStreamPosChangeInFrames(streamPos) {

@@ -23,6 +23,8 @@ public:
         FILE_PATH,
         ABSOLUTE_FILE_PATH,
         IS_DIR,
+        LIST_PATH, // Return the list of file from index to the end in the directory.
+        COMPLETE_LIST_PATH, // Return the list of all the file in the directory.
     };
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -39,6 +41,14 @@ public:
     Get the path of the folder displayed.
     */
     QString path() const;
+
+    /*
+    Return the path of the file index (if valid) and all the files next to index inside the directory (m_dir).
+    index:
+        - if valid: return the files path of index and all the files next to it.
+        - if equal to -1: return the files path of all the files.
+    */
+    Q_INVOKABLE QStringList fileList(int index = -1) const;
 
 signals:
     /*

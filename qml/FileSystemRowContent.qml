@@ -75,7 +75,7 @@ Item {
                     if (isDir) {
                         fileSystemModel.cd(name)
                     } else {
-                        SAL.open(absoluteFilePath)
+                        SAL.open(listPath)
                     }
                 }
             }

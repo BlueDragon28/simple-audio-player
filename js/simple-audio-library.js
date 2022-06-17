@@ -2,11 +2,24 @@
 Wrapper to the SAL C++ module.
 */
 
+.import SimpleAudioPlayer 1.0 as SAP
 .import SAL 1.0 as SAL
 
 function open(filePath) {
-    if (SAL.Player.isReadable(filePath)) {
-        SAL.Player.open(filePath)
+    if (typeof filePath === "string") {
+        if (SAL.Player.isReadable(filePath)) {
+            SAL.Player.open(filePath)
+            SAL.Player.play()
+        }
+    } else {
+        var validFiles = new Array()
+        for (var i = 0; i <= filePath.length; i++) {
+            if (SAL.Player.isReadable(filePath[i])) {
+                validFiles.push(filePath[i])
+            }
+        }
+        SAP.PlayingList.list = validFiles
+        SAL.Player.open(validFiles)
         SAL.Player.play()
     }
 }

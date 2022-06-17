@@ -1,5 +1,4 @@
 #include "FileSystemModel.h"
-#include <iostream>
 
 FileSystemModel::FileSystemModel(QObject* parent) :
     QAbstractListModel(parent)
@@ -15,6 +14,8 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     roles[FILE_PATH] = "filePath";
     roles[ABSOLUTE_FILE_PATH] = "absoluteFilePath";
     roles[IS_DIR] = "isDir";
+    roles[LIST_PATH] = "listPath";
+    roles[COMPLETE_LIST_PATH] = "completeListPath";
     return roles;
 }
 
@@ -42,7 +43,7 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.column() == 0 &&
         index.row() >= 0 && index.row() < rowCount() &&
-        (role == NAME || role == FILE_PATH || role == ABSOLUTE_FILE_PATH || role == IS_DIR))
+        (role == NAME || role == FILE_PATH || role == ABSOLUTE_FILE_PATH || role == IS_DIR || role == LIST_PATH || role == COMPLETE_LIST_PATH))
     {
         if (role == NAME)
         {
@@ -64,6 +65,14 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
         else if (role == IS_DIR)
         {
             return m_fileList.at(index.row()).isDir();
+        }
+        else if (role == LIST_PATH)
+        {
+            return fileList(index.row());
+        }
+        else if (role == COMPLETE_LIST_PATH)
+        {
+            return fileList();
         }
     }
 
@@ -161,4 +170,34 @@ void FileSystemModel::cdDown()
             emit pathChanged();
         }
     }
+}
+
+/*
+Return the path of the file index (if valid) and all the files next to index inside the directory (m_dir).
+index:
+    - if valid: return the files path of index and all the files next to it.
+    - if equal to -1: return the files path of all the files.
+*/
+QStringList FileSystemModel::fileList(int index) const
+{
+    if (index == -1)
+    {
+        index = 0;
+    }
+
+    if (!m_fileList.isEmpty() && index >= 0 && index < m_fileList.size())
+    {
+        QStringList strList;
+        for (int i = index; i < m_fileList.size(); i++)
+        {
+            if (m_fileList.at(i).isFile())
+            {
+                strList.append(m_fileList.at(i).absoluteFilePath());
+            }
+        }
+
+        return strList;
+    }
+
+    return QStringList();
 }

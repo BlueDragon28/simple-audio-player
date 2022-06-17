@@ -115,6 +115,17 @@ void Player::open(const QString& filePath)
     m_player->open(filePath.toStdString(), true);
 }
 
+void Player::open(const QStringList& filesPath)
+{
+    bool clearQueue = true;
+    foreach (const QString& path, filesPath)
+    {
+        m_player->open(path.toStdString(), clearQueue);
+        if (clearQueue)
+            clearQueue = false;
+    }
+}
+
 /*
 Start playing or resuming the stream.
 */
