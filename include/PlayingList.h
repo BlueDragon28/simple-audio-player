@@ -11,12 +11,14 @@
 class PlayingList : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
     QML_SINGLETON
     Q_PROPERTY(QList<QString> list READ list WRITE setList NOTIFY listChanged)
     Q_PROPERTY(int index READ index NOTIFY indexChanged)
 
-    PlayingList(QObject* parent = nullptr);
 public:
+    PlayingList();
+    
     /*
     The list of the played musics.
     */

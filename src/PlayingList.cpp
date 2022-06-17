@@ -1,7 +1,7 @@
 #include "PlayingList.h"
 
-PlayingList::PlayingList(QObject* parent) :
-    QObject(parent),
+PlayingList::PlayingList() :
+    QObject(nullptr),
     m_index(0)
 {}
 
