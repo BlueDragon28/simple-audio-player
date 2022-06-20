@@ -12,8 +12,8 @@ function open(filePath) {
             SAL.Player.play()
         }
     } else {
-        var validFiles = new Array()
-        for (var i = 0; i <= filePath.length; i++) {
+        let validFiles = new Array()
+        for (let i = 0; i < filePath.length; i++) {
             if (SAL.Player.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
             }
@@ -41,7 +41,7 @@ function parseTime(time) {
 
     // Parse hours.
     if (time >= 3600) {
-        var t = String(Math.floor(time / 3600))
+        let t = String(Math.floor(time / 3600))
         time = Math.floor(time % 3600)
         if (t.length == 1) {
             t = "0" + t
@@ -51,7 +51,7 @@ function parseTime(time) {
 
     // Parse minutes.
     if (time >= 60) {
-        var t = String(Math.floor(time / 60))
+        let t = String(Math.floor(time / 60))
         time = Math.floor(time % 60)
         if (t.length == 1) {
             t = "0" + t
@@ -60,7 +60,7 @@ function parseTime(time) {
     }
     
     // Parse seconds.
-    var t = String(time)
+    let t = String(time)
     if (strTime.length == 0) {
         strTime += "00:"
     }
