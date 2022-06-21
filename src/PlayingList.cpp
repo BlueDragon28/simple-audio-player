@@ -2,7 +2,8 @@
 
 PlayingList::PlayingList() :
     QObject(nullptr),
-    m_index(0)
+    m_index(0),
+    m_doNotMove(false)
 {}
 
 /*
@@ -10,9 +11,12 @@ The list of the played musics.
 */
 void PlayingList::setList(const QList<QString>& list)
 {
-    m_list = list;
-    emit listChanged();
-    setIndex(0);
+    if (list != m_list)
+    {
+        m_list = list;
+        emit listChanged();
+        setIndex(0);
+    }
 }
 
 const QList<QString>& PlayingList::list() const
@@ -30,8 +34,8 @@ int PlayingList::index() const
 
 void PlayingList::setIndex(int index)
 {
-    if (index >= 0 && (index < m_list.size() || index == 0))
-    m_index = index;
+    if (index != m_index && index >= 0 && (index < m_list.size() || index == 0))
+        m_index = index;
 }
 
 /*
@@ -63,7 +67,7 @@ Move to the next music.
 */
 void PlayingList::next()
 {
-    if (hasNext())
+    if (hasNext() && !m_doNotMove)
     {
         setIndex(m_index+1);
     }
@@ -74,8 +78,37 @@ Move to the previous music.
 */
 void PlayingList::previous()
 {
-    if (hasPrevious())
+    if (hasPrevious() && !m_doNotMove)
     {
         setIndex(m_index-1);
+    }
+}
+
+/*
+Get playing list from index to the end of the list.
+*/
+QList<QString> PlayingList::listFromIndex() const
+{
+    if (m_index >= 0 && m_index < m_list.size())
+    {
+        return m_list.mid(m_index);
+    }
+    else
+    {
+        return QList<QString>();
+    }
+}
+
+bool PlayingList::doNotMove() const
+{
+    return m_doNotMove;
+}
+
+void PlayingList::setDoNotMove(bool value)
+{
+    if (value != m_doNotMove)
+    {
+        m_doNotMove = value;
+        emit doNotMoveChanged();
     }
 }

@@ -29,6 +29,20 @@ Item {
             onClicked: SAL.playPause()
         }
 
+        // Next button
+        Button {
+            id: nextBtn
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: Layout.preferredHeight
+
+            text: ">|"
+
+            onClicked: SAL.next()
+        }
+
         // Label showing the position time of the stream.
         Label {
             id: position
@@ -91,7 +105,6 @@ Item {
 
         function onStreamStopping() {
             playBtn.stopping()
-            PlayingList.clear()
         }
 
         function onStartNewFile(filePath) {
@@ -104,7 +117,11 @@ Item {
             streamSlider.to = 0
             position.text = "00:00"
             duration.text = "00:00"
-            PlayingList.next()
+            if (PlayingList.doNotMove) {
+                PlayingList.doNotMove = false
+            } else {
+                PlayingList.next()
+            }
         }
 
         function onStreamPosChangeInFrames(streamPos) {

@@ -19,7 +19,20 @@ function open(filePath) {
             }
         }
         SAP.PlayingList.list = validFiles
+        // Prevent the onEndFile signal to change the PlayingList index.
+        // The property is set back to false by the onEndFile signal.
+        SAP.PlayingList.doNotMove = true
         SAL.Player.open(validFiles)
+        SAL.Player.play()
+    }
+}
+
+// Function to move to the next track.
+function next() {
+    if (SAP.PlayingList.hasNext()) {
+        SAP.PlayingList.next()
+        SAP.PlayingList.doNotMove = true
+        SAL.Player.open(SAP.PlayingList.listFromIndex())
         SAL.Player.play()
     }
 }
