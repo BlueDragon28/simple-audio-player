@@ -43,6 +43,8 @@ function previous() {
         SAL.Player.seek(0)
         lastTime = currentTime
     } else if (SAP.PlayingList.hasPrevious()) {
+        // In case doNotMove is set to true, disabling it.
+        SAP.PlayingList.doNotMove = false
         SAP.PlayingList.previous()
         SAP.PlayingList.doNotMove = true
         SAL.Player.open(SAP.PlayingList.listFromIndex())
@@ -54,6 +56,7 @@ function previous() {
 // Move to the next track.
 function next() {
     if (SAP.PlayingList.hasNext()) {
+        SAP.PlayingList.doNotMove = false
         SAP.PlayingList.next()
         SAP.PlayingList.doNotMove = true
         SAL.Player.open(SAP.PlayingList.listFromIndex())
