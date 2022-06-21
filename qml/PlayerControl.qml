@@ -16,6 +16,19 @@ Item {
     RowLayout {
         anchors.fill: parent
 
+        Button {
+            id: previousBtn
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: Layout.preferredHeight
+
+            text: "|<"
+
+            onClicked: SAL.previous()
+        }
+
         // Play pause button.
         PlayPauseButton {
             id: playBtn
