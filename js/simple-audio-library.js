@@ -5,6 +5,7 @@ Wrapper to the SAL C++ module.
 .import SimpleAudioPlayer 1.0 as SAP
 .import SAL 1.0 as SAL
 
+// Open a new list.
 function open(filePath) {
     if (typeof filePath === "string") {
         if (SAL.Player.isReadable(filePath)) {
@@ -50,7 +51,7 @@ function previous() {
     }
 }
 
-// Function to move to the next track.
+// Move to the next track.
 function next() {
     if (SAP.PlayingList.hasNext()) {
         SAP.PlayingList.next()
@@ -60,7 +61,7 @@ function next() {
     }
 }
 
-// Function to play or pause when the play/pause button is clicked.
+// Play or pause when the play/pause button is clicked.
 function playPause() {
     if (SAL.Player.isPlaying()) {
         SAL.Player.pause()
@@ -69,9 +70,7 @@ function playPause() {
     }
 }
 
-/*
-Function parsing seconds into a string of hours, minutes and seconds.
-*/
+// Parsing seconds into a string of hours, minutes and seconds.
 function parseTime(time) {
     var strTime = "";
 
