@@ -51,7 +51,7 @@ Is there a previous music.
 */
 bool PlayingList::hasPrevious() const
 {
-    return m_index-1 > 0;
+    return m_index-1 >= 0;
 }
 
 /*
