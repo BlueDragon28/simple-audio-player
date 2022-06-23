@@ -83,8 +83,7 @@ Item {
             id: fileSystemContent
             anchors.top: topBar.bottom
             anchors.left: parent.left
-            anchors.leftMargin: 4
-            width: parent.width - 8
+            width: parent.width
             height: parent.height - topBar.height
 
             // This function update the path of the fileSystemContent.

@@ -50,34 +50,52 @@ Item {
         highlightResizeDuration: 500
         highlightMoveDuration: 150
 
-        spacing: 5
+        spacing: 0
     }
 
     Component {
         id: fileSystemDelegate
 
-        Label {
+        Item {
             width: fileSystemView.width
-            text: name
+            height: fileName.height+9
 
-            // Mouse area to change the selection of the fileSystemView.
-            MouseArea {
-                anchors.fill: parent
-                
-                // When clicked, change the current index of the fileSystemView
-                onClicked: fileSystemView.currentIndex = index
+            Label {
+                id: fileName
+                width: parent.width-8
+                x: 4
+                y: 4
+                text: name
 
-                /*
-                When the user double click on an item, if its a directory, move the view inside
-                this directory.
-                */
-                onDoubleClicked: {
-                    if (isDir) {
-                        fileSystemModel.cd(name)
-                    } else {
-                        SAL.open(listPath)
+                // Mouse area to change the selection of the fileSystemView.
+                MouseArea {
+                    anchors.fill: parent
+                    
+                    // When clicked, change the current index of the fileSystemView
+                    onClicked: fileSystemView.currentIndex = index
+
+                    /*
+                    When the user double click on an item, if its a directory, move the view inside
+                    this directory.
+                    */
+                    onDoubleClicked: {
+                        if (isDir) {
+                            fileSystemModel.cd(name)
+                        } else {
+                            SAL.open(listPath)
+                        }
                     }
                 }
+            }
+
+            Rectangle {
+                anchors.top: fileName.bottom
+                anchors.topMargin: 4
+                anchors.left: parent.left
+
+                width: parent.width
+                height: 1
+                color: "lightgray"
             }
         }
     }
