@@ -128,6 +128,7 @@ Item {
         function onStartNewFile(filePath) {
             streamSlider.to = Player.streamSize()
             duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
+            PlayingList.next(filePath)
         }
 
         function onEndFile(filePath) {
@@ -135,11 +136,6 @@ Item {
             streamSlider.to = 0
             position.text = "00:00"
             duration.text = "00:00"
-            if (PlayingList.doNotMove) {
-                PlayingList.doNotMove = false
-            } else {
-                PlayingList.next()
-            }
         }
 
         function onStreamPosChangeInFrames(streamPos) {

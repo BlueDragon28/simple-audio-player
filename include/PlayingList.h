@@ -62,8 +62,11 @@ signals:
 public slots:
     /*
     Move to the next music.
+    If filePath is empty, the index move to the next item in the list.
+    If filePath is not empty, the index move to the item in the list with the same
+    file path.
     */
-    void next();
+    void next(const QString& filePath = QString());
 
     /*
     Move to the previous music.

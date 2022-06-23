@@ -64,12 +64,28 @@ void PlayingList::clear()
 
 /*
 Move to the next music.
+If filePath is empty, the index move to the next item in the list.
+If filePath is not empty, the index move to the item in the list with the same
+file path.
 */
-void PlayingList::next()
+void PlayingList::next(const QString& filePath)
 {
-    if (hasNext() && !m_doNotMove)
+    // Move index to the position of filePath in the list.
+    if (!filePath.isEmpty())
     {
-        setIndex(m_index+1);
+        int index = m_list.indexOf(filePath);
+        if (index >= 0)
+        {
+            setIndex(index);
+        }
+    }
+    // Move index to one item.
+    else 
+    {
+        if (hasNext() && !m_doNotMove)
+        {
+            setIndex(m_index+1);
+        }
     }
 }
 
