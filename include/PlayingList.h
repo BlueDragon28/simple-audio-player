@@ -15,7 +15,6 @@ class PlayingList : public QObject
     QML_SINGLETON
     Q_PROPERTY(QList<QString> list READ list WRITE setList NOTIFY listChanged)
     Q_PROPERTY(int index READ index NOTIFY indexChanged)
-    Q_PROPERTY(bool doNotMove READ doNotMove WRITE setDoNotMove NOTIFY doNotMoveChanged)
 
 public:
     PlayingList();
@@ -51,13 +50,9 @@ public:
     */
     Q_INVOKABLE QList<QString> listFromIndex() const;
 
-    bool doNotMove() const;
-    void setDoNotMove(bool value);
-
 signals:
     void listChanged();
     void indexChanged();
-    void doNotMoveChanged();
 
 public slots:
     /*
@@ -78,12 +73,6 @@ private:
 
     QList<QString> m_list;
     int m_index;
-
-    /*
-    When a new track is set (by the user), the next and/or previous function
-    will be called when unnecessarily. This is a workaround to prevent this.
-    */
-    bool m_doNotMove;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYINGLIST_H_

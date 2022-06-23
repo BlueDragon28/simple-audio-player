@@ -19,9 +19,6 @@ function open(filePath) {
             }
         }
         SAP.PlayingList.list = validFiles
-        // Prevent the onEndFile signal to change the PlayingList index.
-        // The property is set back to false by the onEndFile signal.
-        SAP.PlayingList.doNotMove = true
         SAP.Player.open(validFiles)
         SAP.Player.play()
     }
@@ -42,10 +39,7 @@ function previous() {
         SAP.Player.seek(0)
         lastTime = currentTime
     } else if (SAP.PlayingList.hasPrevious()) {
-        // In case doNotMove is set to true, disabling it.
-        SAP.PlayingList.doNotMove = false
         SAP.PlayingList.previous()
-        SAP.PlayingList.doNotMove = true
         SAP.Player.open(SAP.PlayingList.listFromIndex())
         SAP.Player.play()
         lastTime = currentTime
@@ -55,9 +49,7 @@ function previous() {
 // Move to the next track.
 function next() {
     if (SAP.PlayingList.hasNext()) {
-        SAP.PlayingList.doNotMove = false
         SAP.PlayingList.next()
-        SAP.PlayingList.doNotMove = true
         SAP.Player.open(SAP.PlayingList.listFromIndex())
         SAP.Player.play()
     }

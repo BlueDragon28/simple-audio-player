@@ -2,8 +2,7 @@
 
 PlayingList::PlayingList() :
     QObject(nullptr),
-    m_index(0),
-    m_doNotMove(false)
+    m_index(0)
 {}
 
 /*
@@ -82,7 +81,7 @@ void PlayingList::next(const QString& filePath)
     // Move index to one item.
     else 
     {
-        if (hasNext() && !m_doNotMove)
+        if (hasNext())
         {
             setIndex(m_index+1);
         }
@@ -94,7 +93,7 @@ Move to the previous music.
 */
 void PlayingList::previous()
 {
-    if (hasPrevious() && !m_doNotMove)
+    if (hasPrevious())
     {
         setIndex(m_index-1);
     }
@@ -112,19 +111,5 @@ QList<QString> PlayingList::listFromIndex() const
     else
     {
         return QList<QString>();
-    }
-}
-
-bool PlayingList::doNotMove() const
-{
-    return m_doNotMove;
-}
-
-void PlayingList::setDoNotMove(bool value)
-{
-    if (value != m_doNotMove)
-    {
-        m_doNotMove = value;
-        emit doNotMoveChanged();
     }
 }
