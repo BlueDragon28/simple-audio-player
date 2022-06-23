@@ -64,6 +64,11 @@ function playPause() {
     }
 }
 
+// Stop the stream.
+function stop() {
+    SAP.Player.stop()
+}
+
 // Parsing seconds into a string of hours, minutes and seconds.
 function parseTime(time) {
     var strTime = "";

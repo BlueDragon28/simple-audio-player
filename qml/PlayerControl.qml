@@ -42,6 +42,22 @@ Item {
             onClicked: SAL.playPause()
         }
 
+        // Stop button
+        Button {
+            id: stopBtn
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: Layout.preferredHeight
+
+            text: "s"
+            enabled: false
+
+            // Stop the stream.
+            onClicked: SAL.stop()
+        }
+
         // Next button
         Button {
             id: nextBtn
@@ -113,6 +129,7 @@ Item {
             playBtn.playing()
             previousBtn.enabled = true
             nextBtn.enabled = true
+            stopBtn.enabled = true
         }
 
         function onStreamPaused() {
@@ -123,6 +140,7 @@ Item {
             playBtn.stopping()
             previousBtn.enabled = false
             nextBtn.enabled = false
+            stopBtn.enabled = false
         }
 
         function onStartNewFile(filePath) {
