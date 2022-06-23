@@ -86,7 +86,7 @@ void FileSystemModel::updateList()
 {
     if (!m_dir.path().isEmpty() && m_dir.isReadable())
     {
-        beginRemoveRows(QModelIndex(), 0, rowCount());
+        beginRemoveRows(QModelIndex(), 0, rowCount()-1);
         endRemoveRows();
 
         /*
@@ -95,7 +95,7 @@ void FileSystemModel::updateList()
         */
         m_fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
 
-        beginInsertRows(QModelIndex(), 0, m_fileList.size());
+        beginInsertRows(QModelIndex(), 0, m_fileList.size()-1);
         endInsertRows();
     }
 }
