@@ -24,6 +24,7 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             text: "|<"
+            enabled: false
 
             onClicked: SAL.previous()
         }
@@ -51,6 +52,7 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             text: ">|"
+            enabled: false
 
             onClicked: SAL.next()
         }
@@ -109,6 +111,8 @@ Item {
 
         function onStreamPlaying() {
             playBtn.playing()
+            previousBtn.enabled = true
+            nextBtn.enabled = true
         }
 
         function onStreamPaused() {
@@ -117,6 +121,8 @@ Item {
 
         function onStreamStopping() {
             playBtn.stopping()
+            previousBtn.enabled = false
+            nextBtn.enabled = false
         }
 
         function onStartNewFile(filePath) {
