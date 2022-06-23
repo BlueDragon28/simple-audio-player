@@ -3,19 +3,18 @@ Wrapper to the SAL C++ module.
 */
 
 .import SimpleAudioPlayer 1.0 as SAP
-.import SAL 1.0 as SAL
 
 // Open a new list.
 function open(filePath) {
     if (typeof filePath === "string") {
-        if (SAL.Player.isReadable(filePath)) {
-            SAL.Player.open(filePath)
-            SAL.Player.play()
+        if (SAP.Player.isReadable(filePath)) {
+            SAP.Player.open(filePath)
+            SAP.Player.play()
         }
     } else {
         let validFiles = new Array()
         for (let i = 0; i < filePath.length; i++) {
-            if (SAL.Player.isReadable(filePath[i])) {
+            if (SAP.Player.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
             }
         }
@@ -23,8 +22,8 @@ function open(filePath) {
         // Prevent the onEndFile signal to change the PlayingList index.
         // The property is set back to false by the onEndFile signal.
         SAP.PlayingList.doNotMove = true
-        SAL.Player.open(validFiles)
-        SAL.Player.play()
+        SAP.Player.open(validFiles)
+        SAP.Player.play()
     }
 }
 
@@ -40,15 +39,15 @@ function previous() {
     otherwise, go to the previous track.
     */
     if (lastTime == -1 || currentTime - lastTime > 1000) {
-        SAL.Player.seek(0)
+        SAP.Player.seek(0)
         lastTime = currentTime
     } else if (SAP.PlayingList.hasPrevious()) {
         // In case doNotMove is set to true, disabling it.
         SAP.PlayingList.doNotMove = false
         SAP.PlayingList.previous()
         SAP.PlayingList.doNotMove = true
-        SAL.Player.open(SAP.PlayingList.listFromIndex())
-        SAL.Player.play()
+        SAP.Player.open(SAP.PlayingList.listFromIndex())
+        SAP.Player.play()
         lastTime = currentTime
     }
 }
@@ -59,17 +58,17 @@ function next() {
         SAP.PlayingList.doNotMove = false
         SAP.PlayingList.next()
         SAP.PlayingList.doNotMove = true
-        SAL.Player.open(SAP.PlayingList.listFromIndex())
-        SAL.Player.play()
+        SAP.Player.open(SAP.PlayingList.listFromIndex())
+        SAP.Player.play()
     }
 }
 
 // Play or pause when the play/pause button is clicked.
 function playPause() {
-    if (SAL.Player.isPlaying()) {
-        SAL.Player.pause()
-    } else if (SAL.Player.isReady()) {
-        SAL.Player.play()
+    if (SAP.Player.isPlaying()) {
+        SAP.Player.pause()
+    } else if (SAP.Player.isReady()) {
+        SAP.Player.play()
     }
 }
 

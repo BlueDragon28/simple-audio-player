@@ -1,10 +1,10 @@
 #include "Player.h"
 #include <QDebug>
 
-Player* Player::staticInstance = nullptr;
+//Player* Player::staticInstance = nullptr;
 
-Player::Player(QObject* parent) :
-    QObject(parent),
+Player::Player() :
+    QObject(nullptr),
     m_player(SAL::AudioPlayer::instance())
 {
     // Bind the event wrapper to the SAL instance.
@@ -22,23 +22,6 @@ Player::~Player()
 {
     // Destroy the simple-audio-library instance.
     SAL::AudioPlayer::deinit();
-}
-
-/*
-Static function to instanciate the singleton.
-*/
-QObject* Player::qmlRegistration(QQmlEngine* qmlEngine, QJSEngine* jsEngine)
-{
-    staticInstance = new Player();
-    return staticInstance;
-}
-
-/*
-Static function to retrieve the singleton instance.
-*/
-Player* Player::instance()
-{
-    return staticInstance;
 }
 
 /*

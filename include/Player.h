@@ -13,10 +13,11 @@ This singleton class is a wrapper of the simple-audio-library for the QML.
 class Player : public QObject
 {
     Q_OBJECT
-
-    Player(QObject* parent = nullptr);
+    QML_ELEMENT
+    QML_SINGLETON
 
 public:
+    Player();
     ~Player();
 
     /*
@@ -28,16 +29,6 @@ public:
         SECONDS,
     };
     Q_ENUM(SizeType);
-
-    /*
-    Static function to instanciate the singleton.
-    */
-    static QObject* qmlRegistration(QQmlEngine* engine, QJSEngine* jsEngine);
-
-    /*
-    Static function to retrieve the singleton instance.
-    */
-    static Player* instance();
 
     /*
     Return true if simple-audio-library is initialized.
@@ -161,7 +152,7 @@ private:
     SAL::AudioPlayer* m_player;
 
     // Static variable holding the instance of this class.
-    static Player* staticInstance;
+    //static Player* staticInstance;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYER_H_

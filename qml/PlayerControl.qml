@@ -2,7 +2,6 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
-import SAL 1.0
 import "qrc:///js/simple-audio-library.js" as SAL
 
 // This is where the player control (play, pause, etc) and the volume control is placed.
