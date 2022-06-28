@@ -10,8 +10,8 @@ Player::Player() :
     // Bind the event wrapper to the SAL instance.
     m_player->callback().addStartFileCallback(std::bind(&Player::salStartNewFile, this, std::placeholders::_1));
     m_player->callback().addEndFileCallback(std::bind(&Player::salEndFile, this, std::placeholders::_1));
-    m_player->callback().addStreamPosChangeCallback(std::bind(&Player::salStreamPosChangeInSeconds, this, std::placeholders::_1));
-    m_player->callback().addStreamPosChangeInFramesCallback(std::bind(&Player::salStreamPosChangeInFrames, this, std::placeholders::_1));
+    m_player->callback().addStreamPosChangeCallback(std::bind(&Player::salStreamPosChangeInSeconds, this, std::placeholders::_1), SAL::TimeType::SECONDS);
+    m_player->callback().addStreamPosChangeCallback(std::bind(&Player::salStreamPosChangeInFrames, this, std::placeholders::_1), SAL::TimeType::FRAMES);
     m_player->callback().addStreamPausedCallback(std::bind(&Player::salStreamPaused, this));
     m_player->callback().addStreamPlayingCallback(std::bind(&Player::salStreamPlaying, this));
     m_player->callback().addStreamStoppingCallback(std::bind(&Player::salStreamStopping, this));
