@@ -83,11 +83,7 @@ Return a list of strings of all the available files formats readable by the simp
 */
 QList<QString> Player::supportedFormats() const
 {
-    std::vector<std::string> stlList = m_player->supportedFormats();
-    QList<QString> qtList(stlList.size());
-    for (int i = 0; i < qtList.size(); i++)
-        qtList[i] = QString::fromStdString(stlList.at(i));
-    return qtList;
+    return {};
 }
 
 /*
