@@ -54,9 +54,9 @@ Return current stream size.
 size_t Player::streamSize(SizeType type) const
 {
     if (type == FRAMES)
-        return m_player->streamSizeInFrames();
+        return m_player->streamSize(SAL::TimeType::FRAMES);
     else
-        return m_player->streamSize();
+        return m_player->streamSize(SAL::TimeType::SECONDS);
 }
 
 /*
@@ -65,9 +65,9 @@ Return current stream position.
 size_t Player::streamPos(SizeType type) const
 {
     if (type == FRAMES)
-        return m_player->streamPosInFrames();
+        return m_player->streamPos(SAL::TimeType::FRAMES);
     else
-        return m_player->streamPos();
+        return m_player->streamPos(SAL::TimeType::SECONDS);
 }
 
 /*
