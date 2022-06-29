@@ -50,8 +50,7 @@ function previous() {
 function next() {
     if (SAP.PlayingList.hasNext()) {
         SAP.PlayingList.next()
-        SAP.Player.open(SAP.PlayingList.listFromIndex())
-        SAP.Player.play()
+        SAP.Player.next()
     }
 }
 

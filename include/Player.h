@@ -92,6 +92,11 @@ public slots:
     */
     void seek(size_t pos, SizeType type = FRAMES);
 
+    /*
+    Move to the next audio stream.
+    */
+    void next();
+
 signals:
     /*
     Signal called when the simple-audio-library start playing a new file.

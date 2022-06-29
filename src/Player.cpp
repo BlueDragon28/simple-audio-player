@@ -137,6 +137,14 @@ void Player::seek(size_t pos, SizeType type)
 }
 
 /*
+Move to the next audio stream.
+*/
+void Player::next()
+{
+    m_player->next();
+}
+
+/*
 This methods are wrapped between the event system of the simple-audio-libray and Qt.
 */
 void Player::salStartNewFile(const std::string& filePath)
