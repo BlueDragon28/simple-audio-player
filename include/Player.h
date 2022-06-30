@@ -15,6 +15,7 @@ class Player : public QObject
     Q_OBJECT
     QML_ELEMENT
     QML_SINGLETON
+    Q_PROPERTY(QString currentStream READ currentStream WRITE setCurrentStream NOTIFY currentStreamChanged)
 
 public:
     Player();
@@ -64,6 +65,11 @@ public:
     Return a list of strings of all the available files formats readable by the simple-audio-library.
     */
     Q_INVOKABLE QList<QString> supportedFormats() const;
+
+    /*
+    Currently played audio file path.
+    */
+    QString currentStream() const;
 
 public slots:
     /*
@@ -140,6 +146,11 @@ signals:
     */
     void isReadyChanged(bool isReady);
 
+    /*
+    When current stream changed.
+    */
+    void currentStreamChanged();
+
 private:
     /*
     This methods are wrapped between the event system of the simple-audio-libray and Qt.
@@ -153,11 +164,16 @@ private:
     void salStreamStopping();
     void salIsReadyChanged(bool isReady);
 
+    /*
+    Set the current stream played.
+    */
+    void setCurrentStream(const QString& filePath);
+
     // Instance of SAL.
     SAL::AudioPlayer* m_player;
 
-    // Static variable holding the instance of this class.
-    //static Player* staticInstance;
+    // Currently played audio file.
+    QString m_currentStream;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYER_H_

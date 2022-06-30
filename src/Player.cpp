@@ -149,12 +149,17 @@ This methods are wrapped between the event system of the simple-audio-libray and
 */
 void Player::salStartNewFile(const std::string& filePath)
 {
-    emit startNewFile(QString::fromStdString(filePath));
+    QString qStrFilePath = QString::fromStdString(filePath);
+    emit startNewFile(qStrFilePath);
+    // Set current stream played property.
+    setCurrentStream(qStrFilePath);
 }
 
 void Player::salEndFile(const std::string& filePath)
 {
     emit endFile(QString::fromStdString(filePath));
+    // Reset current stream played property.
+    setCurrentStream("");
 }
 
 void Player::salStreamPosChangeInFrames(size_t streamPos)
@@ -185,4 +190,24 @@ void Player::salStreamStopping()
 void Player::salIsReadyChanged(bool isReady)
 {
     emit isReadyChanged(isReady);
+}
+
+/*
+Currently played audio file path.
+*/
+QString Player::currentStream() const
+{
+    return m_currentStream;
+}
+
+/*
+Set the current stream played.
+*/
+void Player::setCurrentStream(const QString& filePath)
+{
+    if (filePath != m_currentStream)
+    {
+        m_currentStream = filePath;
+        emit currentStreamChanged();
+    }
 }
