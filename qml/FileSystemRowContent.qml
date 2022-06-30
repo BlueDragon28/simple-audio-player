@@ -56,9 +56,11 @@ Item {
     Component {
         id: fileSystemDelegate
 
-        Item {
+        Rectangle {
             width: fileSystemView.width
             height: fileName.height+9
+            color: Player.currentStream === absoluteFilePath ? Qt.color("#A00040FF") : "transparent"
+            radius: 8
 
             Label {
                 id: fileName
