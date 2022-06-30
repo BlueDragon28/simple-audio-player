@@ -13,8 +13,9 @@ void PlayingList::setList(const QList<QString>& list)
     if (list != m_list)
     {
         m_list = list;
+        m_index = 0;
         emit listChanged();
-        setIndex(0);
+        emit indexChanged();
     }
 }
 
@@ -34,7 +35,10 @@ int PlayingList::index() const
 void PlayingList::setIndex(int index)
 {
     if (index != m_index && index >= 0 && (index < m_list.size() || index == 0))
+    {
         m_index = index;
+        emit indexChanged();
+    }
 }
 
 /*
