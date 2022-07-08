@@ -1,4 +1,5 @@
 #include "FileSystemModel.h"
+#include "FileSize.h"
 
 FileSystemModel::FileSystemModel(QObject* parent) :
     QAbstractListModel(parent)
@@ -16,6 +17,7 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     roles[IS_DIR] = "isDir";
     roles[LIST_PATH] = "listPath";
     roles[COMPLETE_LIST_PATH] = "completeListPath";
+    roles[SIZE] = "size";
     return roles;
 }
 
@@ -43,7 +45,13 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.column() == 0 &&
         index.row() >= 0 && index.row() < rowCount() &&
-        (role == NAME || role == FILE_PATH || role == ABSOLUTE_FILE_PATH || role == IS_DIR || role == LIST_PATH || role == COMPLETE_LIST_PATH))
+        (role == NAME || 
+         role == FILE_PATH || 
+         role == ABSOLUTE_FILE_PATH || 
+         role == IS_DIR || 
+         role == LIST_PATH || 
+         role == COMPLETE_LIST_PATH || 
+         role == SIZE))
     {
         if (role == NAME)
         {
@@ -56,6 +64,13 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
         else if (role == ABSOLUTE_FILE_PATH)
         {
             return m_fileList.at(index.row()).absoluteFilePath();
+        }
+        else if (role == SIZE)
+        {
+            if (!m_fileList.at(index.row()).isDir())
+                return FileSize(m_fileList.at(index.row()).size()).toString();
+            else
+                return "";
         }
         /*
         Is the item is a folder or a file.

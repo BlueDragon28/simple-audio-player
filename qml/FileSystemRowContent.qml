@@ -94,7 +94,7 @@ Item {
                     id: fileSize
                     width: viewHeader.sizeSize-4
                     height: parent.height
-                    text: "0"
+                    text: size
                 }
             }
 

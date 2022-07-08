@@ -25,6 +25,7 @@ public:
         IS_DIR,
         LIST_PATH, // Return the list of file from index to the end in the directory.
         COMPLETE_LIST_PATH, // Return the list of all the file in the directory.
+        SIZE, // Return the size of the file in human readable form.
     };
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;

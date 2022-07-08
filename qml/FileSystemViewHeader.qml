@@ -27,7 +27,7 @@ Item {
                 id: name
                 //color: "whitesmoke"
 
-                SplitView.minimumWidth: 50
+                SplitView.minimumWidth: 120
                 SplitView.fillWidth: true
 
                 Label {
@@ -46,7 +46,7 @@ Item {
                 //color: "whitesmoke"
 
                 SplitView.minimumWidth: 50
-                SplitView.preferredWidth: 50
+                SplitView.preferredWidth: 80
                 SplitView.maximumWidth: 200
 
                 Label {
