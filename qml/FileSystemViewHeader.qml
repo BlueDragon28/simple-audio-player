@@ -12,6 +12,7 @@ Item {
     height: 25
 
     property int nameSize: name.width
+    property int lastModifiedSize: lastModified.width
     property int sizeSize: size.width
 
     ToolBar {
@@ -25,7 +26,6 @@ Item {
             // The file name column.
             Item {
                 id: name
-                //color: "whitesmoke"
 
                 SplitView.minimumWidth: 120
                 SplitView.fillWidth: true
@@ -40,10 +40,26 @@ Item {
                 }
             }
 
+            // The last time the file was modified.
+            Item {
+                id: lastModified
+
+                SplitView.minimumWidth: 200
+                SplitView.maximumWidth: 500
+
+                Label {
+                    anchors.fill: parent
+                    text: "Last modified"
+                    clip: true
+
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+
             // The file size column.
             Item {
                 id: size
-                //color: "whitesmoke"
 
                 SplitView.minimumWidth: 50
                 SplitView.preferredWidth: 80

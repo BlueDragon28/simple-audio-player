@@ -78,7 +78,7 @@ Item {
             Row {
                 width: parent.width-8
                 height: parent.height-8
-                spacing: 4
+                spacing: 2
                 x: 4
                 y: 4
 
@@ -89,11 +89,17 @@ Item {
                     text: name
                 }
 
+                // The last time the file was modified.
+                Label {
+                    id: lastModification
+                    width: viewHeader.lastModifiedSize
+                    text: lastModified
+                }
+
                 // The file size.
                 Label {
                     id: fileSize
                     width: viewHeader.sizeSize-4
-                    height: parent.height
                     text: size
                 }
             }

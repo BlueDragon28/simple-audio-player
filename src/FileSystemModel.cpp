@@ -18,6 +18,7 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     roles[LIST_PATH] = "listPath";
     roles[COMPLETE_LIST_PATH] = "completeListPath";
     roles[SIZE] = "size";
+    roles[LAST_MODIFIED] = "lastModified";
     return roles;
 }
 
@@ -51,7 +52,8 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
          role == IS_DIR || 
          role == LIST_PATH || 
          role == COMPLETE_LIST_PATH || 
-         role == SIZE))
+         role == SIZE ||
+         role == LAST_MODIFIED))
     {
         if (role == NAME)
         {
@@ -71,6 +73,10 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
                 return FileSize(m_fileList.at(index.row()).size()).toString();
             else
                 return "";
+        }
+        else if (role == LAST_MODIFIED)
+        {
+            return m_fileList.at(index.row()).lastModified().toString();
         }
         /*
         Is the item is a folder or a file.
