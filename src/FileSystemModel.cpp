@@ -19,6 +19,7 @@ QHash<int, QByteArray> FileSystemModel::roleNames() const
     roles[COMPLETE_LIST_PATH] = "completeListPath";
     roles[SIZE] = "size";
     roles[LAST_MODIFIED] = "lastModified";
+    roles[SELECTED] = "isSelected";
     return roles;
 }
 
@@ -53,30 +54,35 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
          role == LIST_PATH || 
          role == COMPLETE_LIST_PATH || 
          role == SIZE ||
-         role == LAST_MODIFIED))
+         role == LAST_MODIFIED ||
+         role == SELECTED))
     {
         if (role == NAME)
         {
-            return m_fileList.at(index.row()).fileName();
+            return m_fileList.at(index.row()).info.fileName();
         }
         else if (role == FILE_PATH)
         {
-            return m_fileList.at(index.row()).filePath();
+            return m_fileList.at(index.row()).info.filePath();
         }
         else if (role == ABSOLUTE_FILE_PATH)
         {
-            return m_fileList.at(index.row()).absoluteFilePath();
+            return m_fileList.at(index.row()).info.absoluteFilePath();
         }
         else if (role == SIZE)
         {
-            if (!m_fileList.at(index.row()).isDir())
-                return FileSize(m_fileList.at(index.row()).size()).toString();
+            if (!m_fileList.at(index.row()).info.isDir())
+                return FileSize(m_fileList.at(index.row()).info.size()).toString();
             else
                 return "";
         }
         else if (role == LAST_MODIFIED)
         {
-            return m_fileList.at(index.row()).lastModified().toString();
+            return m_fileList.at(index.row()).info.lastModified().toString();
+        }
+        else if (role == SELECTED)
+        {
+            return m_fileList.at(index.row()).isSelected;
         }
         /*
         Is the item is a folder or a file.
@@ -85,7 +91,7 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
         */
         else if (role == IS_DIR)
         {
-            return m_fileList.at(index.row()).isDir();
+            return m_fileList.at(index.row()).info.isDir();
         }
         else if (role == LIST_PATH)
         {
@@ -114,7 +120,14 @@ void FileSystemModel::updateList()
         Get the list of folders and files inside the directory width the directory displayed first and
         without the . and .. directories.
         */
-        m_fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
+        m_fileList.clear();
+        m_listOrder.clear();
+        QFileInfoList fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
+        m_fileList.resize(fileList.size());
+        for (size_t i = 0; i < fileList.size(); i++)
+        {
+            m_fileList[i] = { fileList.at(i), false };
+        }
 
         beginInsertRows(QModelIndex(), 0, m_fileList.size()-1);
         endInsertRows();
@@ -211,9 +224,9 @@ QStringList FileSystemModel::fileList(int index) const
         QStringList strList;
         for (int i = index; i < m_fileList.size(); i++)
         {
-            if (m_fileList.at(i).isFile())
+            if (m_fileList.at(i).info.isFile())
             {
-                strList.append(m_fileList.at(i).absoluteFilePath());
+                strList.append(m_fileList.at(i).info.absoluteFilePath());
             }
         }
 
@@ -221,4 +234,65 @@ QStringList FileSystemModel::fileList(int index) const
     }
 
     return QStringList();
+}
+
+/*
+Change the selection state of an item.
+*/
+void FileSystemModel::setIsSelected(int index, bool isSelected)
+{
+    if (index >= 0 && index < m_fileList.size())
+    {
+        if (isSelected != m_fileList.at(index).isSelected)
+        {
+            int i = m_listOrder.indexOf(index);
+
+            if (isSelected)
+            {
+                if (i == -1)
+                {
+                    m_listOrder.append(index);
+                }
+            }
+            else
+            {
+                if (i != -1)
+                {
+                    m_listOrder.remove(index);
+                }
+            }
+        }
+    }
+}
+
+/*
+Clear the selection.
+*/
+void FileSystemModel::clearSelection()
+{
+    m_listOrder.clear();
+    for (FileInfo& file : m_fileList)
+    {
+        file.isSelected = false;
+    }
+}
+
+/*
+Return the list of selected file.
+*/
+QStringList FileSystemModel::selectedFilesList()
+{
+    QStringList fileList;
+    if (!m_listOrder.isEmpty())
+    {
+        for (int i = 0; i < m_listOrder.size(); i++)
+        {
+            if (m_listOrder.at(i) >= 0 && m_listOrder.at(i) < m_fileList.size())
+            {
+                fileList.append(m_fileList.at(m_listOrder.at(i)).info.absoluteFilePath());
+            }
+        }
+    }
+
+    return fileList;
 }

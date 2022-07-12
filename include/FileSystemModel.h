@@ -27,6 +27,7 @@ public:
         COMPLETE_LIST_PATH, // Return the list of all the file in the directory.
         SIZE, // Return the size of the file in human readable form.
         LAST_MODIFIED, // Return the last time the file was modified.
+        SELECTED, // Return if an element is selected.
     };
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -51,6 +52,21 @@ public:
         - if equal to -1: return the files path of all the files.
     */
     Q_INVOKABLE QStringList fileList(int index = -1) const;
+
+    /*
+    Change the selection state of an item.
+    */
+    Q_INVOKABLE void setIsSelected(int index, bool isSelected);
+
+    /*
+    Clear the selection.
+    */
+    Q_INVOKABLE void clearSelection();
+
+    /*
+    Return the list of selected file.
+    */
+    Q_INVOKABLE QStringList selectedFilesList();
 
 signals:
     /*
@@ -82,8 +98,20 @@ private:
     */
     void updateList();
 
+    /*
+    Struct holding the file info and if the element is selected.
+    */
+    struct FileInfo
+    {
+        QFileInfo info;
+        bool isSelected;
+    };
+
     QDir m_dir;
-    QFileInfoList m_fileList;
+    QList<FileInfo> m_fileList;
+
+    // Order of the selection (holding the indices).
+    QList<int> m_listOrder;
 
     // This list store the list of all the last opened directories.
     QStringList m_lastDirsList;
