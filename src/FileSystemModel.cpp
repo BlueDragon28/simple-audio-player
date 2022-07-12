@@ -245,13 +245,22 @@ void FileSystemModel::setIsSelected(int index, bool isSelected)
     {
         if (isSelected != m_fileList.at(index).isSelected)
         {
+            // Update if it's selected.
+            m_fileList[index].isSelected = isSelected;
+
+            /*
+            Check if the list order list contain this index. 
+            Otherwise, adding the index to the list.
+            */
             int i = m_listOrder.indexOf(index);
+            bool isModifies = false;
 
             if (isSelected)
             {
                 if (i == -1)
                 {
                     m_listOrder.append(index);
+                    isModifies = true;
                 }
             }
             else
@@ -259,8 +268,12 @@ void FileSystemModel::setIsSelected(int index, bool isSelected)
                 if (i != -1)
                 {
                     m_listOrder.remove(index);
+                    isModifies = false;
                 }
             }
+
+            // Notify the view.
+            emit dataChanged(this->index(index, 0), this->index(index, 0), {SELECTED});
         }
     }
 }
@@ -275,6 +288,9 @@ void FileSystemModel::clearSelection()
     {
         file.isSelected = false;
     }
+
+    // Notify the view of the modification.
+    emit dataChanged(index(0), index(m_fileList.size()-1));
 }
 
 /*
