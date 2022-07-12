@@ -368,3 +368,31 @@ void FileSystemModel::shiftSelectItem(int index)
         // Otherwise, this item is already selected or lowestIndex is invalid. Do nothing.
     }
 }
+
+/*
+Called when the user selected an item with ctrl.
+*/
+void FileSystemModel::ctrlSelectItem(int index)
+{
+    if (index >= 0 && index < m_fileList.size())
+    {
+        // Swap isSelected of the item.
+        m_fileList[index].isSelected = !m_fileList[index].isSelected;
+
+        // Remove (if any) the index of the item from listOrder list.
+        int listSortingIndex = m_listOrder.indexOf(index);
+        if (listSortingIndex != -1)
+        {
+            m_listOrder.remove(listSortingIndex);
+        }
+
+        // If the item is selected, add the index of the item at the end of listOrder list.
+        if (m_fileList.at(index).isSelected)
+        {
+            m_listOrder.append(index);
+        }
+
+        // Notify the view of the change.
+        emit dataChanged(this->index(index), this->index(index), {SELECTED});
+    }
+}

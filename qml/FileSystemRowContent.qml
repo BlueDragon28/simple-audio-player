@@ -125,8 +125,10 @@ Item {
                     
                     // When clicked, select the item.
                     onClicked: {
-                        if (mouse.modifiers == Qt.ShiftModifier) {
+                        if (mouse.modifiers === Qt.ShiftModifier) {
                             fileSystemModel.shiftSelectItem(index)
+                        } else if (mouse.modifiers === Qt.ControlModifier) {
+                            fileSystemModel.ctrlSelectItem(index)
                         } else {
                             fileSystemModel.clearSelection()
                             fileSystemModel.setIsSelected(index, true)
@@ -138,6 +140,11 @@ Item {
                     this directory. Otherwise, try to play file and all the files next to it (if any).
                     */
                     onDoubleClicked: {
+                        // If the user is pressing the control key, do nothing.
+                        if (mouse.modifiers === Qt.ControlModifier) {
+                            return;
+                        }
+                        
                         if (isDir) {
                             fileSystemModel.cd(name)
                         } else {

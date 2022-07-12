@@ -73,6 +73,11 @@ public:
     */
     Q_INVOKABLE void shiftSelectItem(int index);
 
+    /*
+    Called when the user selected an item with ctrl.
+    */
+    Q_INVOKABLE void ctrlSelectItem(int index);
+
 signals:
     /*
     This signal is emitted when the displayed path is displayed.
