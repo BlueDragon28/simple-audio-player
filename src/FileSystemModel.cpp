@@ -268,12 +268,15 @@ void FileSystemModel::setIsSelected(int index, bool isSelected)
                 if (i != -1)
                 {
                     m_listOrder.remove(index);
-                    isModifies = false;
+                    isModifies = true;
                 }
             }
 
             // Notify the view.
-            emit dataChanged(this->index(index, 0), this->index(index, 0), {SELECTED});
+            if (isModifies)
+            {
+                emit dataChanged(this->index(index, 0), this->index(index, 0), {SELECTED});
+            }
         }
     }
 }
