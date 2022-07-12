@@ -125,8 +125,12 @@ Item {
                     
                     // When clicked, select the item.
                     onClicked: {
-                        fileSystemModel.clearSelection()
-                        fileSystemModel.setIsSelected(index, true)
+                        if (mouse.modifiers == Qt.ShiftModifier) {
+                            fileSystemModel.shiftSelectItem(index)
+                        } else {
+                            fileSystemModel.clearSelection()
+                            fileSystemModel.setIsSelected(index, true)
+                        }
                     }
 
                     /*

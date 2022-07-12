@@ -312,3 +312,59 @@ QStringList FileSystemModel::selectedFilesList()
 
     return fileList;
 }
+
+/*
+Return the lowest index inside listOrder list.
+*/
+int FileSystemModel::lowestSelectedIndex()
+{
+    int lowestIndex = m_fileList.size();
+        
+    foreach (int index, m_listOrder)
+    {
+        if (index < lowestIndex)
+        {
+            lowestIndex = index;
+        }
+    }
+
+    if (lowestIndex != m_fileList.size())
+        return lowestIndex;
+    else
+        return -1;
+}
+
+/*
+Called when the user selected an item with shift.
+*/
+void FileSystemModel::shiftSelectItem(int index)
+{
+    if (index >= 0 && index < m_fileList.size())
+    {
+        // Getting the lowest selected index.
+        int lowestIndex = lowestSelectedIndex();
+        // If index lower than lowestIndex. Select from index to lowestIndex.
+        if (index < lowestIndex)
+        {
+            clearSelection();
+            for (int i = index; i <= lowestIndex; i++)
+            {
+                m_fileList[i].isSelected = true;
+                m_listOrder.append(i);
+            }
+            emit dataChanged(this->index(index), this->index(lowestIndex), {SELECTED});
+        }
+        // If index greater than lowestIndex. Select from lowestIndex to index.
+        else if (index > lowestIndex && lowestIndex != -1)
+        {
+            clearSelection();
+            for (int i = lowestIndex; i <= index; i++)
+            {
+                m_fileList[i].isSelected = true;
+                m_listOrder.append(i);
+            }
+            emit dataChanged(this->index(lowestIndex), this->index(index), {SELECTED});
+        }
+        // Otherwise, this item is already selected or lowestIndex is invalid. Do nothing.
+    }
+}

@@ -68,6 +68,11 @@ public:
     */
     Q_INVOKABLE QStringList selectedFilesList();
 
+    /*
+    Called when the user selected an item with shift.
+    */
+    Q_INVOKABLE void shiftSelectItem(int index);
+
 signals:
     /*
     This signal is emitted when the displayed path is displayed.
@@ -97,6 +102,11 @@ private:
     When the directory path of the file system change, updating the list.
     */
     void updateList();
+
+    /*
+    Return the lowest index inside listOrder list.
+    */
+    int lowestSelectedIndex();
 
     /*
     Struct holding the file info and if the element is selected.
