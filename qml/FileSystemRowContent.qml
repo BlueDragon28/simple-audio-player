@@ -53,15 +53,6 @@ Item {
             }
 
             delegate: fileSystemDelegate
-            
-            // Highlith the selected item by the user.
-            highlight: Rectangle {
-                color: "lightsteelblue"
-            }
-            // The time needed for the highlight to resize to the size of the delegate. 
-            highlightResizeDuration: 500
-            highlightMoveDuration: 150
-
             spacing: 0
         }
     }
