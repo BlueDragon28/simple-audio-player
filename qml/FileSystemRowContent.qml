@@ -60,68 +60,85 @@ Item {
     Component {
         id: fileSystemDelegate
 
+        /*
+        This rectangle is displaying the selection (if the item is selected or not).
+        */
         Rectangle {
             width: fileSystemView.width
             height: fileName.height+9
-            color: Player.currentStream === absoluteFilePath ? Qt.color("#A00040FF") : "transparent"
-            radius: 8
+            color: isSelected ? "lightsteelblue" : "transparent"
 
-            Row {
-                width: parent.width-8
-                height: parent.height-8
-                spacing: 2
-                x: 4
-                y: 4
-
-                // The name of the file name.
-                Label {
-                    id: fileName
-                    width: viewHeader.nameSize-4
-                    text: name
-                }
-
-                // The last time the file was modified.
-                Label {
-                    id: lastModification
-                    width: viewHeader.lastModifiedSize
-                    text: lastModified
-                }
-
-                // The file size.
-                Label {
-                    id: fileSize
-                    width: viewHeader.sizeSize-4
-                    text: size
-                }
-            }
-
-            // Line at the bottom of the row.
+            /*
+            This rectangle is displaying if the file is playing.
+            */
             Rectangle {
-                anchors.top: parent.bottom
-                anchors.topMargin: -1
-                anchors.left: parent.left
-
-                width: parent.width
-                height: 1
-                color: "lightgray"
-            }
-
-            // Mouse area to change the selection of the fileSystemView.
-            MouseArea {
                 anchors.fill: parent
-                
-                // When clicked, change the current index of the fileSystemView
-                onClicked: fileSystemView.currentIndex = index
+                color: Player.currentStream === absoluteFilePath ? Qt.color("#A00040FF") : "transparent"
+                radius: 8
 
                 /*
-                When the user double click on an item, if its a directory, move the view inside
-                this directory.
+                A line row displaying informations on the file.
                 */
-                onDoubleClicked: {
-                    if (isDir) {
-                        fileSystemModel.cd(name)
-                    } else {
-                        SAL.open(listPath)
+                Row {
+                    width: parent.width-8
+                    height: parent.height-8
+                    spacing: 2
+                    x: 4
+                    y: 4
+
+                    // The name of the file name.
+                    Label {
+                        id: fileName
+                        width: viewHeader.nameSize-4
+                        text: name
+                    }
+
+                    // The last time the file was modified.
+                    Label {
+                        id: lastModification
+                        width: viewHeader.lastModifiedSize
+                        text: lastModified
+                    }
+
+                    // The file size.
+                    Label {
+                        id: fileSize
+                        width: viewHeader.sizeSize-4
+                        text: size
+                    }
+                }
+
+                // Line at the bottom of the row.
+                Rectangle {
+                    anchors.top: parent.bottom
+                    anchors.topMargin: -1
+                    anchors.left: parent.left
+
+                    width: parent.width
+                    height: 1
+                    color: "lightgray"
+                }
+
+                // Mouse area to change the selection of the fileSystemView.
+                MouseArea {
+                    anchors.fill: parent
+                    
+                    // When clicked, select the item.
+                    onClicked: {
+                        fileSystemModel.clearSelection()
+                        fileSystemModel.setIsSelected(index, true)
+                    }
+
+                    /*
+                    When the user double click on an item, if its a directory, move the view inside
+                    this directory. Otherwise, try to play file and all the files next to it (if any).
+                    */
+                    onDoubleClicked: {
+                        if (isDir) {
+                            fileSystemModel.cd(name)
+                        } else {
+                            SAL.open(listPath)
+                        }
                     }
                 }
             }
