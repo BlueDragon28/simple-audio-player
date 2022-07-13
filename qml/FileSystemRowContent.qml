@@ -131,8 +131,8 @@ Item {
                 MouseArea {
                     anchors.fill: parent
 
-                    // Accept left and right button events.
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    // Accept left, middle and right button events.
+                    acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
                     
                     // When clicked, select the item.
                     onClicked: function (mouse) {
@@ -147,6 +147,8 @@ Item {
                             }
                         } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
                             contextMenu.popup()
+                        } else { // Middle button click: deselect all selection.
+                            fileSystemModel.clearSelection()
                         }
                     }
 
