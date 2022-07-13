@@ -7,14 +7,14 @@ Displaying informations about the current track inside the Player Control toolBa
 */
 Item {
     id: root
-    implicitWidth: horizontalLayout.width
+    implicitHeight: horizontalLayout.height
 
     // Alias to change the name of the track.
     property alias name: trackName.text
 
     ColumnLayout {
         id: horizontalLayout
-        height: parent.height
+        width: parent.width
 
         Label {
             id: trackName
