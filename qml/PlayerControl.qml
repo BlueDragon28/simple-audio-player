@@ -75,6 +75,14 @@ Item {
             onClicked: SAL.next()
         }
 
+        // Displaying information about the current track.
+        TrackInformation {
+            id: trackInformation
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+        }
+
         // Label showing the position time of the stream.
         Label {
             id: position
@@ -149,6 +157,9 @@ Item {
             streamSlider.to = Player.streamSize()
             duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
             PlayingList.next(filePath)
+
+            // Displaying the name of the track to TrackInformation.
+            trackInformation.name = SAL.getFileName(filePath)
         }
 
         function onEndFile(filePath) {
@@ -156,6 +167,9 @@ Item {
             streamSlider.to = 0
             position.text = "00:00"
             duration.text = "00:00"
+
+            // Reset TrackInformation information.
+            trackInformation.name = ""
         }
 
         function onStreamPosChangeInFrames(streamPos) {

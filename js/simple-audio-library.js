@@ -117,3 +117,20 @@ function playSelectedMusic(model) {
         open(selectedItems)
     }
 }
+
+/*
+Retrieving the filename from a path.
+*/
+function getFileName(path) {
+    let index = path.lastIndexOf("/")
+
+    if (index >= 0) {
+        if (index+1 < path.length) {
+            return path.slice(index+1)
+        } else {
+            return ""
+        }
+    } else {
+        return path
+    }
+}
