@@ -155,9 +155,11 @@ Item {
                     When the user double click on an item, if its a directory, move the view inside
                     this directory. Otherwise, try to play file and all the files next to it (if any).
                     */
-                    onDoubleClicked: {
-                        // If the user is pressing the control key, do nothing.
-                        if (mouse.modifiers === Qt.ControlModifier) {
+                    onDoubleClicked: function(mouse) {
+                        // If the user is pressing the control key, or double clicking with the middle or right button, do nothing.
+                        if (mouse.button === Qt.MiddleButton || 
+                            mouse.button === Qt.RightButton || 
+                            mouse.modifiers === Qt.ControlModifier) {
                             return;
                         }
                         
