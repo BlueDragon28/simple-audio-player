@@ -55,13 +55,8 @@ Item {
             */
             TrackInformation {
                 id: trackInformation
-                clip: true
 
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-                Layout.bottomMargin: 8
-                Layout.leftMargin: 8
-                Layout.rightMargin: 8
+                Layout.fillWidth: parent
             }
         }
     }

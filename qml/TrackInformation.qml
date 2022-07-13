@@ -3,25 +3,33 @@ import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 
 /*
-Displaying informations about the current track inside the Player Control toolBar.
+Displaying informations about the current track.
 */
 Item {
     id: root
-    implicitHeight: horizontalLayout.height
+    implicitHeight: rect.height
 
     // Alias to change the name of the track.
     property alias name: trackName.text
 
-    ColumnLayout {
-        id: horizontalLayout
+    Rectangle {
+        id: rect
         width: parent.width
+        height: horizontalLayout.height
+        color: "lightgray"
 
-        Label {
-            id: trackName
-            verticalAlignment: Qt.AlignVCenter
+        ColumnLayout {
+            id: horizontalLayout
+            width: parent.width
 
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            Label {
+                id: trackName
+                clip: true
+                verticalAlignment: Qt.AlignVCenter
+
+                Layout.margins: 8
+                Layout.fillWidth: true
+            }
         }
     }
 }
