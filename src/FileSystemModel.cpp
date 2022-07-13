@@ -237,47 +237,23 @@ QStringList FileSystemModel::fileList(int index) const
 }
 
 /*
-Change the selection state of an item.
+Select an item and clear all other selection.
 */
-void FileSystemModel::setIsSelected(int index, bool isSelected)
+void FileSystemModel::selectAtIndex(int index)
 {
     if (index >= 0 && index < m_fileList.size())
     {
-        if (isSelected != m_fileList.at(index).isSelected)
-        {
-            // Update if it's selected.
-            m_fileList[index].isSelected = isSelected;
+        // Clear all the selection.
+        clearSelection();
 
-            /*
-            Check if the list order list contain this index. 
-            Otherwise, adding the index to the list.
-            */
-            int i = m_listOrder.indexOf(index);
-            bool isModifies = false;
+        // Select the item at index (index).
+        m_fileList[index].isSelected = true;
 
-            if (isSelected)
-            {
-                if (i == -1)
-                {
-                    m_listOrder.append(index);
-                    isModifies = true;
-                }
-            }
-            else
-            {
-                if (i != -1)
-                {
-                    m_listOrder.remove(index);
-                    isModifies = true;
-                }
-            }
+        // Put index into the selection listOrder.
+        m_listOrder.append(index);
 
-            // Notify the view.
-            if (isModifies)
-            {
-                emit dataChanged(this->index(index, 0), this->index(index, 0), {SELECTED});
-            }
-        }
+        // Notify the vue.
+        emit dataChanged(this->index(index), this->index(index), {SELECTED});
     }
 }
 

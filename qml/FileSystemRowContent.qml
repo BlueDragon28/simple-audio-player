@@ -142,8 +142,7 @@ Item {
                             } else if (mouse.modifiers === Qt.ControlModifier) {
                                 fileSystemModel.ctrlSelectItem(index)
                             } else {
-                                fileSystemModel.clearSelection()
-                                fileSystemModel.setIsSelected(index, true)
+                                fileSystemModel.selectAtIndex(index)
                             }
                         } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
                             contextMenu.popup()

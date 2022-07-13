@@ -54,9 +54,9 @@ public:
     Q_INVOKABLE QStringList fileList(int index = -1) const;
 
     /*
-    Change the selection state of an item.
+    Select an item and clear all other selection.
     */
-    Q_INVOKABLE void setIsSelected(int index, bool isSelected);
+    Q_INVOKABLE void selectAtIndex(int index);
 
     /*
     Clear the selection.
