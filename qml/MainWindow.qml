@@ -26,7 +26,8 @@ ApplicationWindow {
 
     // Player control.
     footer: ToolBar {
-        height: 35
+        height: 41
+        position: ToolBar.footer
 
         PlayerControl {
             anchors.fill: parent
