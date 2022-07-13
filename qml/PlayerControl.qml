@@ -14,6 +14,8 @@ Item {
 
     RowLayout {
         anchors.fill: parent
+        anchors.topMargin: 3
+        anchors.bottomMargin: 3
 
         Button {
             id: previousBtn
