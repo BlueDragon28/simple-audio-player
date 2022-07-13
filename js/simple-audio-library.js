@@ -104,3 +104,16 @@ function parseTime(time) {
 
     return strTime
 }
+
+/*
+Play selected music
+*/
+function playSelectedMusic(model) {
+    // Retrive the list of selected items.
+    let selectedItems = model.selectedFilesList()
+
+    // If any items in the list, open and play the list.
+    if (selectedItems.length > 0) {
+        open(selectedItems)
+    }
+}

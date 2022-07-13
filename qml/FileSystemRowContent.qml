@@ -54,6 +54,14 @@ Item {
 
             delegate: fileSystemDelegate
             spacing: 0
+
+            /*
+            Context menu called when the user right click on the view.
+            */
+            FileSystemContextMenu {
+                id: contextMenu
+                onPlay: SAL.playSelectedMusic(fileSystemModel)
+            }
         }
     }
 
@@ -122,16 +130,23 @@ Item {
                 // Mouse area to change the selection of the fileSystemView.
                 MouseArea {
                     anchors.fill: parent
+
+                    // Accept left and right button events.
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
                     
                     // When clicked, select the item.
-                    onClicked: {
-                        if (mouse.modifiers === Qt.ShiftModifier) {
-                            fileSystemModel.shiftSelectItem(index)
-                        } else if (mouse.modifiers === Qt.ControlModifier) {
-                            fileSystemModel.ctrlSelectItem(index)
-                        } else {
-                            fileSystemModel.clearSelection()
-                            fileSystemModel.setIsSelected(index, true)
+                    onClicked: function (mouse) {
+                        if (mouse.button === Qt.LeftButton) { // Left button click: select items.
+                            if (mouse.modifiers === Qt.ShiftModifier) {
+                                fileSystemModel.shiftSelectItem(index)
+                            } else if (mouse.modifiers === Qt.ControlModifier) {
+                                fileSystemModel.ctrlSelectItem(index)
+                            } else {
+                                fileSystemModel.clearSelection()
+                                fileSystemModel.setIsSelected(index, true)
+                            }
+                        } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
+                            contextMenu.popup()
                         }
                     }
 

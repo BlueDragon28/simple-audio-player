@@ -12,6 +12,7 @@
         <file>qml/PlayPauseButton.qml</file>
         <file>qml/StreamSlider.qml</file>
         <file>qml/FileSystemViewHeader.qml</file>
+        <file>qml/FileSystemContextMenu.qml</file>
 
         <file>js/simple-audio-library.js</file>
     </qresource>
