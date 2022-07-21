@@ -42,10 +42,14 @@ Item {
                 If the track doesn't have a title, use the file name.
             */
             let title = TrackTag.title
+            let filePath = TrackTag.filePath
+
             if (title.length > 0) {
                 trackTitle.text = title
+            } else if (filePath.length == 0) {
+                trackTitle.text = ""
             } else {
-                trackTitle.text = SAL.getFileName(TrackTag.filePath)
+                trackTitle.text = SAL.getFileName(filePath)
             }
         }
     }
