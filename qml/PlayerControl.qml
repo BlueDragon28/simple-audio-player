@@ -149,6 +149,9 @@ Item {
             streamSlider.to = Player.streamSize()
             duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
             PlayingList.next(filePath)
+
+            // Update tag.
+            TrackTag.filePath = filePath
         }
 
         function onEndFile(filePath) {
@@ -156,6 +159,9 @@ Item {
             streamSlider.to = 0
             position.text = "00:00"
             duration.text = "00:00"
+
+            // Reset tag.
+            TrackTag.filePath = ""
         }
 
         function onStreamPosChangeInFrames(streamPos) {

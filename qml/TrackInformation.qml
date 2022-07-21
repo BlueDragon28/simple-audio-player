@@ -1,6 +1,8 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
+import SimpleAudioPlayer 1.0
+import "qrc:///js/simple-audio-library.js" as SAL
 
 /*
 Displaying informations about the current track.
@@ -8,9 +10,6 @@ Displaying informations about the current track.
 Item {
     id: root
     implicitHeight: rect.height
-
-    // Alias to change the name of the track.
-    property alias name: trackName.text
 
     Rectangle {
         id: rect
@@ -54,6 +53,24 @@ Item {
                         PropertyAnimation { to: 0; duration: 0 }
                     }
                 }
+            }
+        }
+    }
+
+    // Connect to the TrackTag singleton to receive notification when tags are changed.
+    Connections {
+        target: TrackTag
+
+        function onTitleChanged() {
+            /*
+                Display the title of the track.
+                If the track doesn't have a title, use the file name.
+            */
+            let title = TrackTag.title
+            if (title.length > 0) {
+                trackName.text = title
+            } else {
+                trackName.text = getFileName(TrackTag.filePath)
             }
         }
     }

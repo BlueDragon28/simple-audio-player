@@ -2,7 +2,6 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
-import "qrc:///js/simple-audio-library.js" as SAL
 
 /*
 This is the side panel of the audio player.
@@ -58,21 +57,6 @@ Item {
 
                 Layout.fillWidth: parent
             }
-        }
-    }
-
-    // Connection to the Player C++ class to receive signals calls.
-    Connections {
-        target: Player
-
-        // When a new stream start, update trackInformation with the name of the file.
-        function onStartNewFile(filePath) {
-            trackInformation.name = SAL.getFileName(filePath)
-        }
-
-        // When a stream stop, reset trackInformation.
-        function onEndFile(filePath) {
-            trackInformation.name = ""
         }
     }
 }
