@@ -149,6 +149,9 @@ Item {
                         } else { // Middle button click: deselect all selection.
                             fileSystemModel.clearSelection()
                         }
+
+                        // Make focus on the list view.
+                        fileSystemView.focus = true
                     }
 
                     /*
