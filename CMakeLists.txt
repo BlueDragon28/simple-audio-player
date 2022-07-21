@@ -16,6 +16,9 @@ find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SAL REQUIRED simple-audio-library_static)
 
+# Find taglib library
+pkg_check_modules(TAGLIB REQUIRED taglib)
+
 # Search for every headers in sources file.
 file(GLOB HEADERS include/*.h)
 file(GLOB SOURCES src/*.cpp)
@@ -35,7 +38,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Quick
     Qt6::QuickControls2
-    ${SAL_LIBRARIES})
+    ${SAL_LIBRARIES}
+    ${TAGLIB_LIBRARIES})
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 qt_add_qml_module(${PROJECT_NAME} URI "SimpleAudioPlayer" VERSION 1.0)
