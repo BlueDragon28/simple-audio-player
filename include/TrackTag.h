@@ -25,6 +25,7 @@ public:
     };
 
     TrackTag();
+    ~TrackTag();
 
     /*
     Static method returning the tag of a file.

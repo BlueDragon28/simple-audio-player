@@ -17,6 +17,12 @@ TrackTag::TrackTag()
         });
 }
 
+TrackTag::~TrackTag()
+{
+    if (m_readTagThread.joinable())
+        m_readTagThread.join();
+}
+
 /*
 Set the file path to extract the tags.
 */
