@@ -72,31 +72,38 @@ TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath)
 }
 
 /*
+Inline method to update tag.
+*/
+template<typename T>
+inline void TrackTag::updateTag(T& memberTagItem, T& newTagItem, void (TrackTag::*updateSignal)())
+{
+    bool tagUpdated = false;
+
+    // Check if the new tag is different from the old tag. If it is, update it.
+    if (newTagItem != memberTagItem)
+    {
+        memberTagItem = newTagItem;
+        tagUpdated = true;
+    }
+
+    // If the tag is updated, notify it.
+    if (tagUpdated)
+    {
+        emit (this->*updateSignal)();
+    }
+}
+
+/*
 Read the tag of the current file.
 */
 void TrackTag::readTag()
 {
-    std::scoped_lock lock(m_filePathMutex, m_tagMutex);
-
     // Retrieve the tag from the file filePath.
     Tag tag = getTagFromFile(m_filePath);
 
-    // Update the tag.
-    if (tag.title != m_tag.title)
-    {
-        m_tag.title = tag.title;
-        emit titleChanged();
-    }
-    if (tag.album != m_tag.album)
-    {
-        m_tag.album = tag.album;
-        emit albumChanged();
-    }
-    if (tag.artist != m_tag.artist)
-    {
-        m_tag.artist = tag.artist;
-        emit artistChanged();
-    }
+    updateTag(m_tag.title, tag.title, &TrackTag::titleChanged);
+    updateTag(m_tag.album, tag.album, &TrackTag::albumChanged);
+    updateTag(m_tag.artist, tag.artist, &TrackTag::artistChanged);
 }
 
 QString TrackTag::title() const

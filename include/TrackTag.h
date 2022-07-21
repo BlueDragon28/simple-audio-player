@@ -57,6 +57,11 @@ private:
     QString album() const;
     QString artist() const;
 
+    /*
+    Inline method to update tag.
+    */
+    template<typename T>
+    inline void updateTag(T& memberTagItem, T& newTagItem, void (TrackTag::*updateSignal)());
 
     /*
     Read the tag of the current file.
