@@ -65,7 +65,7 @@ TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath)
 
         tag.title = QString::fromUtf8(t->title().toCString());
         tag.album = QString::fromUtf8(t->album().toCString());
-        tag.artist = QString::fromUtf8(t->album().toCString());
+        tag.artist = QString::fromUtf8(t->artist().toCString());
     }
 
     return tag;
