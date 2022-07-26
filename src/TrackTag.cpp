@@ -1,5 +1,6 @@
 #include "TrackTag.h"
 #include <QFileInfo>
+#include <QDir>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <taglib/tpropertymap.h>
@@ -104,6 +105,9 @@ void TrackTag::readTag()
     updateTag(m_tag.title, tag.title, &TrackTag::titleChanged);
     updateTag(m_tag.album, tag.album, &TrackTag::albumChanged);
     updateTag(m_tag.artist, tag.artist, &TrackTag::artistChanged);
+
+    // Get the cover art of the album.
+    getCoverArt();
 }
 
 QString TrackTag::title() const
@@ -122,4 +126,45 @@ QString TrackTag::artist() const
 {
     std::scoped_lock lock(m_tagMutex);
     return m_tag.artist;
+}
+
+QPixmap TrackTag::covertArt() const
+{
+    std::scoped_lock lock(m_coverMutex);
+    return m_coverArt;
+}
+
+void TrackTag::getCoverArt() 
+{
+    // Get the list of files inside the track directory.
+    QDir trackDirectory = QFileInfo(m_filePath).absoluteDir();
+    QFileInfoList filesInfo = trackDirectory.entryInfoList(QDir::Files);
+
+    // Check if there is a file named "large_cover.png" or "small_cover.png" in the folder.
+    QString filePath;
+    foreach (const QFileInfo& fileInfo, filesInfo)
+    {
+        if (fileInfo.fileName() == "large_cover.png" ||
+            fileInfo.fileName() == "small_cover.png")
+        {
+            filePath = fileInfo.absoluteFilePath();
+            break;
+        }
+    }
+
+    // If the cover is found, opening it.
+    if (!filePath.isEmpty())
+    {
+        std::scoped_lock lock(m_coverMutex);
+        m_coverArt = QPixmap(filePath);
+    }
+    // Otherwise, display an empty cover.
+    else
+    {
+        std::scoped_lock lock(m_coverMutex);
+        m_coverArt = QPixmap();
+    }
+
+    // Anyway, notify of the covertArt change.
+    emit covertArtChanged();
 }

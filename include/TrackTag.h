@@ -5,6 +5,7 @@
 #include <QtQml/qqmlregistration.h>
 #include <thread>
 #include <mutex>
+#include <QPixmap>
 
 class TrackTag : public QObject
 {
@@ -15,6 +16,7 @@ class TrackTag : public QObject
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString album READ album NOTIFY albumChanged)
     Q_PROPERTY(QString artist READ artist NOTIFY artistChanged)
+    Q_PROPERTY(QPixmap covertArt READ covertArt NOTIFY covertArtChanged)
 
 public:
     struct Tag
@@ -37,6 +39,7 @@ signals:
     void titleChanged();
     void albumChanged();
     void artistChanged();
+    void covertArtChanged();
 
 private:
     /*
@@ -56,6 +59,12 @@ private:
     QString title() const;
     QString album() const;
     QString artist() const;
+    QPixmap covertArt() const;
+
+    /*
+    Get the cover art of the album.
+    */
+    void getCoverArt();
 
     /*
     Inline method to update tag.
@@ -78,6 +87,10 @@ private:
 
     // Reading the tag of the current file in a separate file.
     std::thread m_readTagThread;
+
+    // Album cover.
+    QPixmap m_coverArt;
+    mutable std::mutex m_coverMutex;
 };
 
 #endif // SIMPLEAUDIOPLAYER_TRACKTAG_H_
