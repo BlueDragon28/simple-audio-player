@@ -27,13 +27,16 @@ Item {
             TrackLabel {
                 id: trackTitle
                 Layout.fillWidth: true
-                Layout.margins: 8
+                Layout.leftMargin: 8
+                Layout.topMargin: 8
+                Layout.rightMargin: 8
             }
 
             TrackLabel {
                 id: trackAlbum
                 Layout.fillWidth: true
-                Layout.margins: 8
+                Layout.leftMargin: 8
+                Layout.rightMargin: 8
                 fontSize: 10
                 color: "#505050"
             }
@@ -41,7 +44,9 @@ Item {
             TrackLabel {
                 id: trackArtist
                 Layout.fillWidth: true
-                Layout.margins: 8
+                Layout.leftMargin: 8
+                Layout.rightMargin: 8
+                Layout.bottomMargin: 8
                 fontSize: 10
                 color: "#505050"
             }
