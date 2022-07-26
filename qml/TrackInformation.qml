@@ -29,6 +29,22 @@ Item {
                 Layout.fillWidth: true
                 Layout.margins: 8
             }
+
+            TrackLabel {
+                id: trackAlbum
+                Layout.fillWidth: true
+                Layout.margins: 8
+                fontSize: 10
+                color: "#505050"
+            }
+
+            TrackLabel {
+                id: trackArtist
+                Layout.fillWidth: true
+                Layout.margins: 8
+                fontSize: 10
+                color: "#505050"
+            }
         }
     }
 
@@ -50,6 +66,40 @@ Item {
                 trackTitle.text = ""
             } else {
                 trackTitle.text = SAL.getFileName(filePath)
+            }
+        }
+
+        function onAlbumChanged() {
+            /*
+                Display the name of the album.
+                If there is no album name, use "Unknown" instead.
+            */
+            let album = TrackTag.album
+            let filePath = TrackTag.filePath
+
+            if (album.length > 0) {
+                trackAlbum.text = album
+            } else if (filePath.length == 0) {
+                trackAlbum.text = ""
+            } else {
+                trackAlbum.text = "Unknown"
+            }
+        }
+
+        function onArtistChanged() {
+            /*
+                Display the artist name.
+                If there is no artist name, use "Unknown" instead.
+            */
+            let artist = TrackTag.artist
+            let filePath = TrackTag.filePath
+
+            if (artist.length > 0) {
+                trackArtist.text = artist
+            } else if (filePath.length == 0) {
+                trackArtist.text = ""
+            } else {
+                trackArtist.text = "Unknown"
             }
         }
     }

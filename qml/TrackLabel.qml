@@ -9,6 +9,8 @@ Item {
 
     // Get access to the label properties.
     property alias text: trackLabel.text
+    property alias fontSize: trackLabel.font.pointSize
+    property alias color: trackLabel.color
 
     Label {
         id: trackLabel
