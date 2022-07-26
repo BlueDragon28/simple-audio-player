@@ -102,9 +102,12 @@ void TrackTag::readTag()
     // Retrieve the tag from the file filePath.
     Tag tag = getTagFromFile(m_filePath);
 
-    updateTag(m_tag.title, tag.title, &TrackTag::titleChanged);
-    updateTag(m_tag.album, tag.album, &TrackTag::albumChanged);
-    updateTag(m_tag.artist, tag.artist, &TrackTag::artistChanged);
+    {
+        std::scoped_lock lock(m_tagMutex);
+        updateTag(m_tag.title, tag.title, &TrackTag::titleChanged);
+        updateTag(m_tag.album, tag.album, &TrackTag::albumChanged);
+        updateTag(m_tag.artist, tag.artist, &TrackTag::artistChanged);
+    }
 
     // Get the cover art of the album.
     getCoverArt();
