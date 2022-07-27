@@ -117,14 +117,14 @@ Item {
             }
         }
 
-        function onCovertArtChanged() {
+        function onCoverArtChanged() {
             /*
             Display the album cover (if any).
             */
             albumCover.source = "image://coverArt/cover"
         }
 
-        function onCovertArtIsEmpty() {
+        function onCoverArtIsEmpty() {
             /*
             Display default image.
             */

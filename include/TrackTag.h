@@ -38,8 +38,8 @@ signals:
     void titleChanged();
     void albumChanged();
     void artistChanged();
-    void covertArtChanged();
-    void covertArtIsEmpty();
+    void coverArtChanged();
+    void coverArtIsEmpty();
 
 private:
     /*

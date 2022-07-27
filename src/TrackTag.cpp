@@ -154,12 +154,12 @@ void TrackTag::getCoverArt()
     if (!filePath.isEmpty())
     {
         CoverArtTag::setCoverImage(QPixmap(filePath));
-        emit covertArtChanged();
+        emit coverArtChanged();
     }
     // Otherwise, reset the cover.
     else
     {
         CoverArtTag::resetCoverImage();
-        emit covertArtIsEmpty();
+        emit coverArtIsEmpty();
     }
 }
