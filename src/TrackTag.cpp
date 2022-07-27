@@ -23,6 +23,7 @@ TrackTag::~TrackTag()
 {
     if (m_readTagThread.joinable())
         m_readTagThread.join();
+    CoverArtTag::resetCoverImage();
 }
 
 /*
