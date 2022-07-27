@@ -87,10 +87,6 @@ private:
 
     // Reading the tag of the current file in a separate file.
     std::thread m_readTagThread;
-
-    // Album cover.
-    QPixmap m_coverArt;
-    mutable std::mutex m_coverMutex;
 };
 
 #endif // SIMPLEAUDIOPLAYER_TRACKTAG_H_

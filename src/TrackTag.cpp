@@ -1,4 +1,5 @@
 #include "TrackTag.h"
+#include "CoverArtTag.h"
 #include <QFileInfo>
 #include <QDir>
 #include <taglib/tag.h>
@@ -133,8 +134,7 @@ QString TrackTag::artist() const
 
 QPixmap TrackTag::covertArt() const
 {
-    std::scoped_lock lock(m_coverMutex);
-    return m_coverArt;
+    return CoverArtTag::getCoverImage();
 }
 
 void TrackTag::getCoverArt() 
@@ -158,14 +158,12 @@ void TrackTag::getCoverArt()
     // If the cover is found, opening it.
     if (!filePath.isEmpty())
     {
-        std::scoped_lock lock(m_coverMutex);
-        m_coverArt = QPixmap(filePath);
+        CoverArtTag::setCoverImage(QPixmap(filePath));
     }
-    // Otherwise, display an empty cover.
+    // Otherwise, reset the cover.
     else
     {
-        std::scoped_lock lock(m_coverMutex);
-        m_coverArt = QPixmap();
+        CoverArtTag::resetCoverImage();
     }
 
     // Anyway, notify of the covertArt change.
