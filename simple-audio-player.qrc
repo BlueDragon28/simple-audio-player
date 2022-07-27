@@ -17,5 +17,7 @@
         <file>qml/TrackLabel.qml</file>
 
         <file>js/simple-audio-library.js</file>
+
+        <file>images/musiqueIcon.png</file>
     </qresource>
 </RCC>

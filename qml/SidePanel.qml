@@ -19,12 +19,11 @@ Item {
 
         ColumnLayout {
             anchors.fill: parent
+            spacing: 0
 
             // Section list.
             ListView {
                 id: sectionList
-                /*anchors.fill: parent
-                anchors.margins: 8*/
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.margins: 8
@@ -48,14 +47,12 @@ Item {
                     color: "lightsteelblue"
                 }
             }
-
-            /*
-            Track information
-            */
+            
+            // Track information
             TrackInformation {
                 id: trackInformation
 
-                Layout.fillWidth: parent
+                Layout.fillWidth: true
             }
         }
     }

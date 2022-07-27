@@ -21,8 +21,17 @@ Item {
             id: horizontalLayout
             width: parent.width
 
-            // Displaying track informations in labels that slide when the text go beyond the boundaries.
+            // Display album cover 
+            Image {
+                id: albumCover
+                source: "image://coverArt/empty"
+                fillMode: Image.PreserveAspectFit
+                Layout.fillWidth: parent
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: Layout.preferredWidth * (sourceSize.height / sourceSize.width)
+            }
 
+            // Displaying track informations in labels that slide when the text go beyond the boundaries.
             // Track title
             TrackLabel {
                 id: trackTitle
@@ -106,6 +115,20 @@ Item {
             } else {
                 trackArtist.text = "Unknown"
             }
+        }
+
+        function onCovertArtChanged() {
+            /*
+            Display the album cover (if any).
+            */
+            albumCover.source = "image://coverArt/cover"
+        }
+
+        function onCovertArtIsEmpty() {
+            /*
+            Display default image.
+            */
+            albumCover.source = "image://coverArt/empty"
         }
     }
 }

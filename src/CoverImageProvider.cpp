@@ -8,9 +8,12 @@ CoverImageProvider::CoverImageProvider() :
 QPixmap CoverImageProvider::requestPixmap(const QString& id, QSize* size, const QSize& requestedSize)
 {
     // Retrive the cover image.
-    if (id == "cover")
+    if (id == "cover" || id == "empty")
     {
-        QPixmap pixmap = CoverArtTag::getCoverImage();
+        // Get cover image or default image base on id.
+        QPixmap pixmap = 
+            id == "cover" ? CoverArtTag::getCoverImage() :
+                            QPixmap(":/images/musiqueIcon.png");
 
         // Store in size the real size of the image.
         if (size)

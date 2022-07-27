@@ -16,7 +16,6 @@ class TrackTag : public QObject
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString album READ album NOTIFY albumChanged)
     Q_PROPERTY(QString artist READ artist NOTIFY artistChanged)
-    Q_PROPERTY(QPixmap covertArt READ covertArt NOTIFY covertArtChanged)
 
 public:
     struct Tag
@@ -40,6 +39,7 @@ signals:
     void albumChanged();
     void artistChanged();
     void covertArtChanged();
+    void covertArtIsEmpty();
 
 private:
     /*
@@ -59,7 +59,6 @@ private:
     QString title() const;
     QString album() const;
     QString artist() const;
-    QPixmap covertArt() const;
 
     /*
     Get the cover art of the album.

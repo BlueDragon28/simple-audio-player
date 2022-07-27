@@ -132,11 +132,6 @@ QString TrackTag::artist() const
     return m_tag.artist;
 }
 
-QPixmap TrackTag::covertArt() const
-{
-    return CoverArtTag::getCoverImage();
-}
-
 void TrackTag::getCoverArt() 
 {
     // Get the list of files inside the track directory.
@@ -159,13 +154,12 @@ void TrackTag::getCoverArt()
     if (!filePath.isEmpty())
     {
         CoverArtTag::setCoverImage(QPixmap(filePath));
+        emit covertArtChanged();
     }
     // Otherwise, reset the cover.
     else
     {
         CoverArtTag::resetCoverImage();
+        emit covertArtIsEmpty();
     }
-
-    // Anyway, notify of the covertArt change.
-    emit covertArtChanged();
 }
