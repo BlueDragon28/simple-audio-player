@@ -3,6 +3,7 @@
 
 #include <QPixmap>
 #include <mutex>
+#include <memory>
 
 /*
 This static class store the cover art of the current played image.
@@ -24,7 +25,7 @@ public:
     static void resetCoverImage();
 
 private:
-    static QPixmap m_coverImage;
+    static std::unique_ptr<QPixmap> m_coverImage;
     static std::mutex m_coverMutex;
 };
 
