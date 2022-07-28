@@ -66,6 +66,11 @@ private:
     void getCoverArt();
 
     /*
+    Extracting the cover image from the audio file.
+    */
+    bool extractCoverArtFromFile();
+
+    /*
     Inline method to update tag.
     */
     template<typename T>

@@ -2,9 +2,13 @@
 #include "CoverArtTag.h"
 #include <QFileInfo>
 #include <QDir>
+#include <QBitmap>
+#include <QImage>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <taglib/tpropertymap.h>
+#include <taglib/flacfile.h>
+#include <taglib/flacpicture.h>
 
 TrackTag::TrackTag()
 {
@@ -157,10 +161,50 @@ void TrackTag::getCoverArt()
         CoverArtTag::setCoverImage(QPixmap(filePath), m_tag.album);
         emit coverArtChanged();
     }
-    // Otherwise, reset the cover.
     else
     {
-        CoverArtTag::resetCoverImage();
-        emit coverArtIsEmpty();
+        // Trying to get the cover image from the file.
+        if (extractCoverArtFromFile())
+        {
+            emit coverArtChanged();
+        }
+        else
+        {
+            // Otherwise, reset the cover.
+            CoverArtTag::resetCoverImage();
+            emit coverArtIsEmpty();
+        }
     }
+}
+
+bool TrackTag::extractCoverArtFromFile()
+{
+    std::scoped_lock lock(m_filePathMutex);
+    
+    // Open as a FLAC file.
+    TagLib::FLAC::File flacFile = TagLib::FLAC::File(m_filePath.toLocal8Bit().constData(), true);
+    if (flacFile.isValid())
+    {
+        // Retrieve all the images inside the flac file.
+        TagLib::List<TagLib::FLAC::Picture*> pictures = 
+            flacFile.pictureList();
+        
+        if (!pictures.isEmpty())
+        {
+            // Get the first image and use it as the cover art.
+            TagLib::FLAC::Picture* picture = pictures.front();
+
+            // Open image from the data.
+            QImage image = QImage::fromData(
+                QByteArrayView(picture->data().data(), picture->data().size()));
+
+            if (!image.isNull())
+            {
+                CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
