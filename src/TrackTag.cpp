@@ -164,16 +164,15 @@ void TrackTag::getCoverArt()
     else
     {
         // Trying to get the cover image from the file.
-        if (extractCoverArtFromFile())
+        if (!m_filePath.isEmpty() && extractCoverArtFromFile())
         {
             emit coverArtChanged();
+            return;
         }
-        else
-        {
-            // Otherwise, reset the cover.
-            CoverArtTag::resetCoverImage();
-            emit coverArtIsEmpty();
-        }
+        
+        // Otherwise, reset the cover.
+        CoverArtTag::resetCoverImage();
+        emit coverArtIsEmpty();
     }
 }
 
