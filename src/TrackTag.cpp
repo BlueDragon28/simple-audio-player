@@ -154,7 +154,7 @@ void TrackTag::getCoverArt()
     // If the cover is found, opening it.
     if (!filePath.isEmpty())
     {
-        CoverArtTag::setCoverImage(QPixmap(filePath));
+        CoverArtTag::setCoverImage(QPixmap(filePath), m_tag.album);
         emit coverArtChanged();
     }
     // Otherwise, reset the cover.

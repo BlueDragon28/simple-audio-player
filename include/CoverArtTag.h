@@ -1,6 +1,7 @@
 #ifndef SIMPLEAUDIOPLAYER_COVERARTTAG_H_
 #define SIMPLEAUDIOPLAYER_COVERARTTAG_H_
 
+#include <QString>
 #include <QPixmap>
 #include <mutex>
 #include <memory>
@@ -18,13 +19,15 @@ class CoverArtTag
 
 public:
     /*
-    Set, get and reset the cover image.
+    Set, get and reset the cover image and album name.
     */
-    static void setCoverImage(const QPixmap& coverImage);
+    static void setCoverImage(const QPixmap& coverImage, const QString& albumName);
     static QPixmap getCoverImage();
+    static QString getAlbumName();
     static void resetCoverImage();
 
 private:
+    static QString m_albumName;
     static std::unique_ptr<QPixmap> m_coverImage;
     static std::mutex m_coverMutex;
 };

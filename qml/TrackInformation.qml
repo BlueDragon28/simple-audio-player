@@ -121,7 +121,8 @@ Item {
             /*
             Display the album cover (if any).
             */
-            albumCover.source = "image://coverArt/cover"
+            let albumName = TrackTag.album
+            albumCover.source = "image://coverArt/" + albumName
         }
 
         function onCoverArtIsEmpty() {
