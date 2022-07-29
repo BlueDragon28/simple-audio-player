@@ -10,6 +10,7 @@
 #include <taglib/flacfile.h>
 #include <taglib/flacpicture.h>
 #include <taglib/attachedpictureframe.h>
+#include <taglib/mpegfile.h>
 
 TrackTag::TrackTag()
 {
@@ -184,6 +185,11 @@ bool TrackTag::extractCoverArtFromFile()
     // Open as a FLAC file.
     bool result = extractFlacCoverArt();
 
+    if (!result)
+    {
+        result = extractMp3CoverArt();
+    }
+
     return result;
 }
 
@@ -225,6 +231,30 @@ bool TrackTag::extractFlacCoverArt()
     return result;
 }
 
+bool TrackTag::extractMp3CoverArt()
+{
+    bool result = false;
+
+    // Open has a MPEG file.
+    TagLib::MPEG::File mpegFile = TagLib::MPEG::File(m_filePath.toLocal8Bit().constData());
+    if (mpegFile.isValid())
+    {
+        // Extract ID3v2 cover art if any.
+        if (mpegFile.ID3v2Tag())
+        {
+            result = extractId3v2CoverArt(mpegFile.ID3v2Tag());
+        }
+
+        // Extract APE cover art if any.
+        if (!result && mpegFile.APETag())
+        {
+            result = extractAPECoverArt(mpegFile.APETag());
+        }
+    }
+
+    return result;
+}
+
 bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
 {
     if (tag)
@@ -242,6 +272,37 @@ bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
             {
                 CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
                 return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag)
+{
+    if (tag)
+    {
+        const TagLib::APE::ItemListMap& list = tag->itemListMap();
+        // Getting the cover art image.
+        if (list.contains("COVER ART (FRONT)"))
+        {
+            TagLib::ByteVector item = list["COVER ART (FRONT)"].value();
+            // Do not copy the file name of the file.
+            int pos = item.find('\0');
+            if (pos >= 0)
+            {
+                const TagLib::ByteVector& pic = item.mid(pos+1);
+
+                // Opening the image.
+                QImage image = QImage::fromData(
+                    QByteArrayView(pic.data(), pic.size()));
+                
+                if (!image.isNull())
+                {
+                    CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                    return true;
+                }
             }
         }
     }

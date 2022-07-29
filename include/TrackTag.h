@@ -7,6 +7,7 @@
 #include <mutex>
 #include <QPixmap>
 #include <taglib/id3v2tag.h>
+#include <taglib/apetag.h>
 
 class TrackTag : public QObject
 {
@@ -72,7 +73,10 @@ private:
     bool extractCoverArtFromFile();
 
     bool extractFlacCoverArt();
+    bool extractMp3CoverArt();
+
     bool extractId3v2CoverArt(TagLib::ID3v2::Tag* tag);
+    bool extractAPECoverArt(TagLib::APE::Tag* tag);
 
     /*
     Inline method to update tag.
