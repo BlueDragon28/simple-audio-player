@@ -180,25 +180,26 @@ void TrackTag::getCoverArt()
 
 bool TrackTag::extractCoverArtFromFile()
 {
-    std::scoped_lock lock(m_filePathMutex);
+    QString filePath = this->filePath();
+    Tag tag = getTag();
     
     // Open as a FLAC file.
-    bool result = extractFlacCoverArt();
+    bool result = extractFlacCoverArt(filePath, tag);
 
     if (!result)
     {
-        result = extractMp3CoverArt();
+        result = extractMp3CoverArt(filePath, tag);
     }
 
     return result;
 }
 
-bool TrackTag::extractFlacCoverArt()
+bool TrackTag::extractFlacCoverArt(const QString& filePath, const Tag& tag)
 {
     bool result = false;
 
     // Open as a FLAC file.
-    TagLib::FLAC::File flacFile = TagLib::FLAC::File(m_filePath.toLocal8Bit().constData());
+    TagLib::FLAC::File flacFile = TagLib::FLAC::File(filePath.toLocal8Bit().constData());
     if (flacFile.isValid())
     {
         // Retrieve all the images inside the flac file.
@@ -216,7 +217,7 @@ bool TrackTag::extractFlacCoverArt()
 
             if (!image.isNull())
             {
-                CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                CoverArtTag::setCoverImage(QPixmap::fromImage(image), tag.album);
                 result = true;
             }
         }
@@ -224,38 +225,38 @@ bool TrackTag::extractFlacCoverArt()
         // If no cover art image found, check if there are not on the ID3v2Tag.
         if (!result && flacFile.ID3v2Tag())
         {
-            result = extractId3v2CoverArt(flacFile.ID3v2Tag());
+            result = extractId3v2CoverArt(flacFile.ID3v2Tag(), tag);
         }
     }
 
     return result;
 }
 
-bool TrackTag::extractMp3CoverArt()
+bool TrackTag::extractMp3CoverArt(const QString& filePath, const Tag& tag)
 {
     bool result = false;
 
     // Open has a MPEG file.
-    TagLib::MPEG::File mpegFile = TagLib::MPEG::File(m_filePath.toLocal8Bit().constData());
+    TagLib::MPEG::File mpegFile = TagLib::MPEG::File(filePath.toLocal8Bit().constData());
     if (mpegFile.isValid())
     {
         // Extract ID3v2 cover art if any.
         if (mpegFile.ID3v2Tag())
         {
-            result = extractId3v2CoverArt(mpegFile.ID3v2Tag());
+            result = extractId3v2CoverArt(mpegFile.ID3v2Tag(), tag);
         }
 
         // Extract APE cover art if any.
         if (!result && mpegFile.APETag())
         {
-            result = extractAPECoverArt(mpegFile.APETag());
+            result = extractAPECoverArt(mpegFile.APETag(), tag);
         }
     }
 
     return result;
 }
 
-bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
+bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag, const Tag& albumTag)
 {
     if (tag)
     {
@@ -270,7 +271,7 @@ bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
             
             if (!image.isNull())
             {
-                CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                CoverArtTag::setCoverImage(QPixmap::fromImage(image), albumTag.album);
                 return true;
             }
         }
@@ -279,7 +280,7 @@ bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
     return false;
 }
 
-bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag)
+bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag, const Tag& albumTag)
 {
     if (tag)
     {
@@ -300,7 +301,7 @@ bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag)
                 
                 if (!image.isNull())
                 {
-                    CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                    CoverArtTag::setCoverImage(QPixmap::fromImage(image), albumTag.album);
                     return true;
                 }
             }

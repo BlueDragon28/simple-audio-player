@@ -62,6 +62,9 @@ private:
     QString album() const;
     QString artist() const;
 
+    // Return the tag struct.
+    inline Tag getTag() const;
+
     /*
     Get the cover art of the album.
     */
@@ -72,11 +75,11 @@ private:
     */
     bool extractCoverArtFromFile();
 
-    bool extractFlacCoverArt();
-    bool extractMp3CoverArt();
+    bool extractFlacCoverArt(const QString& filePath, const Tag& tag);
+    bool extractMp3CoverArt(const QString& filePath, const Tag& tag);
 
-    bool extractId3v2CoverArt(TagLib::ID3v2::Tag* tag);
-    bool extractAPECoverArt(TagLib::APE::Tag* tag);
+    bool extractId3v2CoverArt(TagLib::ID3v2::Tag* tag, const Tag& albumTag);
+    bool extractAPECoverArt(TagLib::APE::Tag* tag, const Tag& albumTag);
 
     /*
     Inline method to update tag.
@@ -100,5 +103,11 @@ private:
     // Reading the tag of the current file in a separate file.
     std::thread m_readTagThread;
 };
+
+inline TrackTag::Tag TrackTag::getTag() const
+{
+    std::scoped_lock lock(m_tagMutex);
+    return m_tag;
+}
 
 #endif // SIMPLEAUDIOPLAYER_TRACKTAG_H_
