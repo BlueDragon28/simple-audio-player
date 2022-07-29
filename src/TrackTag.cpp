@@ -9,6 +9,7 @@
 #include <taglib/tpropertymap.h>
 #include <taglib/flacfile.h>
 #include <taglib/flacpicture.h>
+#include <taglib/attachedpictureframe.h>
 
 TrackTag::TrackTag()
 {
@@ -181,7 +182,17 @@ bool TrackTag::extractCoverArtFromFile()
     std::scoped_lock lock(m_filePathMutex);
     
     // Open as a FLAC file.
-    TagLib::FLAC::File flacFile = TagLib::FLAC::File(m_filePath.toLocal8Bit().constData(), true);
+    bool result = extractFlacCoverArt();
+
+    return result;
+}
+
+bool TrackTag::extractFlacCoverArt()
+{
+    bool result = false;
+
+    // Open as a FLAC file.
+    TagLib::FLAC::File flacFile = TagLib::FLAC::File(m_filePath.toLocal8Bit().constData());
     if (flacFile.isValid())
     {
         // Retrieve all the images inside the flac file.
@@ -197,6 +208,36 @@ bool TrackTag::extractCoverArtFromFile()
             QImage image = QImage::fromData(
                 QByteArrayView(picture->data().data(), picture->data().size()));
 
+            if (!image.isNull())
+            {
+                CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);
+                result = true;
+            }
+        }
+        
+        // If no cover art image found, check if there are not on the ID3v2Tag.
+        if (!result && flacFile.ID3v2Tag())
+        {
+            result = extractId3v2CoverArt(flacFile.ID3v2Tag());
+        }
+    }
+
+    return result;
+}
+
+bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
+{
+    if (tag)
+    {
+        // Getting the cover list.
+        const TagLib::ID3v2::FrameList& frameList = tag->frameList("APIC");
+        if (!frameList.isEmpty())
+        {
+            const TagLib::ID3v2::AttachedPictureFrame* const cover = 
+                (const TagLib::ID3v2::AttachedPictureFrame*)frameList.front();
+            QImage image = QImage::fromData(
+                QByteArrayView(cover->picture().data(), cover->picture().size()));
+            
             if (!image.isNull())
             {
                 CoverArtTag::setCoverImage(QPixmap::fromImage(image), m_tag.album);

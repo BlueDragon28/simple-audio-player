@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include <QPixmap>
+#include <taglib/id3v2tag.h>
 
 class TrackTag : public QObject
 {
@@ -69,6 +70,9 @@ private:
     Extracting the cover image from the audio file.
     */
     bool extractCoverArtFromFile();
+
+    bool extractFlacCoverArt();
+    bool extractId3v2CoverArt(TagLib::ID3v2::Tag* tag);
 
     /*
     Inline method to update tag.
