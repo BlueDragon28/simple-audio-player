@@ -170,7 +170,7 @@ function playSelectedMusic(model) {
 
     // If any items in the list, open and play the list.
     if (selectedItems.length > 0) {
-        open(selectedItems)
+        open(selectedItems, selectedItems[0])
     }
 }
 
