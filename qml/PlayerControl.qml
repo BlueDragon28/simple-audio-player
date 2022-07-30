@@ -60,6 +60,20 @@ Item {
             onClicked: SAL.stop()
         }
 
+        // Random button
+        Button {
+            id: randomBtn
+
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: Layout.preferredHeight
+
+            text: "r"
+            checkable: true
+            onClicked: SAL.setRandom(checked)
+        }
+
         // Next button
         Button {
             id: nextBtn
