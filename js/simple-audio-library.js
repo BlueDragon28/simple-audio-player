@@ -5,11 +5,25 @@ Wrapper to the SAL C++ module.
 .pragma library
 .import SimpleAudioPlayer 1.0 as SAP
 
+// Pointer storing the original list when randomize it.
+let originalList = []
+
 // Random the playing list.
 let isRandom = false;
 function setRandom(value) {
     if (typeof value === "boolean") {
         isRandom = value
+        if (SAP.Player.isPlaying()) {
+            let playingList
+            if (originalList.length > 0) {
+                playingList = originalList
+            } else {
+                playingList = SAP.PlayingList.list
+            }
+
+            let currentItem = SAP.PlayingList.current
+            open(playingList, currentItem)
+        }
     }
 }
 
@@ -67,7 +81,8 @@ function open(filePath, firstElement = "") {
         }
 
         // Randomize the array if isRandom is true
-        if (isRandom) {
+        if (isRandom === true) {
+            originalList = Array.from(validFiles)
             validFiles = randomize(validFiles, firstElement)
         }
 

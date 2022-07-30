@@ -16,6 +16,7 @@ void PlayingList::setList(const QList<QString>& list)
         m_index = 0;
         emit listChanged();
         emit indexChanged();
+        emit currentChanged();
     }
 }
 
@@ -38,6 +39,7 @@ void PlayingList::setIndex(int index)
     {
         m_index = index;
         emit indexChanged();
+        emit currentChanged();
     }
 }
 
@@ -116,4 +118,13 @@ QList<QString> PlayingList::listFromIndex() const
     {
         return QList<QString>();
     }
+}
+
+QString PlayingList::current() const
+{
+    if (m_index >= 0 && m_index < m_list.size())
+    {
+        return m_list.at(m_index);
+    }
+    return QString();
 }

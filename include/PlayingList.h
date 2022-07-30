@@ -15,6 +15,7 @@ class PlayingList : public QObject
     QML_SINGLETON
     Q_PROPERTY(QList<QString> list READ list WRITE setList NOTIFY listChanged)
     Q_PROPERTY(int index READ index NOTIFY indexChanged)
+    Q_PROPERTY(QString current READ current NOTIFY currentChanged)
 
 public:
     PlayingList();
@@ -50,9 +51,15 @@ public:
     */
     Q_INVOKABLE QList<QString> listFromIndex() const;
 
+    /*
+    Get the file path of the current index.
+    */
+    QString current() const;
+
 signals:
     void listChanged();
     void indexChanged();
+    void currentChanged();
 
 public slots:
     /*
