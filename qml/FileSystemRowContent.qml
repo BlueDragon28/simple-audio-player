@@ -169,7 +169,7 @@ Item {
                         if (isDir) {
                             fileSystemModel.cd(name)
                         } else {
-                            SAL.open(listPath)
+                            SAL.open(completeListPath, absoluteFilePath)
                         }
                     }
                 }
