@@ -72,7 +72,10 @@ function open(filePath, firstElement = "") {
         }
 
         SAP.PlayingList.list = validFiles
-        SAP.Player.open(validFiles)
+        if (firstElement.length > 0) {
+            SAP.PlayingList.next(firstElement) // Move the list to the selected item.
+        }
+        SAP.Player.open(SAP.PlayingList.listFromIndex())
         SAP.Player.play()
     }
 }
