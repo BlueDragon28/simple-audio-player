@@ -2,22 +2,75 @@
 Wrapper to the SAL C++ module.
 */
 
+.pragma library
 .import SimpleAudioPlayer 1.0 as SAP
 
+// Random the playing list.
+let isRandom = false;
+function setRandom(value) {
+    if (typeof value === "boolean") {
+        isRandom = value
+    }
+}
+
+// Using the shuffle algorithm to randomize an array
+function shuffle(array) {
+    for (let i = array.length-1; i > 0; i--) {
+        var randomIndex = Math.floor(Math.random() * (i + 1));
+        [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+    }
+    return array
+}
+
+// Randomize the playing list.
+function randomize(playingList, firstToPlay) {
+    // If playingList if a string, return it.
+    if (typeof playingList === "string") {
+        return playingList
+    } else {
+        // Check if first to play is in the list.
+        let isInTheList = false
+        if (firstToPlay.length > 0) {
+            for (let i = 0; i < playingList.length; i++) {
+                if (playingList[i] === firstToPlay) {
+                    playingList.splice(i, 1)
+                    isInTheList = true
+                    break
+                }
+            }
+        }   
+
+        // Randomize the playingList array
+        let randomArray = shuffle(playingList)
+        // Add the firstToPlay (if exist) to the beguinning of the list.
+        if (isInTheList) {
+            randomArray.splice(0, 0, firstToPlay)
+        }
+
+        return randomArray
+    }
+}
+
 // Open a new list.
-function open(filePath) {
+function open(filePath, firstElement = "") {
     if (typeof filePath === "string") {
         if (SAP.Player.isReadable(filePath)) {
             SAP.Player.open(filePath)
             SAP.Player.play()
         }
-    } else {
+    } else if (filePath.length > 0) {
         let validFiles = new Array()
         for (let i = 0; i < filePath.length; i++) {
             if (SAP.Player.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
             }
         }
+
+        // Randomize the array if isRandom is true
+        if (isRandom) {
+            validFiles = randomize(validFiles, firstElement)
+        }
+
         SAP.PlayingList.list = validFiles
         SAP.Player.open(validFiles)
         SAP.Player.play()
