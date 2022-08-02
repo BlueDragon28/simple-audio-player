@@ -57,11 +57,18 @@ QString TrackTag::filePath() const
 /*
 Static method returning the tag of a file.
 */
-TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath)
+TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath, bool* success)
 {
     // If the filePath is empty or the file does not exists, return an empty tag list.
     if (filePath.isEmpty() || !QFileInfo::exists(filePath))
+    {
+        if (success)
+        {
+            *success = false;
+        }
+
         return {};
+    }
 
     TrackTag::Tag tag;
     
@@ -75,6 +82,18 @@ TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath)
         tag.title = QString::fromUtf8(t->title().toCString());
         tag.album = QString::fromUtf8(t->album().toCString());
         tag.artist = QString::fromUtf8(t->artist().toCString());
+
+        if (success)
+        {
+            *success = true;
+        }
+    }
+    else
+    {
+        if (success)
+        {
+            *success = false;
+        }
     }
 
     return tag;

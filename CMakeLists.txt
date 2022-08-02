@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find Qt6
-find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Sql REQUIRED)
 
 # Find simple-audio-library
 find_package(PkgConfig REQUIRED)
@@ -38,6 +38,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Quick
     Qt6::QuickControls2
+    Qt6::Sql
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES})
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")

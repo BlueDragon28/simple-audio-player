@@ -2,10 +2,14 @@
 #include <QQmlApplicationEngine>
 #include "Player.h"
 #include "CoverImageProvider.h"
+#include "MusicCollectionList.h"
 
 int main(int argc, char** argv)
 {
     QGuiApplication app(argc, argv);
+
+    // Instanciate MusicCollectionList.
+    MusicCollectionList::instance();
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());

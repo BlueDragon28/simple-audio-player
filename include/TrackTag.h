@@ -33,7 +33,7 @@ public:
     /*
     Static method returning the tag of a file.
     */
-    Q_INVOKABLE static Tag getTagFromFile(const QString& filePath);
+    Q_INVOKABLE static Tag getTagFromFile(const QString& filePath, bool* success = nullptr);
 
 signals:
     void filePathChanged();
