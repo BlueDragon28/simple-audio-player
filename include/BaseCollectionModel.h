@@ -9,6 +9,11 @@ class BaseCollectionModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+    enum CollectionRole
+    {
+        NAME
+    };
+
     BaseCollectionModel(const QString& tableName);
     virtual ~BaseCollectionModel();
 

@@ -8,6 +8,11 @@ BaseCollectionModel::BaseCollectionModel(const QString& tableName) :
     // When the music collection is updated, update this collection.
     connect(m_musicCollection, &MusicCollectionList::listUpdated,
             this, &BaseCollectionModel::updateItemsList);
+
+    if (m_musicCollection->isCollectionRead())
+    {
+        updateItemsList();
+    }
 }
 
 BaseCollectionModel::~BaseCollectionModel()
@@ -20,12 +25,20 @@ int BaseCollectionModel::rowCount(const QModelIndex &parent) const
 
 QVariant BaseCollectionModel::data(const QModelIndex &index, int role) const
 {
+    if (index.row() >= 0 && index.row() < rowCount())
+    {
+        if (role == NAME)
+        {
+            return m_itemsList.at(index.row());
+        }
+    }
     return QVariant();
 }
 
 QHash<int, QByteArray> BaseCollectionModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles[NAME] = "name";
     return roles;
 }
 
