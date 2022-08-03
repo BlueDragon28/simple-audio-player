@@ -14,9 +14,22 @@ Item {
         anchors.fill: parent
         color: "white"
 
-        Label {
-            anchors.centerIn: parent
-            text: "Music"
+//        Label {
+//            anchors.centerIn: parent
+//            text: "Music"
+//        }
+
+        ListView {
+            anchors.fill: parent
+            anchors.margins: 8
+
+            model: AlbumCollectionModel {
+                id: albumCollectionList
+            }
+
+            delegate: Label {
+                text: name
+            }
         }
     }
 }
