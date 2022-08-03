@@ -11,6 +11,11 @@
 #include <mutex>
 #include <thread>
 #include <memory>
+#include <atomic>
+
+#define TRACKS_NAME "Tracks"
+#define ALBUMS_NAME "Albums"
+#define ARTISTS_NAME "Artists"
 
 /*
 This class is used to store the user music collection.
@@ -27,6 +32,15 @@ public:
 
     // Static method to retrieve and instanciate the class.
     static MusicCollectionList* instance();
+
+    // Does the music collection has been read.
+    bool isCollectionRead() const;
+
+    // Number of albums in the collection.
+    int numberOfItemInTable(const QString& tableName) const;
+
+    // Retrieve names from table (tableName).
+    QStringList retrieveNamesFromTable(const QString& tableName) const;
 
 signals:
     void listUpdated(); // Signal called when the thread (m_parsingThread) stop processing.
@@ -67,6 +81,9 @@ private:
 
     // Static instance of the class.
     static std::unique_ptr<MusicCollectionList> _instance;
+
+    // Does the music collection has been read.
+    std::atomic<bool> m_isCollectionRead;
 };
 
 #endif // SIMPLEAUDIOPLAYER_MUSICCOLLECTIONLIST_H
