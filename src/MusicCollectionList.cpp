@@ -331,6 +331,31 @@ QStringList MusicCollectionList::retrieveNamesFromTable(const QString &tableName
     return namesList;
 }
 
+QString MusicCollectionList::retrieveFilePathFromAlbumName(const QString& albumName) const
+{
+    // Retrieve a file path of a track from the album (albumName).
+    QString statement = QString(
+        "SELECT " TRACKS_NAME ".filePath "
+        "FROM " TRACKS_NAME " "
+        "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
+        "WHERE name = \"%1\";").arg(QString(albumName).replace("'", "''").replace("\"", "\"\""));
+
+    QSqlQuery query(m_db);
+    if (query.exec(statement))
+    {
+        if (query.next())
+        {
+            return query.value(0).toString();
+        }
+    }
+    else
+    {
+        qDebug() << QString("failed to query file path from album %1: %2").arg(albumName).arg(query.lastError().text());
+    }
+
+    return "";
+}
+
 bool MusicCollectionList::isCollectionRead() const
 {
     return m_isCollectionRead;

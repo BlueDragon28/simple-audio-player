@@ -1,5 +1,7 @@
 #include <CoverImageProvider.h>
 #include "CoverArtTag.h"
+#include "MusicCollectionList.h"
+#include "TrackTag.h"
 
 CoverImageProvider::CoverImageProvider() :
     QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -17,10 +19,12 @@ QPixmap CoverImageProvider::requestPixmap(const QString& id, QSize* size, const 
     else 
     {
         // If the request album is the same has the stored cover image, retrieving it.
-        if (id == CoverArtTag::getAlbumName())
-        {
-            pixmap = CoverArtTag::getCoverImage();
-        }
+        //if (id == CoverArtTag::getAlbumName())
+        //{
+        //    pixmap = CoverArtTag::getCoverImage();
+        //}
+        QString trackPath = MusicCollectionList::instance()->retrieveFilePathFromAlbumName(id);
+        pixmap = TrackTag::getCoverArt(trackPath);
     }
 
     // Store in size the real size of the image.

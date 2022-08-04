@@ -42,6 +42,9 @@ public:
     // Retrieve names from table (tableName).
     QStringList retrieveNamesFromTable(const QString& tableName) const;
 
+    // Retrieve the first found tracks file path of an album name.
+    QString retrieveFilePathFromAlbumName(const QString& albumName) const;
+
 signals:
     void listUpdated(); // Signal called when the thread (m_parsingThread) stop processing.
 
