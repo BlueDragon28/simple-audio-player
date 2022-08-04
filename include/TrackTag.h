@@ -35,6 +35,11 @@ public:
     */
     Q_INVOKABLE static Tag getTagFromFile(const QString& filePath, bool* success = nullptr);
 
+    /*
+    Get the cover art of an album.
+    */
+    static QPixmap getCoverArt(const QString& filePath);
+
 signals:
     void filePathChanged();
     void titleChanged();
@@ -66,20 +71,15 @@ private:
     inline Tag getTag() const;
 
     /*
-    Get the cover art of the album.
+    Extracting the cover image from an audio file.
     */
-    void getCoverArt();
+    static QPixmap extractCoverArtFromFile(const QString& filePath);
 
-    /*
-    Extracting the cover image from the audio file.
-    */
-    bool extractCoverArtFromFile();
+    static QPixmap extractFlacCoverArt(const QString& filePath);
+    static QPixmap extractMp3CoverArt(const QString& filePath);
 
-    bool extractFlacCoverArt(const QString& filePath, const Tag& tag);
-    bool extractMp3CoverArt(const QString& filePath, const Tag& tag);
-
-    bool extractId3v2CoverArt(TagLib::ID3v2::Tag* tag, const Tag& albumTag);
-    bool extractAPECoverArt(TagLib::APE::Tag* tag, const Tag& albumTag);
+    static QPixmap extractId3v2CoverArt(TagLib::ID3v2::Tag* tag);
+    static QPixmap extractAPECoverArt(TagLib::APE::Tag* tag);
 
     /*
     Inline method to update tag.

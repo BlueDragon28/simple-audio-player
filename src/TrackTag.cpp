@@ -137,7 +137,17 @@ void TrackTag::readTag()
     }
 
     // Get the cover art of the album.
-    getCoverArt();
+    QPixmap cover = getCoverArt(m_filePath);
+    if (!cover.isNull())
+    {
+        CoverArtTag::setCoverImage(cover, tag.album);
+        emit coverArtChanged();
+    }
+    else
+    {
+        CoverArtTag::resetCoverImage();
+        emit coverArtIsEmpty();
+    }
 }
 
 QString TrackTag::title() const
@@ -158,65 +168,56 @@ QString TrackTag::artist() const
     return m_tag.artist;
 }
 
-void TrackTag::getCoverArt() 
+QPixmap TrackTag::getCoverArt(const QString& filePath)
 {
-    // Get the list of files inside the track directory.
-    QDir trackDirectory = QFileInfo(m_filePath).absoluteDir();
-    QFileInfoList filesInfo = trackDirectory.entryInfoList(QDir::Files);
-
-    // Check if there is a file named "large_cover.png" or "small_cover.png" in the folder.
-    QString filePath;
-    foreach (const QFileInfo& fileInfo, filesInfo)
+    if (!filePath.isEmpty() && QFileInfo::exists(filePath))
     {
-        if (fileInfo.fileName() == "large_cover.png" ||
-            fileInfo.fileName() == "small_cover.png")
+        // Get the list of files inside the track directory.
+        QDir trackDirectory = QFileInfo(filePath).absoluteDir();
+        QFileInfoList filesInfo = trackDirectory.entryInfoList(QDir::Files);
+
+        // Check if there is a file named "large_cover.png" or "small_cover.png" in the folder.
+        QString coverPath;
+        foreach (const QFileInfo& fileInfo, filesInfo)
         {
-            filePath = fileInfo.absoluteFilePath();
-            break;
+            if (fileInfo.fileName() == "large_cover.png" ||
+                fileInfo.fileName() == "small_cover.png")
+            {
+                coverPath = fileInfo.absoluteFilePath();
+                break;
+            }
+        }
+
+        // If the cover is found, opening it.
+        if (!coverPath.isEmpty())
+        {
+            return QPixmap(coverPath);
+        }
+        else
+        {
+            // Trying to get the cover image from the file.
+            return extractCoverArtFromFile(filePath);
         }
     }
 
-    // If the cover is found, opening it.
-    if (!filePath.isEmpty())
-    {
-        CoverArtTag::setCoverImage(QPixmap(filePath), m_tag.album);
-        emit coverArtChanged();
-    }
-    else
-    {
-        // Trying to get the cover image from the file.
-        if (!m_filePath.isEmpty() && extractCoverArtFromFile())
-        {
-            emit coverArtChanged();
-            return;
-        }
-        
-        // Otherwise, reset the cover.
-        CoverArtTag::resetCoverImage();
-        emit coverArtIsEmpty();
-    }
+    return QPixmap();
 }
 
-bool TrackTag::extractCoverArtFromFile()
+QPixmap TrackTag::extractCoverArtFromFile(const QString& filePath)
 {
-    QString filePath = this->filePath();
-    Tag tag = getTag();
-    
     // Open as a FLAC file.
-    bool result = extractFlacCoverArt(filePath, tag);
+    QPixmap pixmap = extractFlacCoverArt(filePath);
 
-    if (!result)
+    if (pixmap.isNull())
     {
-        result = extractMp3CoverArt(filePath, tag);
+        pixmap = extractMp3CoverArt(filePath);
     }
 
-    return result;
+    return pixmap;
 }
 
-bool TrackTag::extractFlacCoverArt(const QString& filePath, const Tag& tag)
+QPixmap TrackTag::extractFlacCoverArt(const QString& filePath)
 {
-    bool result = false;
-
     // Open as a FLAC file.
     TagLib::FLAC::File flacFile = TagLib::FLAC::File(filePath.toLocal8Bit().constData());
     if (flacFile.isValid())
@@ -234,48 +235,43 @@ bool TrackTag::extractFlacCoverArt(const QString& filePath, const Tag& tag)
             QImage image = QImage::fromData(
                 QByteArrayView(picture->data().data(), picture->data().size()));
 
-            if (!image.isNull())
-            {
-                CoverArtTag::setCoverImage(QPixmap::fromImage(image), tag.album);
-                result = true;
-            }
+            return QPixmap::fromImage(image);
         }
         
         // If no cover art image found, check if there are not on the ID3v2Tag.
-        if (!result && flacFile.ID3v2Tag())
+        if (flacFile.ID3v2Tag())
         {
-            result = extractId3v2CoverArt(flacFile.ID3v2Tag(), tag);
+            return extractId3v2CoverArt(flacFile.ID3v2Tag());
         }
     }
 
-    return result;
+    return QPixmap();
 }
 
-bool TrackTag::extractMp3CoverArt(const QString& filePath, const Tag& tag)
+QPixmap TrackTag::extractMp3CoverArt(const QString& filePath)
 {
-    bool result = false;
-
     // Open has a MPEG file.
     TagLib::MPEG::File mpegFile = TagLib::MPEG::File(filePath.toLocal8Bit().constData());
+    QPixmap pixmap;
     if (mpegFile.isValid())
     {
         // Extract ID3v2 cover art if any.
         if (mpegFile.ID3v2Tag())
         {
-            result = extractId3v2CoverArt(mpegFile.ID3v2Tag(), tag);
+            pixmap = extractId3v2CoverArt(mpegFile.ID3v2Tag());
         }
 
         // Extract APE cover art if any.
-        if (!result && mpegFile.APETag())
+        if (pixmap.isNull() && mpegFile.APETag())
         {
-            result = extractAPECoverArt(mpegFile.APETag(), tag);
+            pixmap = extractAPECoverArt(mpegFile.APETag());
         }
     }
 
-    return result;
+    return pixmap;
 }
 
-bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag, const Tag& albumTag)
+QPixmap TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
 {
     if (tag)
     {
@@ -287,19 +283,15 @@ bool TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag, const Tag& albumTag
                 (const TagLib::ID3v2::AttachedPictureFrame*)frameList.front();
             QImage image = QImage::fromData(
                 QByteArrayView(cover->picture().data(), cover->picture().size()));
-            
-            if (!image.isNull())
-            {
-                CoverArtTag::setCoverImage(QPixmap::fromImage(image), albumTag.album);
-                return true;
-            }
+
+            return QPixmap::fromImage(image);
         }
     }
 
-    return false;
+    return QPixmap();
 }
 
-bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag, const Tag& albumTag)
+QPixmap TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag)
 {
     if (tag)
     {
@@ -317,15 +309,11 @@ bool TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag, const Tag& albumTag)
                 // Opening the image.
                 QImage image = QImage::fromData(
                     QByteArrayView(pic.data(), pic.size()));
-                
-                if (!image.isNull())
-                {
-                    CoverArtTag::setCoverImage(QPixmap::fromImage(image), albumTag.album);
-                    return true;
-                }
+
+                return QPixmap::fromImage(image);
             }
         }
     }
 
-    return false;
+    return QPixmap();
 }
