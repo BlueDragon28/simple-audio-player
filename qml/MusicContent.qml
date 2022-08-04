@@ -5,7 +5,7 @@ import SimpleAudioPlayer 1.0
 
 /*
 This view is displaying the music available on the filesystem
-through a list of artists and albums.
+through a list of albums.
 */
 Item {
     id: root
@@ -14,22 +14,8 @@ Item {
         anchors.fill: parent
         color: "white"
 
-//        Label {
-//            anchors.centerIn: parent
-//            text: "Music"
-//        }
-
-        ListView {
+        AlbumListView {
             anchors.fill: parent
-            anchors.margins: 8
-
-            model: AlbumCollectionModel {
-                id: albumCollectionList
-            }
-
-            delegate: Label {
-                text: name
-            }
         }
     }
 }

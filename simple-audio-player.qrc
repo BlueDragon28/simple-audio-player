@@ -15,9 +15,8 @@
         <file>qml/FileSystemContextMenu.qml</file>
         <file>qml/TrackInformation.qml</file>
         <file>qml/TrackLabel.qml</file>
-
         <file>js/simple-audio-library.js</file>
-
         <file>images/musiqueIcon.png</file>
+        <file>qml/AlbumListView.qml</file>
     </qresource>
 </RCC>
