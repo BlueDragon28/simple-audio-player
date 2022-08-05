@@ -1,4 +1,5 @@
 #include <CoverImageProvider.h>
+#include <QFileInfo>
 #include "CoverArtTag.h"
 #include "MusicCollectionList.h"
 #include "TrackTag.h"
@@ -19,14 +20,18 @@ QPixmap CoverImageProvider::requestPixmap(const QString& id, QSize* size, const 
     else if (!id.isEmpty())
     {
         // If the request album is the same has the stored cover image, retrieving it.
-        //if (id == CoverArtTag::getAlbumName())
-        //{
-        //    pixmap = CoverArtTag::getCoverImage();
-        //}
-        QString trackPath = MusicCollectionList::instance()->retrieveFilePathFromAlbumName(id);
-        if (!trackPath.isEmpty())
+        if (id == CoverArtTag::getAlbumName())
         {
-            pixmap = TrackTag::getCoverArt(trackPath);
+            pixmap = CoverArtTag::getCoverImage();
+        }
+        // If not, then try to open the image using the file path stored in the album collection list.
+        else
+        {
+            QString trackPath = MusicCollectionList::instance()->retrieveFilePathFromAlbumName(id);
+            if (!trackPath.isEmpty())
+            {
+                pixmap = TrackTag::getCoverArt(trackPath);
+            }
         }
 
         // If the pixmap is null, load the default image cover.
