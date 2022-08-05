@@ -77,7 +77,7 @@ Item {
 
             if (title.length > 0) {
                 trackTitle.text = title
-            } else if (filePath.length == 0) {
+            } else if (filePath.length === 0) {
                 trackTitle.text = ""
             } else {
                 trackTitle.text = SAL.getFileName(filePath)
@@ -94,7 +94,7 @@ Item {
 
             if (album.length > 0) {
                 trackAlbum.text = album
-            } else if (filePath.length == 0) {
+            } else if (filePath.length === 0) {
                 trackAlbum.text = ""
             } else {
                 trackAlbum.text = "Unknown"
@@ -111,7 +111,7 @@ Item {
 
             if (artist.length > 0) {
                 trackArtist.text = artist
-            } else if (filePath.length == 0) {
+            } else if (filePath.length === 0) {
                 trackArtist.text = ""
             } else {
                 trackArtist.text = "Unknown"

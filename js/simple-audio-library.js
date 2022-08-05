@@ -73,7 +73,7 @@ function open(filePath, firstElement = "") {
             SAP.Player.play()
         }
     } else if (filePath.length > 0) {
-        let validFiles = new Array()
+        let validFiles = []
         for (let i = 0; i < filePath.length; i++) {
             if (SAP.Player.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
