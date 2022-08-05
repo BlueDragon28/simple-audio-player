@@ -25,6 +25,7 @@ Item {
             Image {
                 id: albumCover
                 source: "image://coverArt/empty"
+                asynchronous: true // Loading the cover image in another thread.
                 fillMode: Image.PreserveAspectFit
                 Layout.fillWidth: parent
                 Layout.preferredWidth: parent.width
