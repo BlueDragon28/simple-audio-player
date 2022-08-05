@@ -16,7 +16,7 @@ QPixmap CoverImageProvider::requestPixmap(const QString& id, QSize* size, const 
     {
         pixmap = QPixmap(":/images/musiqueIcon.png");
     }
-    else 
+    else if (!id.isEmpty())
     {
         // If the request album is the same has the stored cover image, retrieving it.
         //if (id == CoverArtTag::getAlbumName())
@@ -24,7 +24,16 @@ QPixmap CoverImageProvider::requestPixmap(const QString& id, QSize* size, const 
         //    pixmap = CoverArtTag::getCoverImage();
         //}
         QString trackPath = MusicCollectionList::instance()->retrieveFilePathFromAlbumName(id);
-        pixmap = TrackTag::getCoverArt(trackPath);
+        if (!trackPath.isEmpty())
+        {
+            pixmap = TrackTag::getCoverArt(trackPath);
+        }
+
+        // If the pixmap is null, load the default image cover.
+        if (pixmap.isNull())
+        {
+            pixmap = QPixmap(":/images/musiqueIcon.png");
+        }
     }
 
     // Store in size the real size of the image.
