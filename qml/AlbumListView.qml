@@ -45,13 +45,15 @@ Item {
                 anchors.topMargin: 10
                 spacing: 3
 
-                Rectangle {
+                Image {
                     id: cover
+                    source: "image://coverArt/" + name
+                    asynchronous: true
+                    fillMode: Image.PreserveAspectFit
                     width: parent.width - 20
                     height: width
                     x: 10
                     y: 10
-                    color: "gray"
                 }
 
                 Label {
@@ -70,7 +72,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: albumView.currentIndex = index
+                onClicked: albumView.currentIndex = index // Update the selection index.
             }
         }
     }
