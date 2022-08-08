@@ -50,6 +50,17 @@ signals:
 
 private:
     /*
+    Enumeration file type.
+    */
+    enum class AudioFileType
+    {
+        UNKNOWN,
+        FLAC,
+        ID3,
+    };
+
+
+    /*
     Set the file path to extract the tags.
     */
     void setFilePath(const QString& filePath);
@@ -71,6 +82,11 @@ private:
     inline Tag getTag() const;
 
     /*
+    Get file type base from the identification in the header of the file.
+    */
+    static AudioFileType getFileTypeFromHeader(const QString& filePath);
+
+    /*
     Extracting the cover image from an audio file.
     */
     static QPixmap extractCoverArtFromFile(const QString& filePath);
@@ -79,7 +95,6 @@ private:
     static QPixmap extractMp3CoverArt(const QString& filePath);
 
     static QPixmap extractId3v2CoverArt(TagLib::ID3v2::Tag* tag);
-    static QPixmap extractAPECoverArt(TagLib::APE::Tag* tag);
 
     /*
     Inline method to update tag.

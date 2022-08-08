@@ -4,6 +4,8 @@
 #include <QDir>
 #include <QBitmap>
 #include <QImage>
+#include <QFile>
+#include <QDataStream>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <taglib/tpropertymap.h>
@@ -11,6 +13,8 @@
 #include <taglib/flacpicture.h>
 #include <taglib/attachedpictureframe.h>
 #include <taglib/mpegfile.h>
+
+#include <cstring>
 
 TrackTag::TrackTag()
 {
@@ -205,15 +209,20 @@ QPixmap TrackTag::getCoverArt(const QString& filePath)
 
 QPixmap TrackTag::extractCoverArtFromFile(const QString& filePath)
 {
-    // Open as a FLAC file.
-    QPixmap pixmap = extractFlacCoverArt(filePath);
+    // Check the file type.
+    AudioFileType fileType = getFileTypeFromHeader(filePath);
 
-    if (pixmap.isNull())
+    if (fileType == AudioFileType::FLAC)
     {
-        pixmap = extractMp3CoverArt(filePath);
+        // Open as a FLAC file.
+        return extractFlacCoverArt(filePath);
+    }
+    else if (fileType == AudioFileType::ID3)
+    {
+        return extractMp3CoverArt(filePath);
     }
 
-    return pixmap;
+    return QPixmap();
 }
 
 QPixmap TrackTag::extractFlacCoverArt(const QString& filePath)
@@ -260,12 +269,6 @@ QPixmap TrackTag::extractMp3CoverArt(const QString& filePath)
         {
             pixmap = extractId3v2CoverArt(mpegFile.ID3v2Tag());
         }
-
-        // Extract APE cover art if any.
-        if (pixmap.isNull() && mpegFile.APETag())
-        {
-            pixmap = extractAPECoverArt(mpegFile.APETag());
-        }
     }
 
     return pixmap;
@@ -291,29 +294,35 @@ QPixmap TrackTag::extractId3v2CoverArt(TagLib::ID3v2::Tag* tag)
     return QPixmap();
 }
 
-QPixmap TrackTag::extractAPECoverArt(TagLib::APE::Tag* tag)
+TrackTag::AudioFileType TrackTag::getFileTypeFromHeader(const QString& filePath)
 {
-    if (tag)
+    // If the file exist.
+    if (!filePath.isEmpty() && QFileInfo::exists(filePath))
     {
-        const TagLib::APE::ItemListMap& list = tag->itemListMap();
-        // Getting the cover art image.
-        if (list.contains("COVER ART (FRONT)"))
+        // Opening the file.
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly))
         {
-            TagLib::ByteVector item = list["COVER ART (FRONT)"].value();
-            // Do not copy the file name of the file.
-            int pos = item.find('\0');
-            if (pos >= 0)
+            QDataStream stream(&file);
+
+            // Read the indentification in the header of the file.
+            char headerIndentification[5] = { 0, 0, 0, 0, 0 };
+            stream.readRawData(headerIndentification, 4);
+
+            // Check if the file is a FLAC file.
+            if (strcmp(headerIndentification, "fLaC") == 0)
             {
-                const TagLib::ByteVector& pic = item.mid(pos+1);
+                return AudioFileType::FLAC;
+            }
 
-                // Opening the image.
-                QImage image = QImage::fromData(
-                    QByteArrayView(pic.data(), pic.size()));
-
-                return QPixmap::fromImage(image);
+            // Check if it's a ID3 file.
+            headerIndentification[3] = 0;
+            if (strcmp(headerIndentification, "ID3") != 0)
+            {
+                return AudioFileType::ID3;
             }
         }
     }
 
-    return QPixmap();
+    return AudioFileType::UNKNOWN;
 }
