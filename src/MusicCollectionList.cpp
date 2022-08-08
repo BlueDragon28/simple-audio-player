@@ -356,6 +356,35 @@ QString MusicCollectionList::retrieveFilePathFromAlbumName(const QString& albumN
     return "";
 }
 
+QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFromAlbumName(const QString &albumName) const
+{
+    // Retrieve the files path of the tracks of an album (albumName).
+    QString statement = QString(
+        "SELECT filePath, trackName, album, artists "
+        "FROM " TRACKS_NAME " "
+        "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album ");
+
+    QSqlQuery query(m_db);
+    if (query.exec(statement))
+    {
+        // Store the retrieved information into a list.
+        QList<TrackInfo> trackList;
+        while (query.next())
+        {
+            TrackInfo track;
+            track.filePath = query.value(0).toString();
+            track.trackName = query.value(1).toString();
+            track.albumName = query.value(2).toString();
+            track.artistsName = query.value(3).toString();
+        }
+
+        // Returning the list.
+        return trackList;
+    }
+
+    return QList<TrackInfo>();
+}
+
 bool MusicCollectionList::isCollectionRead() const
 {
     return m_isCollectionRead;

@@ -28,6 +28,14 @@ class MusicCollectionList : public QObject
     MusicCollectionList();
 
 public:
+    struct TrackInfo
+    {
+        QString filePath;
+        QString trackName;
+        QString albumName;
+        QString artistsName;
+    };
+
     ~MusicCollectionList();
 
     // Static method to retrieve and instanciate the class.
@@ -44,6 +52,9 @@ public:
 
     // Retrieve the first found tracks file path of an album name.
     QString retrieveFilePathFromAlbumName(const QString& albumName) const;
+
+    // Retrieve the track list from an album name.
+    QList<TrackInfo> retrieveTrackListFromAlbumName(const QString& albumName) const;
 
 signals:
     void listUpdated(); // Signal called when the thread (m_parsingThread) stop processing.
