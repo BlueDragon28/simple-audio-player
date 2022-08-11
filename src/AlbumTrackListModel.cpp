@@ -65,3 +65,19 @@ void AlbumTracksListModel::retrieveTracksFromAlbumName()
         endInsertRows();
     }
 }
+
+QString AlbumTracksListModel::album() const
+{
+    return m_albumName;
+}
+
+void AlbumTracksListModel::setAlbum(const QString& album)
+{
+    if (album != m_albumName)
+    {
+        // Update album name and notify the view.
+        m_albumName = album;
+        retrieveTracksFromAlbumName();
+        emit albumUpdated();
+    }
+}

@@ -14,6 +14,7 @@ class AlbumTracksListModel : public QAbstractItemModel
 {
     Q_OBJECT
     QML_ELEMENT
+    Q_PROPERTY(QString album READ album WRITE setAlbum NOTIFY albumUpdated)
 
 public:
     enum Roles
@@ -29,11 +30,20 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
+signals:
+    void albumUpdated();
+
 private:
     /*
     Retrieve the tracks inside an album.
     */
     void retrieveTracksFromAlbumName();
+
+    /*
+    Update album name.
+    */
+    QString album() const;
+    void setAlbum(const QString& album);
 
     QString m_albumName;
     QList<MusicCollectionList::TrackInfo> m_trackList;
