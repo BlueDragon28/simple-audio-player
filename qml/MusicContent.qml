@@ -14,8 +14,28 @@ Item {
         anchors.fill: parent
         color: "white"
 
-        AlbumListView {
+        // Stack layout to change between album view and albumContent view.
+        StackLayout {
+            id: stackLayout
             anchors.fill: parent
+
+            AlbumListView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                // When emit, move to the album content list view and display the track list of the album.
+                onEnterAlbum: function(albumName) {
+                    albumContent.albumName = albumName
+                    stackLayout.currentIndex = 1
+                }
+            }
+
+            AlbumContentListView {
+                id: albumContent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
         }
     }
 }

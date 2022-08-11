@@ -18,5 +18,6 @@
         <file>js/simple-audio-library.js</file>
         <file>images/musiqueIcon.png</file>
         <file>qml/AlbumListView.qml</file>
+        <file>qml/AlbumContentListView.qml</file>
     </qresource>
 </RCC>

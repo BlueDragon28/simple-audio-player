@@ -9,6 +9,8 @@ Display a list of albums with the image cover and the name.
 Item {
     id: root
 
+    signal enterAlbum(string albumName)
+
     // View displaying the albums in row and columns.
     GridView {
         id: albumView
@@ -72,7 +74,10 @@ Item {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: albumView.currentIndex = index // Update the selection index.
+                onClicked: {
+                    albumView.currentIndex = index // Update the selection index.
+                    root.enterAlbum(name) // Notify to list the content of the album.
+                }
             }
         }
     }
