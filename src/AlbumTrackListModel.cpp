@@ -1,7 +1,7 @@
 #include "AlbumTrackListModel.h"
 
 AlbumTracksListModel::AlbumTracksListModel() :
-    QAbstractItemModel(nullptr)
+    QAbstractListModel(nullptr)
 {}
 
 AlbumTracksListModel::~AlbumTracksListModel()

@@ -10,7 +10,7 @@
 /*
 This model store the tracks inside an album.
 */
-class AlbumTracksListModel : public QAbstractItemModel
+class AlbumTracksListModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT

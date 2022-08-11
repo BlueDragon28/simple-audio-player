@@ -376,6 +376,7 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
             track.trackName = query.value(1).toString();
             track.albumName = query.value(2).toString();
             track.artistsName = query.value(3).toString();
+            trackList.append(track);
         }
 
         // Returning the list.
