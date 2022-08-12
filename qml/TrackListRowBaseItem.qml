@@ -10,10 +10,10 @@ Rectangle {
     height: contentHeight+9
 
     // When the row is selected, fill the rectangle with lightsteelblue color.
-    color: isSelected ? "lightsteelblue" : "transparent"
+    color: isItemSelected ? "lightsteelblue" : "transparent"
 
     // Does the row is selected.
-    property bool isSelected: false
+    property bool isItemSelected: false
 
     // Does the track is playing.
     property bool isPlaying: false
