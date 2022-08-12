@@ -19,5 +19,6 @@
         <file>images/musiqueIcon.png</file>
         <file>qml/AlbumListView.qml</file>
         <file>qml/AlbumContentListView.qml</file>
+        <file>qml/TrackListRowBaseItem.qml</file>
     </qresource>
 </RCC>
