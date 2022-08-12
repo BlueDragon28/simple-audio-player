@@ -196,13 +196,13 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
     QString statement = QString(
                 "INSERT INTO " TRACKS_NAME " (filePath, trackName, album, artists) "
                 "VALUES (\"%1\", \"%2\", %3, %4);")
-            .arg(fileInfo.absoluteFilePath(), tag.title.replace("'", "''").replace("\"", "\"\""))
+            .arg(fileInfo.absoluteFilePath().replace("'", "''").replace("\"", "\"\""), tag.title.replace("'", "''").replace("\"", "\"\""))
                     .arg(albumID).arg(artistID);
 
     QSqlQuery query(m_db);
     if (!query.exec(statement))
     {
-        qDebug() << QString("Failed to insert tacks %1 into table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
+        qDebug() << statement << QString("Failed to insert tracks %1 into table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
     }
 }
 
