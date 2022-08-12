@@ -32,12 +32,12 @@ Rectangle {
 
         Item {
             width: trackListView.width
-            height: trackName.height
+            height: nameOfTrack.height
 
             Label {
-                id: trackName
+                id: nameOfTrack
                 width: parent.width
-                text: "some text"
+                text: trackName
             }
         }
     }
