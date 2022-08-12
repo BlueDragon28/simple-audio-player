@@ -14,7 +14,7 @@ int AlbumTracksListModel::rowCount(const QModelIndex &parent) const
 
 QVariant AlbumTracksListModel::data(const QModelIndex& index, int role) const
 {
-    if (index.column() == 1 && index.row() >= 0 && index.row() < rowCount())
+    if (index.column() == 0 && index.row() >= 0 && index.row() < rowCount())
     {
         // Returning the name of the track name.
         if (role == TRACK_NAME)
