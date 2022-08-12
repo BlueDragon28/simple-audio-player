@@ -360,9 +360,10 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
 {
     // Retrieve the files path of the tracks of an album (albumName).
     QString statement = QString(
-        "SELECT filePath, trackName, album, artists "
+        "SELECT filePath, trackName "
         "FROM " TRACKS_NAME " "
-        "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album ");
+        "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
+        "WHERE " ALBUMS_NAME ".name  = \"%1\";").arg(QString(albumName).replace("'", "''").replace("\"", "\"\""));
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
@@ -381,6 +382,11 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
 
         // Returning the list.
         return trackList;
+    }
+    else
+    {
+        // If an error occured, print the statement and the error.
+        qDebug() << statement << "failed to query album's tracks list: " + query.lastError().text();
     }
 
     return QList<TrackInfo>();
