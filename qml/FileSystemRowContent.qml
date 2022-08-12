@@ -71,107 +71,68 @@ Item {
         /*
         This rectangle is displaying the selection (if the item is selected or not).
         */
-        Rectangle {
+        TrackListRowBaseItem {
             width: fileSystemView.width
-            height: fileName.height+9
-            color: isSelected ? "lightsteelblue" : "transparent"
+            contentHeight: fileName.height
+            isItemSelected: isSelected
+            
+            // The name of the file name.
+            Label {
+                id: fileName
+                width: viewHeader.nameSize-4
+                text: name
+            }
+
+            // The last time the file was modified.
+            Label {
+                id: lastModification
+                width: viewHeader.lastModifiedSize
+                text: lastModified
+            }
+
+            // The file size.
+            Label {
+                id: fileSize
+                width: viewHeader.sizeSize-4
+                text: size
+            }
+
+            // When clicked, select the item.
+            onClicked: function (mouse) {
+                if (mouse.button === Qt.LeftButton) { // Left button click: select items.
+                    if (mouse.modifiers === Qt.ShiftModifier) {
+                        fileSystemModel.shiftSelectItem(index)
+                    } else if (mouse.modifiers === Qt.ControlModifier) {
+                        fileSystemModel.ctrlSelectItem(index)
+                    } else {
+                        fileSystemModel.selectAtIndex(index)
+                    }
+                } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
+                    contextMenu.popup()
+                } else { // Middle button click: deselect all selection.
+                    fileSystemModel.clearSelection()
+                }
+
+                // Make focus on the list view.
+                fileSystemView.focus = true
+            }
 
             /*
-            This rectangle is displaying if the file is playing.
+            When double click, if it's a directory, move inside, otherwise, play the list 
+            with the current item selected first.
             */
-            Rectangle {
-                anchors.fill: parent
-                color: Player.currentStream === absoluteFilePath ? Qt.color("#A00040FF") : "transparent"
-                radius: 8
-
-                /*
-                A line row displaying informations on the file.
-                */
-                Row {
-                    width: parent.width-8
-                    height: parent.height-8
-                    spacing: 2
-                    x: 4
-                    y: 4
-
-                    // The name of the file name.
-                    Label {
-                        id: fileName
-                        width: viewHeader.nameSize-4
-                        text: name
-                    }
-
-                    // The last time the file was modified.
-                    Label {
-                        id: lastModification
-                        width: viewHeader.lastModifiedSize
-                        text: lastModified
-                    }
-
-                    // The file size.
-                    Label {
-                        id: fileSize
-                        width: viewHeader.sizeSize-4
-                        text: size
-                    }
+            onDoubleClicked: function(mouse) {
+                // If the user is pressing the control key, or double clicking with the middle or right button, don't do anything.
+                if (mouse.button === Qt.MiddleButton || 
+                    mouse.button === Qt.RightButton || 
+                    mouse.modifiers === Qt.ControlModifier) {
+                    return;
                 }
-
-                // Line at the bottom of the row.
-                Rectangle {
-                    anchors.top: parent.bottom
-                    anchors.topMargin: -1
-                    anchors.left: parent.left
-
-                    width: parent.width
-                    height: 1
-                    color: "lightgray"
-                }
-
-                // Mouse area to change the selection of the fileSystemView.
-                MouseArea {
-                    anchors.fill: parent
-
-                    // Accept left, middle and right button events.
-                    acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
-                    
-                    // When clicked, select the item.
-                    onClicked: function (mouse) {
-                        if (mouse.button === Qt.LeftButton) { // Left button click: select items.
-                            if (mouse.modifiers === Qt.ShiftModifier) {
-                                fileSystemModel.shiftSelectItem(index)
-                            } else if (mouse.modifiers === Qt.ControlModifier) {
-                                fileSystemModel.ctrlSelectItem(index)
-                            } else {
-                                fileSystemModel.selectAtIndex(index)
-                            }
-                        } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
-                            contextMenu.popup()
-                        } else { // Middle button click: deselect all selection.
-                            fileSystemModel.clearSelection()
-                        }
-
-                        // Make focus on the list view.
-                        fileSystemView.focus = true
-                    }
-
-                    /*
-                    When the user double click on an item, if its a directory, move the view inside
-                    this directory. Otherwise, try to play file and all the files next to it (if any).
-                    */
-                    onDoubleClicked: function(mouse) {
-                        // If the user is pressing the control key, or double clicking with the middle or right button, do nothing.
-                        if (mouse.button === Qt.MiddleButton || 
-                            mouse.button === Qt.RightButton || 
-                            mouse.modifiers === Qt.ControlModifier) {
-                            return;
-                        }
-                        
-                        if (isDir) {
-                            fileSystemModel.cd(name)
-                        } else {
-                            SAL.open(completeListPath, absoluteFilePath)
-                        }
-                    }
+                
+                if (isDir) {
+                    fileSystemModel.cd(name)
+                } else {
+                    SAL.open(completeListPath, absoluteFilePath)
                 }
             }
         }
