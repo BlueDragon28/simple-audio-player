@@ -75,6 +75,7 @@ Item {
             width: fileSystemView.width
             contentHeight: fileName.height
             isItemSelected: isSelected
+            isPlaying: Player.currentStream === absoluteFilePath // Check if the file is being played.
             
             // The name of the file name.
             Label {
