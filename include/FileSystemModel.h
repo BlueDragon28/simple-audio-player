@@ -1,6 +1,7 @@
 #ifndef SIMPLEAUDIOLIBRARY_FILESYSTEMMODEL_H_
 #define SIMPLEAUDIOLIBRARY_FILESYSTEMMODEL_H_
 
+#include "SelectionModel.h"
 #include <QAbstractListModel>
 #include <QDir>
 #include <QtQml/qqmlcomponent.h>
@@ -8,7 +9,7 @@
 /*
 This class display the content of a folder to a list view.
 */
-class FileSystemModel : public QAbstractListModel
+class FileSystemModel : public SelectionModel
 {
     Q_OBJECT
     QML_ELEMENT
@@ -19,7 +20,7 @@ public:
 
     enum FileSystemRole
     {
-        NAME = Qt::UserRole+1,
+        NAME = MAX_ROLE,
         FILE_PATH,
         ABSOLUTE_FILE_PATH,
         IS_DIR,
@@ -27,10 +28,8 @@ public:
         COMPLETE_LIST_PATH, // Return the list of all the file in the directory.
         SIZE, // Return the size of the file in human readable form.
         LAST_MODIFIED, // Return the last time the file was modified.
-        SELECTED, // Return if an element is selected.
     };
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
@@ -52,31 +51,6 @@ public:
         - if equal to -1: return the files path of all the files.
     */
     Q_INVOKABLE QStringList fileList(int index = -1) const;
-
-    /*
-    Select an item and clear all other selection.
-    */
-    Q_INVOKABLE void selectAtIndex(int index);
-
-    /*
-    Clear the selection.
-    */
-    Q_INVOKABLE void clearSelection();
-
-    /*
-    Return the list of selected file.
-    */
-    Q_INVOKABLE QStringList selectedFilesList();
-
-    /*
-    Called when the user selected an item with shift.
-    */
-    Q_INVOKABLE void shiftSelectItem(int index);
-
-    /*
-    Called when the user selected an item with ctrl.
-    */
-    Q_INVOKABLE void ctrlSelectItem(int index);
 
 signals:
     /*
@@ -109,24 +83,14 @@ private:
     void updateList();
 
     /*
-    Return the lowest index inside listOrder list.
-    */
-    int lowestSelectedIndex();
-
-    /*
     Struct holding the file info and if the element is selected.
     */
     struct FileInfo
     {
         QFileInfo info;
-        bool isSelected;
     };
 
     QDir m_dir;
-    QList<FileInfo> m_fileList;
-
-    // Order of the selection (holding the indices).
-    QList<int> m_listOrder;
 
     // This list store the list of all the last opened directories.
     QStringList m_lastDirsList;
