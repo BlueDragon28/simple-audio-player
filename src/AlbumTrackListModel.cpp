@@ -7,32 +7,28 @@ AlbumTracksListModel::AlbumTracksListModel(QObject* parent) :
 AlbumTracksListModel::~AlbumTracksListModel()
 {}
 
-int AlbumTracksListModel::rowCount(const QModelIndex &parent) const
-{
-    return m_trackList.count();
-}
-
 QVariant AlbumTracksListModel::data(const QModelIndex& index, int role) const
 {
     if (index.column() == 0 && index.row() >= 0 && index.row() < rowCount())
     {
+        QVariant variant = item(index.row());
         // Returning the name of the track name.
         if (role == TRACK_NAME)
         {
-            return m_trackList.at(index.row()).trackName;
+            return qvariant_cast<MusicCollectionList::TrackInfo>(variant).trackName;
         }
         // Returning the artists list.
         else if (role == ARTISTS)
         {
-            return m_trackList.at(index.row()).artistsName;
+            return qvariant_cast<MusicCollectionList::TrackInfo>(variant).artistsName;
         }
         else if (role == FILE_PATH)
         {
-            return m_trackList.at(index.row()).filePath;
+            return qvariant_cast<MusicCollectionList::TrackInfo>(variant).filePath;
         }
     }
 
-    return QVariant();
+    return SelectionModel::data(index, role);
 }
 
 QHash<int, QByteArray> AlbumTracksListModel::roleNames() const
@@ -54,7 +50,7 @@ void AlbumTracksListModel::retrieveTracksFromAlbumName()
     if (rowCount() > 0)
     {
         beginRemoveRows(QModelIndex(), 0, rowCount()-1);
-        m_trackList.clear();
+        clear();
         endRemoveRows();
     }
 
@@ -65,7 +61,17 @@ void AlbumTracksListModel::retrieveTracksFromAlbumName()
     // Update the view with the new list.
     if (!trackList.isEmpty())
     {
-        m_trackList = trackList;
+        // Storing the trackList into a list of variant.
+        QVariantList variantList(trackList.size());
+        for (int i = 0; i < variantList.size(); i++)
+        {
+            variantList[i] = QVariant::fromValue(trackList.at(i));
+        }
+
+        // Sending the variant list to the SelectionModel parent class.
+        setItemList(variantList);
+
+        // Notify the view.
         beginInsertRows(QModelIndex(), 0, rowCount()-1);
         endInsertRows();
     }

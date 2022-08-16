@@ -27,7 +27,6 @@ public:
     AlbumTracksListModel(QObject* parent = nullptr);
     virtual ~AlbumTracksListModel();
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
@@ -47,7 +46,6 @@ private:
     void setAlbum(const QString& album);
 
     QString m_albumName;
-    QList<MusicCollectionList::TrackInfo> m_trackList;
 };
 
 #endif // ALBUMTRACKSLISTMODEL_H
