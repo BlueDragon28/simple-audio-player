@@ -1,7 +1,7 @@
 #include "AlbumTrackListModel.h"
 
-AlbumTracksListModel::AlbumTracksListModel() :
-    QAbstractListModel(nullptr)
+AlbumTracksListModel::AlbumTracksListModel(QObject* parent) :
+    SelectionModel(parent)
 {}
 
 AlbumTracksListModel::~AlbumTracksListModel()

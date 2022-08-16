@@ -1,7 +1,7 @@
 #ifndef ALBUMTRACKSLISTMODEL_H
 #define ALBUMTRACKSLISTMODEL_H
 
-#include <QAbstractListModel>
+#include "SelectionModel.h"
 #include <QFileInfo>
 #include <QList>
 #include <QtQml/qqmlcomponent.h>
@@ -10,7 +10,7 @@
 /*
 This model store the tracks inside an album.
 */
-class AlbumTracksListModel : public QAbstractListModel
+class AlbumTracksListModel : public SelectionModel
 {
     Q_OBJECT
     QML_ELEMENT
@@ -19,11 +19,11 @@ class AlbumTracksListModel : public QAbstractListModel
 public:
     enum Roles
     {
-        TRACK_NAME,
+        TRACK_NAME = MAX_ROLE,
         ARTISTS,
     };
 
-    AlbumTracksListModel();
+    AlbumTracksListModel(QObject* parent = nullptr);
     virtual ~AlbumTracksListModel();
 
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
