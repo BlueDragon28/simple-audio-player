@@ -21,6 +21,7 @@ public:
     {
         TRACK_NAME = MAX_ROLE,
         ARTISTS,
+        FILE_PATH,
     };
 
     AlbumTracksListModel(QObject* parent = nullptr);

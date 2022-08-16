@@ -11,33 +11,57 @@ Rectangle {
 
     property alias albumName: trackListModel.album
 
-    // View diplaying the track list.
-    ListView {
-        id: trackListView
+    Column {
         anchors.fill: parent
-        clip: true
-        spacing: 0
 
-        // Tracks list model.
-        model: AlbumTracksListModel {
-            id: trackListModel
+        // The header of the album list. It displaying the name of the columns and allow resizing them.
+        AlbumContentListViewHeader {
+            id: viewHeader
+            width: parent.width
         }
 
-        delegate: trackListDelegate
-    }
+        // View diplaying the track list.
+        ListView {
+            id: trackListView
+            width: parent.width
+            height: parent.height - viewHeader.height
+            clip: true
+            spacing: 0
 
-    // Delegate of the trackListView.
-    Component {
-        id: trackListDelegate
+            // Tracks list model.
+            model: AlbumTracksListModel {
+                id: trackListModel
+            }
 
-        Item {
-            width: trackListView.width
-            height: nameOfTrack.height
+            delegate: trackListDelegate
+        }
 
-            Label {
-                id: nameOfTrack
-                width: parent.width
-                text: trackName
+        // Delegate of the trackListView.
+        Component {
+            id: trackListDelegate
+
+            // Helper item to display the tracks.
+            TrackListRowBaseItem {
+                width: trackListView.width
+                contentHeight: nameOfTrack.height
+                isItemSelected: isSelected
+                isPlaying: Player.currentStream === filePath
+
+                // Track name
+                Label {
+                    id: nameOfTrack
+                    width: viewHeader.nameWidth
+                    clip: true
+                    text: trackName
+                }
+
+                // Artists list.
+                Label {
+                    id: artistNames
+                    width: viewHeader.artistWidth
+                    clip: true
+                    text: artists
+                }
             }
         }
     }

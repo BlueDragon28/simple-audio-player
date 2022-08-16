@@ -26,6 +26,10 @@ QVariant AlbumTracksListModel::data(const QModelIndex& index, int role) const
         {
             return m_trackList.at(index.row()).artistsName;
         }
+        else if (role == FILE_PATH)
+        {
+            return m_trackList.at(index.row()).filePath;
+        }
     }
 
     return QVariant();
@@ -33,9 +37,10 @@ QVariant AlbumTracksListModel::data(const QModelIndex& index, int role) const
 
 QHash<int, QByteArray> AlbumTracksListModel::roleNames() const
 {
-    QHash<int, QByteArray> roles;
+    QHash<int, QByteArray> roles = SelectionModel::roleNames();
     roles[TRACK_NAME] = "trackName";
     roles[ARTISTS] = "artists";
+    roles[FILE_PATH] = "filePath";
     return roles;
 }
 
