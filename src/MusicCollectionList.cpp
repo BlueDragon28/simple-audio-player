@@ -223,7 +223,7 @@ long long MusicCollectionList::insertNameIntoTable(const QString& name, const QS
     // If there is no name in the table, insert it.
     QString statement =
             "INSERT INTO " + tableName + " (name) "
-            "VALUES (\"" + name + "\");";
+            "VALUES (\"" + QString(name).replace("\"", "\"\"").replace("'", "''") + "\");";
 
     QSqlQuery query(m_db);
     if (!query.exec(statement))
@@ -261,7 +261,7 @@ long long MusicCollectionList::findNameFromTable(const QString& name, const QStr
             "FROM "
             "   " + tableName + " "
             "WHERE "
-            "   name LIKE \"" + name + "\";";
+            "   name LIKE \"" + QString(name).replace("\"", "\"\"").replace("'", "''") + "\";";
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
