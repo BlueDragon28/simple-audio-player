@@ -360,9 +360,10 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
 {
     // Retrieve the files path of the tracks of an album (albumName).
     QString statement = QString(
-        "SELECT filePath, trackName "
+        "SELECT filePath, trackName, " ALBUMS_NAME ".name AS albumName, " ARTISTS_NAME ".name AS artistsName "
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
+        "INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
         "WHERE " ALBUMS_NAME ".name  = \"%1\";").arg(QString(albumName).replace("'", "''").replace("\"", "\"\""));
 
     QSqlQuery query(m_db);
