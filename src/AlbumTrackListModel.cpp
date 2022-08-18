@@ -92,3 +92,21 @@ void AlbumTracksListModel::setAlbum(const QString& album)
         emit albumUpdated();
     }
 }
+
+QStringList AlbumTracksListModel::getTracksList() const
+{
+    // Getting the list of all the tracks from the SelectionModel class.
+    QVariantList variantList = itemList();
+
+    // Retrieve the file path from the list and store it into String QList.
+    QStringList tracksPathList(variantList.size());
+    for (int i = 0; i < tracksPathList.size(); i++)
+    {
+        tracksPathList[i] =
+                qvariant_cast<MusicCollectionList::TrackInfo>(
+                    variantList[i]).filePath;
+    }
+
+    // Returning the list.
+    return tracksPathList;
+}

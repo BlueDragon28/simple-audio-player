@@ -2,6 +2,7 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
+import "qrc:///js/simple-audio-library.js" as SAL
 
 /*
 This item display the tracks of an album.
@@ -81,6 +82,19 @@ Rectangle {
 
                     // Make focus on the list view.
                     trackListView.focus = true
+                }
+
+                // When double click, play the list with the current item selected first.
+                onDoubleClicked: function(mouse) {
+                    // If the user is pressing the control key, or double clicking with the middle or right button, don't do anything.
+                    if (mouse.button === Qt.MiddleButton ||
+                        mouse.button === Qt.RightButton ||
+                        mouse.modifiers === Qt.ControlModifier) {
+                        return;
+                    }
+
+                    // Read the album, starting from the current item.
+                    SAL.open(trackListModel.pathList, filePath)
                 }
             }
         }

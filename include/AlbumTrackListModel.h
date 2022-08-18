@@ -15,6 +15,7 @@ class AlbumTracksListModel : public SelectionModel
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(QString album READ album WRITE setAlbum NOTIFY albumUpdated)
+    Q_PROPERTY(QStringList pathList READ getTracksList)
 
 public:
     enum Roles
@@ -38,6 +39,11 @@ private:
     Retrieve the tracks inside an album.
     */
     void retrieveTracksFromAlbumName();
+
+    /*
+    Return the the list of all the tracks.
+    */
+    QStringList getTracksList() const;
 
     /*
     Update album name.
