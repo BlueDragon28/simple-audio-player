@@ -196,7 +196,7 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
     QString statement = QString(
                 "INSERT INTO " TRACKS_NAME " (filePath, trackName, album, artists) "
                 "VALUES (\"%1\", \"%2\", %3, %4);")
-            .arg(fileInfo.absoluteFilePath().replace("'", "''").replace("\"", "\"\""), tag.title.replace("'", "''").replace("\"", "\"\""))
+            .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""), tag.title.replace("\"", "\"\""))
                     .arg(albumID).arg(artistID);
 
     QSqlQuery query(m_db);
@@ -223,7 +223,7 @@ long long MusicCollectionList::insertNameIntoTable(const QString& name, const QS
     // If there is no name in the table, insert it.
     QString statement =
             "INSERT INTO " + tableName + " (name) "
-            "VALUES (\"" + QString(name).replace("\"", "\"\"").replace("'", "''") + "\");";
+            "VALUES (\"" + QString(name).replace("\"", "\"\"") + "\");";
 
     QSqlQuery query(m_db);
     if (!query.exec(statement))
@@ -261,7 +261,7 @@ long long MusicCollectionList::findNameFromTable(const QString& name, const QStr
             "FROM "
             "   " + tableName + " "
             "WHERE "
-            "   name LIKE \"" + QString(name).replace("\"", "\"\"").replace("'", "''") + "\";";
+            "   name LIKE \"" + QString(name).replace("\"", "\"\"") + "\";";
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
@@ -338,7 +338,7 @@ QString MusicCollectionList::retrieveFilePathFromAlbumName(const QString& albumN
         "SELECT " TRACKS_NAME ".filePath "
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
-        "WHERE name = \"%1\";").arg(QString(albumName).replace("'", "''").replace("\"", "\"\""));
+        "WHERE name = \"%1\";").arg(QString(albumName).replace("\"", "\"\""));
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
@@ -364,7 +364,7 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
         "INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
-        "WHERE " ALBUMS_NAME ".name  = \"%1\";").arg(QString(albumName).replace("'", "''").replace("\"", "\"\""));
+        "WHERE " ALBUMS_NAME ".name  = \"%1\";").arg(QString(albumName).replace("\"", "\"\""));
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
