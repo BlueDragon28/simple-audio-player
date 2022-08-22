@@ -60,6 +60,6 @@ void BaseCollectionModel::updateItemsList()
     {
         m_numberOfItems = m_itemsList.size();
         beginInsertRows(QModelIndex(), 0, m_numberOfItems-1);
-        endInsertColumns();
+        endInsertRows();
     }
 }
