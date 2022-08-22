@@ -17,26 +17,51 @@ Item {
         coverImg.source = "image://coverArt/" + albumName // Change album cover art.
     }
 
+    // Main layout for the album info header.
     Column {
         anchors.fill: parent
-        anchors.margins: 8
-        spacing: 8
+        spacing: 0
 
-        // Button to allow to go back to the albums list.
-        Button {
-            id: goBack
-            text: "<"
-            width: height
+        // Toolbar
+        ToolBar {
+            id: toolBar
+            width: parent.width
+            height: toolBarLayout.height + 8
 
-            onClicked: root.back()
+            RowLayout {
+                id: toolBarLayout
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.topMargin: 4
+                anchors.bottomMargin: 4
+                width: parent.width
+
+                // Button to allow to go back to the albums list.
+                Button {
+                    id: goBack
+                    text: "<"
+                    Layout.preferredWidth: parent.height
+
+                    onClicked: root.back()
+                }
+
+            }
         }
 
-        // Image displaying the album cover art.
-        Image {
-            id: coverImg
-            height: parent.height - goBack.height - 8
-            width: height
-            asynchronous: true
+        // Informations about the album (cover art, name, etc).
+        Column {
+            width: parent.width
+            height: parent.height - toolBar.height
+            padding: 8
+            spacing: 8
+
+            // Image displaying the album cover art.
+            Image {
+                id: coverImg
+                height: parent.height - 16
+                width: height
+                asynchronous: true
+            }
         }
     }
 }
