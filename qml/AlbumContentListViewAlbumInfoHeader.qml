@@ -82,4 +82,12 @@ Item {
             }
         }
     }
+
+    // Adding a bottom line to the header.
+    Rectangle {
+        width: parent.width
+        height: 1
+        anchors.bottom: parent.bottom
+        color: "lightgray"
+    }
 }
