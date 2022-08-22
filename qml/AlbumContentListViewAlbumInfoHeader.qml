@@ -15,6 +15,7 @@ Item {
     // When albumName change, change album info.
     onAlbumNameChanged: {
         coverImg.source = "image://coverArt/" + albumName // Change album cover art.
+        albumNameLabel.text = albumName
     }
 
     // Main layout for the album info header.
@@ -49,7 +50,7 @@ Item {
         }
 
         // Informations about the album (cover art, name, etc).
-        Column {
+        Row {
             width: parent.width
             height: parent.height - toolBar.height
             padding: 8
@@ -58,9 +59,26 @@ Item {
             // Image displaying the album cover art.
             Image {
                 id: coverImg
-                height: parent.height - 16
+                height: parent.height - (parent.padding * 2)
                 width: height
                 asynchronous: true
+            }
+
+            // Container for the album name.
+            Item {
+                width: parent.width - coverImg.width
+                height: parent.height - (parent.padding * 2)
+
+                // Album name
+                Label {
+                    id: albumNameLabel
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.bottomMargin: 8
+                    font.pointSize: 24
+                    font.weight: Font.Bold
+                    text: "test"
+                }
             }
         }
     }
