@@ -34,7 +34,7 @@ Item {
         // Image displaying the album cover art.
         Image {
             id: coverImg
-            height: root.height - goBack.height - 8
+            height: parent.height - goBack.height - 8
             width: height
             asynchronous: true
         }
