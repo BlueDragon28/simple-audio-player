@@ -21,5 +21,6 @@
         <file>qml/AlbumContentListView.qml</file>
         <file>qml/TrackListRowBaseItem.qml</file>
         <file>qml/AlbumContentListViewHeader.qml</file>
+        <file>qml/AlbumContentListViewAlbumInfoHeader.qml</file>
     </qresource>
 </RCC>

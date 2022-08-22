@@ -34,6 +34,8 @@ Item {
                 id: albumContent
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
+                onBack: stackLayout.currentIndex = 0 // Set the stack layout to the albums list item.
             }
 
         }

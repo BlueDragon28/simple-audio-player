@@ -12,8 +12,17 @@ Rectangle {
 
     property alias albumName: trackListModel.album
 
+    signal back() // Go back to the albums list.
+
     Column {
         anchors.fill: parent
+
+        AlbumContentListViewAlbumInfoHeader {
+            id: albumInfoHeader
+            width: parent.width
+
+            onBack: root.back() // When the back signal of the album info header is triggered, move back to the albums list.
+        }
 
         // The header of the album list. It displaying the name of the columns and allow resizing them.
         AlbumContentListViewHeader {
@@ -25,7 +34,7 @@ Rectangle {
         ListView {
             id: trackListView
             width: parent.width
-            height: parent.height - viewHeader.height
+            height: parent.height - (viewHeader.height + albumInfoHeader.height)
             clip: true
             spacing: 0
 
