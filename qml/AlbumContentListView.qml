@@ -14,6 +14,11 @@ Rectangle {
 
     signal back() // Go back to the albums list.
 
+    // When the album name is changed: update album info in AlbumContentListViewAlbumInfoHeader.
+    onAlbumNameChanged: {
+        albumInfoHeader.albumName = albumName
+    }
+
     Column {
         anchors.fill: parent
 

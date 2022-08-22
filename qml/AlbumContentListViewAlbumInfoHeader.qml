@@ -7,13 +7,20 @@ This element display the informations about an album.
 */
 Item {
     id: root
-    height: 200 // Default height of the album header element.
+    height: 250 // Default height of the album header element.
 
+    property string albumName: ""
     signal back() // Go back to the albums list.
+
+    // When albumName change, change album info.
+    onAlbumNameChanged: {
+        coverImg.source = "image://coverArt/" + albumName // Change album cover art.
+    }
 
     Column {
         anchors.fill: parent
         anchors.margins: 8
+        spacing: 8
 
         // Button to allow to go back to the albums list.
         Button {
@@ -22,6 +29,14 @@ Item {
             width: height
 
             onClicked: root.back()
+        }
+
+        // Image displaying the album cover art.
+        Image {
+            id: coverImg
+            height: root.height - goBack.height - 8
+            width: height
+            asynchronous: true
         }
     }
 }
