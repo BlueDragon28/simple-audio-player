@@ -100,6 +100,9 @@ Item {
 
                         onClicked: {
                             albumView.currentIndex = index // Update the selection index.
+                        }
+
+                        onDoubleClicked: {
                             root.enterAlbum(name) // Notify to list the content of the album.
                         }
                     }
