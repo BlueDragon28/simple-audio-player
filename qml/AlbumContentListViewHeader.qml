@@ -11,7 +11,7 @@ Item {
 
     property alias trackNumberWidth: trackNumber.width
     property alias nameWidth: name.width
-    property alias artistWidth: name.width
+    property alias artistWidth: artist.width
 
     ToolBar {
         anchors.fill: parent
