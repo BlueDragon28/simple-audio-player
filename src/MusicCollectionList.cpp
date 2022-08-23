@@ -75,6 +75,7 @@ void MusicCollectionList::createTables()
             "   ID INTEGER PRIMARY KEY,"
             "   filePath TEXT,"
             "   trackName TEXT,"
+            "   trackNumber INTEGER,"
             "   album INTEGER,"
             "   artists INTEGER);";
 
@@ -194,10 +195,10 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
 
     // Insert tracks.
     QString statement = QString(
-                "INSERT INTO " TRACKS_NAME " (filePath, trackName, album, artists) "
-                "VALUES (\"%1\", \"%2\", %3, %4);")
+                "INSERT INTO " TRACKS_NAME " (filePath, trackName, trackNumber, album, artists) "
+                "VALUES (\"%1\", \"%2\", %3, %4, %5);")
             .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""), tag.title.replace("\"", "\"\""))
-                    .arg(albumID).arg(artistID);
+                    .arg(tag.trackNumber).arg(albumID).arg(artistID);
 
     QSqlQuery query(m_db);
     if (!query.exec(statement))
@@ -360,7 +361,7 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
 {
     // Retrieve the files path of the tracks of an album (albumName).
     QString statement = QString(
-        "SELECT filePath, trackName, " ALBUMS_NAME ".name AS albumName, " ARTISTS_NAME ".name AS artistsName "
+        "SELECT filePath, trackName, trackNumber, " ALBUMS_NAME ".name AS albumName, " ARTISTS_NAME ".name AS artistsName "
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
         "INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
@@ -376,8 +377,9 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
             TrackInfo track;
             track.filePath = query.value(0).toString();
             track.trackName = query.value(1).toString();
-            track.albumName = query.value(2).toString();
-            track.artistsName = query.value(3).toString();
+            track.trackNumber = query.value(2).toInt();
+            track.albumName = query.value(3).toString();
+            track.artistsName = query.value(4).toString();
             trackList.append(track);
         }
 

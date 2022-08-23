@@ -32,6 +32,7 @@ public:
     {
         QString filePath;
         QString trackName;
+        int trackNumber;
         QString albumName;
         QString artistsName;
     };

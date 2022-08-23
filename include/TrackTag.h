@@ -25,6 +25,7 @@ public:
         QString title;
         QString album;
         QString artist;
+        int trackNumber;
     };
 
     TrackTag();
