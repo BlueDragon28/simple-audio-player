@@ -21,6 +21,7 @@ public:
     enum Roles
     {
         TRACK_NAME = MAX_ROLE,
+        TRACK_NUMBER,
         ARTISTS,
         FILE_PATH,
     };

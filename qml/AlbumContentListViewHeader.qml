@@ -9,6 +9,7 @@ Item {
     id: root
     height: 25
 
+    property alias trackNumberWidth: trackNumber.width
     property alias nameWidth: name.width
     property alias artistWidth: name.width
 
@@ -19,6 +20,22 @@ Item {
         SplitView {
             anchors.fill: parent
             orientation: Qt.Horizontal
+
+            // Artist name
+            Item {
+                id: trackNumber
+
+                SplitView.minimumWidth: 30
+                SplitView.maximumWidth: 100
+
+                Label {
+                    anchors.fill: parent
+                    text: "#"
+                    clip: true
+                    verticalAlignment: Qt.AlignVCenter
+                    horizontalAlignment: Qt.AlignHCenter
+                }
+            }
 
             // Track name column.
             Item {

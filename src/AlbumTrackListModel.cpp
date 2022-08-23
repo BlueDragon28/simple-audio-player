@@ -17,6 +17,10 @@ QVariant AlbumTracksListModel::data(const QModelIndex& index, int role) const
         {
             return qvariant_cast<MusicCollectionList::TrackInfo>(variant).trackName;
         }
+        else if (role == TRACK_NUMBER)
+        {
+            return qvariant_cast<MusicCollectionList::TrackInfo>(variant).trackNumber;
+        }
         // Returning the artists list.
         else if (role == ARTISTS)
         {
@@ -35,6 +39,7 @@ QHash<int, QByteArray> AlbumTracksListModel::roleNames() const
 {
     QHash<int, QByteArray> roles = SelectionModel::roleNames();
     roles[TRACK_NAME] = "trackName";
+    roles[TRACK_NUMBER] = "trackNumber";
     roles[ARTISTS] = "artists";
     roles[FILE_PATH] = "filePath";
     return roles;

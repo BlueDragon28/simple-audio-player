@@ -62,6 +62,14 @@ Rectangle {
                 isItemSelected: isSelected
                 isPlaying: Player.currentStream === filePath
 
+                // Track Number
+                Label {
+                    id: numberOfTheTrack
+                    width: viewHeader.trackNumberWidth
+                    clip: true
+                    text: trackNumber
+                }
+
                 // Track name
                 Label {
                     id: nameOfTrack
