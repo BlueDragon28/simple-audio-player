@@ -46,6 +46,15 @@ Item {
                     onClicked: root.back()
                 }
 
+                // Label displaying "Album Content" text.
+                Label {
+                    Layout.preferredWidth: parent.width - goBack.implicitWidth
+                    Layout.preferredHeight: parent.height
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "Album Content"
+                }
+
             }
         }
 
