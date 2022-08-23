@@ -31,7 +31,7 @@ Item {
 
         Column {
             width: parent.width
-            height: parent.height
+            height: parent.height - toolbar.height
             padding: 8
             clip: true
 
