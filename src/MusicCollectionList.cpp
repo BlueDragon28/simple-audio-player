@@ -365,7 +365,8 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
         "INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
-        "WHERE " ALBUMS_NAME ".name  = \"%1\";").arg(QString(albumName).replace("\"", "\"\""));
+        "WHERE " ALBUMS_NAME ".name  = \"%1\" "
+        "ORDER BY trackNumber ASC;").arg(QString(albumName).replace("\"", "\"\""));
 
     QSqlQuery query(m_db);
     if (query.exec(statement))
