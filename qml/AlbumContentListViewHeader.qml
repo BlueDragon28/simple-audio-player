@@ -58,6 +58,7 @@ Item {
                 id: artist
 
                 SplitView.minimumWidth: 120
+                SplitView.preferredWidth: 300
 
                 Label {
                     anchors.fill: parent
