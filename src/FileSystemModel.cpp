@@ -128,17 +128,26 @@ void FileSystemModel::updateList()
         QFileInfoList fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
 
         // Put every file info into the variant list.
-        QVariantList variantList(fileList.size());
-        for (int i = 0; i < fileList.size(); i++)
+        if (!fileList.isEmpty())
         {
-            variantList[i] = QVariant::fromValue(FileInfo { fileList.at(i) });
+            QVariantList variantList(fileList.size());
+            for (int i = 0; i < fileList.size(); i++)
+            {
+                variantList[i] = QVariant::fromValue(FileInfo { fileList.at(i) });
+            }
+
+            // Send the variant list to the parent class.
+            setItemList(variantList);
+
+            // Notify the view.
+            beginInsertRows(QModelIndex(), 0, rowCount()-1);
+            endInsertRows();
         }
-
-        // Send the variant list to the parent class.
-        setItemList(variantList);
-
-        beginInsertRows(QModelIndex(), 0, rowCount()-1);
-        endInsertRows();
+        else
+        {
+            // If no folders/files found in the current directory, send an empty list to the upper class.
+            setItemList(QVariantList());
+        }
     }
 }
 
