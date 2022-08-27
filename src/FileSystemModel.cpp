@@ -115,8 +115,11 @@ void FileSystemModel::updateList()
 {
     if (!m_dir.path().isEmpty() && m_dir.isReadable())
     {
-        beginRemoveRows(QModelIndex(), 0, rowCount()-1);
-        endRemoveRows();
+        if (rowCount() > 0)
+        {
+            beginRemoveRows(QModelIndex(), 0, rowCount()-1);
+            endRemoveRows();
+        }
 
         /*
         Get the list of folders and files inside the directory width the directory displayed first and
