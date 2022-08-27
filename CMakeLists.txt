@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find Qt6
-find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Sql REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
