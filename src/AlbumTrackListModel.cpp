@@ -80,6 +80,11 @@ void AlbumTracksListModel::retrieveTracksFromAlbumName()
         beginInsertRows(QModelIndex(), 0, rowCount()-1);
         endInsertRows();
     }
+    else
+    {
+        // If no track found, send an empty list to the upper class.
+        setItemList(QVariantList());
+    }
 }
 
 QString AlbumTracksListModel::album() const
