@@ -274,3 +274,27 @@ QStringList FileSystemModel::fileList(int index) const
 
     return QStringList();
 }
+
+QStringList FileSystemModel::selectedFilesList() const
+{
+    // Retrieving the selected items from the upper class.
+    QVariantList variantList = selectedItemList();
+
+    QStringList filePathList;
+
+    // Iterate thourgh the variant list and retrieve the file path.
+    foreach (const QVariant& variant, variantList)
+    {
+        // Convert variant to FileInfo struct
+        if (variant.canConvert<FileInfo>())
+        {
+            FileInfo fileInfo = qvariant_cast<FileInfo>(variant);
+
+            // Append the file path from fileInfo into the filePathList;
+            filePathList.append(fileInfo.info.absoluteFilePath());
+        }
+    }
+
+    // Retrieving the file path list.
+    return filePathList;
+}

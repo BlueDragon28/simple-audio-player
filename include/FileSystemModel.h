@@ -52,6 +52,11 @@ public:
     */
     Q_INVOKABLE QStringList fileList(int index = -1) const;
 
+    /*
+    Returning the selected file in the current directory.
+    */
+    Q_INVOKABLE QStringList selectedFilesList() const;
+
 signals:
     /*
     This signal is emitted when the displayed path is displayed.
