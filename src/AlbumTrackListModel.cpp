@@ -120,3 +120,21 @@ QStringList AlbumTracksListModel::getTracksList() const
     // Returning the list.
     return tracksPathList;
 }
+
+QStringList AlbumTracksListModel::selectedTracksList() const
+{
+    // Getting the list all the selected track from the upper class.
+    QVariantList variantList = selectedItemList();
+
+    QStringList filePathList;
+
+    // Retrieving the file path from the list and store it into the file path string.
+    foreach (const QVariant& variant, variantList)
+    {
+        MusicCollectionList::TrackInfo trackInfo =
+                qvariant_cast<MusicCollectionList::TrackInfo>(variant);
+        filePathList.append(trackInfo.filePath);
+    }
+
+    return filePathList;
+}

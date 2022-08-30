@@ -55,7 +55,7 @@ Rectangle {
             */
             FileSystemContextMenu {
                 id: contextMenu
-                onPlay: SAL.playSelectedMusic(trackListModel)
+                onPlay: SAL.playSelectedMusic(trackListModel.selectedTracksList());
             }
         }
 
@@ -105,7 +105,7 @@ Rectangle {
                             trackListModel.selectAtIndex(index)
                         }
                     } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
-                        // contextMenu.popup()
+                         contextMenu.popup()
                     } else { // Middle button click: deselect all selection.
                         trackListModel.clearSelection()
                     }

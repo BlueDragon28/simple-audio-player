@@ -32,6 +32,11 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
+    /*
+    Return the list of selected track in the current album.
+    */
+    Q_INVOKABLE QStringList selectedTracksList() const;
+
 signals:
     void albumUpdated();
 
