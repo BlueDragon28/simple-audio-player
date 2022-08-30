@@ -3,8 +3,18 @@
 
 FileSystemModel::FileSystemModel(QObject* parent) :
     SelectionModel(parent)
+#ifdef WIN32
+    ,m_displayDrives(true)
+#endif
 {
     connect(this, &FileSystemModel::pathChanged, this, &FileSystemModel::updateList);
+
+    // Set how the root should be based.
+#ifdef WIN32
+    setPath("");
+#else
+    setPath("/");
+#endif
 }
 
 // Return the roles name to be used in QML.
@@ -113,7 +123,12 @@ When the directory path of the file system change, updating the list.
 */
 void FileSystemModel::updateList() 
 {
+// On Windows, allow empty path to display the drives.
+#ifdef WIN32
+    if (m_displayDrives || (!m_dir.path().isEmpty() && m_dir.isReadable()))
+#else
     if (!m_dir.path().isEmpty() && m_dir.isReadable())
+#endif
     {
         if (rowCount() > 0)
         {
@@ -125,7 +140,20 @@ void FileSystemModel::updateList()
         Get the list of folders and files inside the directory width the directory displayed first and
         without the . and .. directories.
         */
-        QFileInfoList fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
+        QFileInfoList fileList;
+#ifdef WIN32
+        // On Windows: if the path is not empty, retrieve the files and folders list, otherwise, retrieve the drives list.
+        if (!m_displayDrives && !m_dir.path().isEmpty())
+        {
+#endif
+            fileList = m_dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
+#ifdef WIN32
+        }
+        else
+        {
+            fileList = QDir::drives();
+        }
+#endif
 
         // Put every file info into the variant list.
         if (!fileList.isEmpty())
@@ -156,7 +184,19 @@ Get the path of the folder displayed.
 */
 QString FileSystemModel::path() const
 {
-    return m_dir.absolutePath();
+#ifdef WIN32
+    if (!m_displayDrives)
+    {
+#endif
+        return m_dir.absolutePath();
+#ifdef WIN32
+    if (!m_displa
+    }
+    else
+    {
+        return "";
+    }
+#endif
 }
 
 /*
@@ -165,15 +205,37 @@ Do nothing if the path is invalid.
 */
 void FileSystemModel::setPath(const QString& path)
 {
-    if (!path.isEmpty() && path != m_dir.path())
+    // On Windows, check if the path is not null or m_displayDrives is true
+#ifdef WIN32
+    if (path != m_dir.path() || m_displayDrives)
+#else
+    // On Linux, check if the path if not valid and different from m_dir.path().
+    if (path != m_dir.path() && !path.isEmpty())
+#endif
     {
-        QDir dir = QDir(path);
-        if (dir.isReadable())
+        // Check if not empty only on Windows.
+#ifdef WIN32
+        if (!path.isEmpty())
         {
-            m_dir = dir;
-            m_lastDirsList.clear();
+#endif
+            QDir dir = QDir(path);
+#ifdef WIN32
+            m_displayDrives = false;
+#endif
+            if (dir.isReadable())
+            {
+                m_dir = dir;
+                m_lastDirsList.clear();
+                emit pathChanged();
+            }
+#ifdef WIN32
+        }
+        else
+        {
+            m_displayDrives = true;
             emit pathChanged();
         }
+#endif
     }
 }
 

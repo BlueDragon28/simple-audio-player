@@ -49,7 +49,6 @@ Item {
             */
             model: FileSystemModel {
                 id: fileSystemModel
-                path: "/"
             }
 
             delegate: fileSystemDelegate
