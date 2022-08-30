@@ -49,6 +49,14 @@ Rectangle {
             }
 
             delegate: trackListDelegate
+
+            /*
+            Context menu called when the user right click on the view.
+            */
+            FileSystemContextMenu {
+                id: contextMenu
+                onPlay: SAL.playSelectedMusic(trackListModel)
+            }
         }
 
         // Delegate of the trackListView.

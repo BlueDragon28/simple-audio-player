@@ -60,7 +60,7 @@ Item {
             */
             FileSystemContextMenu {
                 id: contextMenu
-                onPlay: SAL.playSelectedMusic(fileSystemModel)
+                onPlay: SAL.playSelectedMusic(fileSystemModel.selectedFilesList())
             }
         }
     }
