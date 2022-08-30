@@ -95,7 +95,13 @@ private:
         QFileInfo info;
     };
 
+    // The Qt directory object used to retrive the file and folders list from a directory.
     QDir m_dir;
+
+    // Display the drives.
+#ifdef WIN32
+    bool m_displayDrives;
+#endif
 
     // This list store the list of all the last opened directories.
     QStringList m_lastDirsList;
