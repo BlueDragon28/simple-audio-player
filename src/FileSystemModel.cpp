@@ -70,7 +70,20 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 
         if (role == NAME)
         {
-            return fileInfo.info.fileName();
+#ifdef WIN32
+            // If its a root directory, return the path.
+            if (m_displayDrives)
+            {
+                return fileInfo.info.path();
+            }
+            else
+            {
+#endif
+                // If it's a file or folder, return the name.
+                return fileInfo.info.fileName();
+#ifdef WIN32
+            }
+#endif
         }
         else if (role == FILE_PATH)
         {
@@ -244,6 +257,8 @@ Move to the children directory of the current directory.
 void FileSystemModel::cd(const QString& dir)
 {
     QString curDirName = m_dir.dirName();
+    QString curPath = m_dir.path();
+
     if (m_dir.cd(dir))
     {
         // If whe move to the parent directory, store the name of the current dir inside the m_lastDirsList list.
@@ -257,8 +272,32 @@ void FileSystemModel::cd(const QString& dir)
             m_lastDirsList.clear();
         }
 
+#ifdef WIN32
+        // Path is valid, do not display drives.
+        m_displayDrives = false;
+#endif
+
         emit pathChanged();
     }
+#ifdef WIN32
+    else if (dir == ".." || dir == "")
+    {
+        // If whe move to the parent directory, store the path of the current dir inside the m_lastDirsList list.
+        if (dir == "..")
+        {
+            m_lastDirsList.append(curPath);
+        }
+        // Otherwise, clear the m_lastDirsList list.
+        else
+        {
+            m_lastDirsList.clear();
+        }
+
+        // When cdUp or going to blank path, if path is not valid, display drives.
+        m_displayDrives = true;
+        emit pathChanged();
+    }
+#endif
 }
 
 /*
@@ -279,6 +318,7 @@ void FileSystemModel::cdDown()
         if (m_dir.cd(*m_lastDirsList.crbegin()))
         {
             m_lastDirsList.removeLast();
+            m_displayDrives = false; // If we go down, then we don't need to display the drives.
             emit pathChanged();
         }
     }
