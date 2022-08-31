@@ -2,9 +2,9 @@
 #include "FileSize.h"
 
 FileSystemModel::FileSystemModel(QObject* parent) :
-    SelectionModel(parent),
+    SelectionModel(parent)
 #ifdef WIN32
-    m_displayDrives(true)
+    ,m_displayDrives(true)
 #endif
 {
     connect(this, &FileSystemModel::pathChanged, this, &FileSystemModel::updateList);
@@ -184,14 +184,18 @@ Get the path of the folder displayed.
 */
 QString FileSystemModel::path() const
 {
+#ifdef WIN32
     if (!m_displayDrives)
     {
+#endif
         return m_dir.absolutePath();
+#ifdef WIN32
     }
     else
     {
         return "";
     }
+#endif
 }
 
 /*
