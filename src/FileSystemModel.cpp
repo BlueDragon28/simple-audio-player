@@ -318,7 +318,9 @@ void FileSystemModel::cdDown()
         if (m_dir.cd(*m_lastDirsList.crbegin()))
         {
             m_lastDirsList.removeLast();
+#ifdef WIN32
             m_displayDrives = false; // If we go down, then we don't need to display the drives.
+#endif
             emit pathChanged();
         }
     }
