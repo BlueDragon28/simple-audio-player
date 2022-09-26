@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <QDebug>
+#include <QStandardPaths>
 
 //Player* Player::staticInstance = nullptr;
 
@@ -16,6 +17,13 @@ Player::Player() :
     m_player->callback().addStreamPlayingCallback(std::bind(&Player::salStreamPlaying, this));
     m_player->callback().addStreamStoppingCallback(std::bind(&Player::salStreamStopping, this));
     m_player->callback().addIsReadyChangedCallback(std::bind(&Player::salIsReadyChanged, this, std::placeholders::_1));
+
+    // Create the debug log file.
+    QStringList strList = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
+    if (!strList.isEmpty())
+    {
+        SAL::DebugLog::instance()->setFilePath((strList.at(0) + "/simple-audio-player.log").toStdString());
+    }
 }
 
 Player::~Player()
