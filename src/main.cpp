@@ -3,12 +3,9 @@
 #include "Player.h"
 #include "CoverImageProvider.h"
 #include "MusicCollectionList.h"
-#include <simple-audio-library/DebugLog.h>
 
 int main(int argc, char** argv)
 {
-    SAL::DebugLog::instance();
-
     QGuiApplication app(argc, argv);
 
     // Instanciate MusicCollectionList.
