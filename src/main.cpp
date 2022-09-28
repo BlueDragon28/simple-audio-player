@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QIcon>
 #include "Player.h"
 #include "CoverImageProvider.h"
 #include "MusicCollectionList.h"
@@ -7,6 +8,9 @@
 int main(int argc, char** argv)
 {
     QGuiApplication app(argc, argv);
+
+    // Setting application icon
+    app.setWindowIcon(QIcon(":/images/musiqueIcon.svg"));
 
     // Instanciate MusicCollectionList.
     MusicCollectionList::instance();
