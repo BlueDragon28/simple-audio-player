@@ -30,10 +30,12 @@ Item {
                 width: parent.width
                 anchors.topMargin: 4
                 anchors.bottomMargin: 4
+                height: 26
 
                 // Previous folder.
                 Button {
                     id: prevBtn
+                    Layout.preferredHeight: parent.height
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     icon.source: "qrc:///images/back.png"
@@ -45,6 +47,7 @@ Item {
                 // Return back to the last next folder if possible.
                 Button {
                     id: nextBtn
+                    Layout.preferredHeight: parent.height
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     icon.source: "qrc:///images/next.png"
@@ -69,6 +72,7 @@ Item {
                 // Go to the folder.
                 Button {
                     id: searchBtn
+                    Layout.preferredHeight: parent.height
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
                     icon.source: "qrc:///images/magnifying-glass.png"

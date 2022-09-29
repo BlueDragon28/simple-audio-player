@@ -36,12 +36,14 @@ Item {
                 anchors.topMargin: 4
                 anchors.bottomMargin: 4
                 width: parent.width
+                height: 26
 
                 // Button to allow to go back to the albums list.
                 Button {
                     id: goBack
                     icon.source: "qrc:///images/back.png"
-                    Layout.preferredWidth: parent.height
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: height
 
                     onClicked: root.back()
                 }
