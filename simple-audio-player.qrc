@@ -15,13 +15,18 @@
         <file>qml/FileSystemContextMenu.qml</file>
         <file>qml/TrackInformation.qml</file>
         <file>qml/TrackLabel.qml</file>
-        <file>js/simple-audio-library.js</file>
-        <file>images/musiqueIcon.png</file>
-        <file>images/musiqueIcon.svg</file>
         <file>qml/AlbumListView.qml</file>
         <file>qml/AlbumContentListView.qml</file>
         <file>qml/TrackListRowBaseItem.qml</file>
         <file>qml/AlbumContentListViewHeader.qml</file>
         <file>qml/AlbumContentListViewAlbumInfoHeader.qml</file>
+
+        <file>js/simple-audio-library.js</file>
+
+        <file>images/musiqueIcon.png</file>
+        <file>images/musiqueIcon.svg</file>
+        <file>images/magnifying-glass.png</file>
+        <file>images/next.png</file>
+        <file>images/back.png</file>
     </qresource>
 </RCC>

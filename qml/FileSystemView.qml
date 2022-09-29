@@ -36,7 +36,7 @@ Item {
                     id: prevBtn
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
-                    text: "<"
+                    icon.source: "qrc:///images/back.png"
 
                     // When clicked, move the FileSystemRowContent to the parent directory.
                     onClicked: fileSystemContent.cdUp()
@@ -47,7 +47,7 @@ Item {
                     id: nextBtn
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
-                    text: ">"
+                    icon.source: "qrc:///images/next.png"
 
                     // When clicked, move the FileSystemRowContent to the last opened directory (if any).
                     onClicked: fileSystemContent.cdDown()
@@ -71,7 +71,7 @@ Item {
                     id: searchBtn
                     Layout.fillWidth: false
                     Layout.preferredWidth: height
-                    text: "s"
+                    icon.source: "qrc:///images/magnifying-glass.png"
 
                     onClicked: fileSystemContent.updatePath()
                 }

@@ -40,7 +40,7 @@ Item {
                 // Button to allow to go back to the albums list.
                 Button {
                     id: goBack
-                    text: "<"
+                    icon.source: "qrc:///images/back.png"
                     Layout.preferredWidth: parent.height
 
                     onClicked: root.back()
