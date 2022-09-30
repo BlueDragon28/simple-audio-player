@@ -99,7 +99,11 @@ Open an audio file.
 */
 void Player::open(const QString& filePath)
 {
+#ifdef WIN32
+    m_player->open(filePath.toLocal8Bit().constData(), true);
+#else
     m_player->open(filePath.toStdString(), true);
+#endif
 }
 
 void Player::open(const QStringList& filesPath)
@@ -107,7 +111,11 @@ void Player::open(const QStringList& filesPath)
     bool clearQueue = true;
     foreach (const QString& path, filesPath)
     {
+#ifdef WIN32
+        m_player->open(path.toLocal8Bit().constData(), clearQueue);
+#else
         m_player->open(path.toStdString(), clearQueue);
+#endif
         if (clearQueue)
             clearQueue = false;
     }
