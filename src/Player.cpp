@@ -22,7 +22,9 @@ Player::Player() :
     QStringList strList = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
     if (!strList.isEmpty())
     {
+#ifdef DEBUG_LOG
         SAL::DebugLog::instance()->setFilePath((strList.at(0) + "/simple-audio-player.log").toStdString());
+#endif
     }
 }
 
