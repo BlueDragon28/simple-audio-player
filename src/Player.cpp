@@ -102,7 +102,7 @@ Open an audio file.
 void Player::open(const QString& filePath)
 {
 #ifdef WIN32
-    m_player->open(filePath.toLatin1().constData(), true);
+    m_player->open(filePath.toUtf8().constData(), true);
 #else
     m_player->open(filePath.toStdString(), true);
 #endif
@@ -114,7 +114,7 @@ void Player::open(const QStringList& filesPath)
     foreach (const QString& path, filesPath)
     {
 #ifdef WIN32
-        m_player->open(path.toLatin1().constData(), clearQueue);
+        m_player->open(path.toUtf8().constData(), clearQueue);
 #else
         m_player->open(path.toStdString(), clearQueue);
 #endif
@@ -169,7 +169,7 @@ void Player::salStartNewFile(const std::string& filePath)
 {
     QString qStrFilePath =
 #ifdef WIN32
-            QString::fromLatin1(filePath);
+            QString::fromUtf8(filePath);
 #else
             QString::fromStdString(filePath);
 #endif
@@ -182,7 +182,7 @@ void Player::salEndFile(const std::string& filePath)
 {
     emit endFile(
 #ifdef WIN32
-                QString::fromLatin1(filePath));
+                QString::fromUtf8(filePath));
 #else
                 QString::fromStdString(filePath));
 #endif
