@@ -77,7 +77,12 @@ TrackTag::Tag TrackTag::getTagFromFile(const QString& filePath, bool* success)
     TrackTag::Tag tag;
     
     // Opening the file.
+#ifdef WIN32
+    TagLib::FileRef file((const wchar_t*)filePath.constData());
+#else
     TagLib::FileRef file(filePath.toLocal8Bit().constData());
+#endif
+
     if (!file.isNull() && file.tag())
     {
         // Retrieve the tags.
