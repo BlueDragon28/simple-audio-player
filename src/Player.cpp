@@ -102,7 +102,7 @@ Open an audio file.
 void Player::open(const QString& filePath)
 {
 #ifdef WIN32
-    m_player->open(filePath.toLocal8Bit().constData(), true);
+    m_player->open(filePath.toLatin1().constData(), true);
 #else
     m_player->open(filePath.toStdString(), true);
 #endif
@@ -114,7 +114,7 @@ void Player::open(const QStringList& filesPath)
     foreach (const QString& path, filesPath)
     {
 #ifdef WIN32
-        m_player->open(path.toLocal8Bit().constData(), clearQueue);
+        m_player->open(path.toLatin1().constData(), clearQueue);
 #else
         m_player->open(path.toStdString(), clearQueue);
 #endif
@@ -167,7 +167,12 @@ This methods are wrapped between the event system of the simple-audio-libray and
 */
 void Player::salStartNewFile(const std::string& filePath)
 {
-    QString qStrFilePath = QString::fromStdString(filePath);
+    QString qStrFilePath =
+#ifdef WIN32
+            QString::fromLatin1(filePath);
+#else
+            QString::fromStdString(filePath);
+#endif
     emit startNewFile(qStrFilePath);
     // Set current stream played property.
     setCurrentStream(qStrFilePath);
@@ -175,7 +180,12 @@ void Player::salStartNewFile(const std::string& filePath)
 
 void Player::salEndFile(const std::string& filePath)
 {
-    emit endFile(QString::fromStdString(filePath));
+    emit endFile(
+#ifdef WIN32
+                QString::fromLatin1(filePath));
+#else
+                QString::fromStdString(filePath));
+#endif
     // Reset current stream played property.
     setCurrentStream("");
 }
