@@ -73,7 +73,9 @@ Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: Layout.preferredHeight
 
-            text: "r"
+            icon.source: "qrc:///images/rand.png"
+            icon.width: parent.width - 8
+            icon.height: parent.height - 8
             checkable: true
             onClicked: SAL.setRandom(checked)
         }

@@ -33,5 +33,6 @@
         <file>images/stop.png</file>
         <file>images/nextSound.png</file>
         <file>images/previousSound.png</file>
+        <file>images/rand.png</file>
     </qresource>
 </RCC>
