@@ -1,6 +1,6 @@
 # simple-audio-player
 
-**simple-audio-player** is a basic audio player wrote in C++17 using the **simple-audio-library** has audio back-end. It's supporting a large variety of file format and support also parsing music collection.
+**simple-audio-player** is a basic audio player writen in C++17 using the **simple-audio-library** has audio back-end. It's supporting a large variety of file format and support also parsing music collection.
 
 ## Features
 
