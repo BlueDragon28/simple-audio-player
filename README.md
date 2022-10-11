@@ -8,7 +8,7 @@
 
 ## Compilation
 
-The simple-audio-player use the **CMake** build generator, it needs Qt (Quick and Sql), the **simple-audio-library**. If you compiled the **SAL** statically, you will also need **PortAudio**, **FLAC++** and **libsndfile**.
+The simple-audio-player use the **CMake** build generator, it needs Qt (Quick and Sql), the **simple-audio-library**. If you compiled the **SAL** statically, you will also need **PortAudio**, **FLAC++**, **libsndfile** and **taglib**.
 
 ### Windows
 
@@ -18,6 +18,7 @@ To compile on Windows, you must include the dependencies in the dependencies' fo
 - PortAudio -> dependencies/portaudio/
 - FLAC++ -> dependencies/flac/
 - libsndfile -> dependencies/libsndfile/
+- taglib -> dependencies/taglib/
 
 ### Linux
 
