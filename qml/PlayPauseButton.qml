@@ -28,8 +28,8 @@ Item {
 
         // By default, set the source image of the btn to play.
         icon.source: "qrc:///images/play.png"
-        icon.width: parent.width - 8
-        icon.height: parent.height - 8
+        icon.width: parent.width - 4
+        icon.height: parent.height - 4
         icon.color: enabled ? "#444" : "lightgray"
 
         // When clicked, redirect the signal to the root item.

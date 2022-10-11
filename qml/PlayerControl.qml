@@ -26,8 +26,8 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             icon.source: "qrc:///images/previousSound.png"
-            icon.width: parent.width - 8
-            icon.height: parent.height - 8
+            icon.width: parent.width - 4
+            icon.height: parent.height - 4
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
@@ -57,8 +57,8 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             icon.source: "qrc:///images/stop.png"
-            icon.width: parent.width - 8
-            icon.height: parent.height - 8
+            icon.width: parent.width - 4
+            icon.height: parent.height - 4
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
@@ -76,8 +76,8 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             icon.source: "qrc:///images/rand.png"
-            icon.width: parent.width - 8
-            icon.height: parent.height - 8
+            icon.width: parent.width - 4
+            icon.height: parent.height - 4
             icon.color: "#444"
             checkable: true
             onClicked: SAL.setRandom(checked)
@@ -93,8 +93,8 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             icon.source: "qrc:///images/nextSound.png"
-            icon.width: parent.width - 8
-            icon.height: parent.height - 8
+            icon.width: parent.width - 4
+            icon.height: parent.height - 4
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
