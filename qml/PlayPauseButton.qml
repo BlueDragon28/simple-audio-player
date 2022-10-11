@@ -30,6 +30,7 @@ Item {
         icon.source: "qrc:///images/play.png"
         icon.width: parent.width - 8
         icon.height: parent.height - 8
+        icon.color: enabled ? "#444" : "lightgray"
 
         // When clicked, redirect the signal to the root item.
         onClicked: root.clicked()
