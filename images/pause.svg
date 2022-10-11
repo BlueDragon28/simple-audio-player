@@ -28,7 +28,7 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="8.2948942"
-     inkscape:cx="23.207047"
+     inkscape:cx="10.548658"
      inkscape:cy="30.380134"
      inkscape:window-width="1920"
      inkscape:window-height="995"
@@ -37,7 +37,25 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs1751" />
+     id="defs1751">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect288"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1 | F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1 @ F,0,0,1,0,0.79375,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="3"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
@@ -45,6 +63,8 @@
     <path
        id="rect1927"
        style="fill:#000000;stroke-width:0.79375"
-       d="M 4.1338564,2.916618 V 14.016715 H 5.9203107 V 2.916618 Z m 6.8791666,0 v 11.100097 h 1.786454 V 2.916618 Z" />
+       d="m 4.1338564,3.710368 v 9.512597 a 0.79375,0.79375 45 0 0 0.79375,0.79375 h 0.1989543 a 0.79375,0.79375 135 0 0 0.79375,-0.79375 l 0,-9.512597 a 0.79375,0.79375 45 0 0 -0.79375,-0.79375 H 4.9276064 a 0.79375,0.79375 135 0 0 -0.79375,0.79375 z m 6.8791666,0 v 9.512597 a 0.79375,0.79375 45 0 0 0.79375,0.79375 h 0.198954 a 0.79375,0.79375 135 0 0 0.79375,-0.79375 V 3.710368 a 0.79375,0.79375 45 0 0 -0.79375,-0.79375 h -0.198954 a 0.79375,0.79375 135 0 0 -0.79375,0.79375 z"
+       inkscape:path-effect="#path-effect288"
+       inkscape:original-d="M 4.1338564,2.916618 V 14.016715 H 5.9203107 V 2.916618 Z m 6.8791666,0 v 11.100097 h 1.786454 V 2.916618 Z" />
   </g>
 </svg>
