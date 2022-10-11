@@ -28,5 +28,11 @@
         <file>images/magnifying-glass.png</file>
         <file>images/next.png</file>
         <file>images/back.png</file>
+        <file>images/play.png</file>
+        <file>images/pause.png</file>
+        <file>images/stop.png</file>
+        <file>images/nextSound.png</file>
+        <file>images/previousSound.png</file>
+        <file>images/rand.png</file>
     </qresource>
 </RCC>

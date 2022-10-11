@@ -10,13 +10,13 @@ Item {
 
     property alias enabled: btn.enabled
 
-    // This two functions change the text inside the btn.
+    // This two functions change the icon inside the btn.
     function playing() {
-        btn.text = "| |"
+        btn.icon.source = "qrc:///images/pause.png"
     }
 
     function stopping() {
-        btn.text = ">"
+        btn.icon.source = "qrc:///images/play.png"
     }
 
     signal clicked()
@@ -26,7 +26,11 @@ Item {
         anchors.fill: parent
         enabled: false
 
-        text: ">"
+        // By default, set the source image of the btn to play.
+        icon.source: "qrc:///images/play.png"
+        icon.width: parent.width - 4
+        icon.height: parent.height - 4
+        icon.color: enabled ? "#444" : "lightgray"
 
         // When clicked, redirect the signal to the root item.
         onClicked: root.clicked()
