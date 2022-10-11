@@ -25,7 +25,9 @@ Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: Layout.preferredHeight
 
-            text: "|<"
+            icon.source: "qrc:///images/previousSound.png"
+            icon.width: parent.width - 8
+            icon.height: parent.height - 8
             enabled: false
 
             onClicked: SAL.previous()
@@ -53,7 +55,6 @@ Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: Layout.preferredHeight
 
-            // text: "s"
             icon.source: "qrc:///images/stop.png"
             icon.width: parent.width - 8
             icon.height: parent.height - 8
@@ -86,7 +87,9 @@ Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: Layout.preferredHeight
 
-            text: ">|"
+            icon.source: "qrc:///images/nextSound.png"
+            icon.width: parent.width - 8
+            icon.height: parent.height - 8
             enabled: false
 
             onClicked: SAL.next()

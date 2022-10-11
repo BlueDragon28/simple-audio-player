@@ -31,5 +31,7 @@
         <file>images/play.png</file>
         <file>images/pause.png</file>
         <file>images/stop.png</file>
+        <file>images/nextSound.png</file>
+        <file>images/previousSound.png</file>
     </qresource>
 </RCC>
