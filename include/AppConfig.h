@@ -3,13 +3,13 @@
 
 #include <QObject>
 #include <QSettings>
+#include <qmap.h>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
 
 /*
 Including all the configurations of the application.
 */
-
 class AppConfig : public QObject
 {
     Q_OBJECT
@@ -27,8 +27,29 @@ public:
     */
     static void saveConfig();
 
+    /*
+    Return the settings of the window has a javascript object.
+    */
+    Q_INVOKABLE static QMap<QString, QVariant> getMainWindowSettings();
+
+    /*
+    Update in memory settings based on a javascript object.
+    */
+    Q_INVOKABLE static void setMainWindowSettings(const QMap<QString, QVariant>& settings);
+
 private:
     static QSettings openSettings();
+
+    struct WindowSettings
+    {
+        int x;
+        int y;
+        int width;
+        int height;
+        bool maximize;
+    };
+    static WindowSettings mainWindowSettings;
+    static bool isMainWindowSettings;
 };
 
 #endif // SIMPLE_AUDIO_PLAYER_APPCONFIG_H_
