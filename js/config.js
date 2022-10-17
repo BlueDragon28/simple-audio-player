@@ -23,3 +23,8 @@ function saveApplicationWindowStatus(window) {
         SAP.AppConfig.setMainWindowSettings(status);
     }
 }
+
+// Getting informations about the application window status.
+function loadApplicationWindowStatus() {
+    return SAP.AppConfig.getMainWindowSettings();
+}

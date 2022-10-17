@@ -7,7 +7,7 @@
 #define WINDOW_Y "y"
 #define WINDOW_WIDTH "width"
 #define WINDOW_HEIGHT "height"
-#define WINDOW_MAXIMIZE "miximize"
+#define WINDOW_MAXIMIZE "maximize"
 #define WINDOW_DEFAULT_SIZE_AND_POS 256
 
 AppConfig::WindowSettings AppConfig::mainWindowSettings = {};

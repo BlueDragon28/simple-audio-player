@@ -9,7 +9,6 @@ The basic content (menu, toolbar and the center content are displayed).
 */
 ApplicationWindow {
     id: root
-    visibility: Window.Maximized
     visible: true
 
     // Menu bar at the top of the program.
@@ -35,7 +34,31 @@ ApplicationWindow {
         }
     }
 
-    // Call when the user try to close the window.
+    // Called when the item is initialized.
+    Component.onCompleted: {
+        const status = AppConfig.loadApplicationWindowStatus();
+
+        // Apply informations to the application window.
+        if (status.x) {
+            x = status.x;
+        }
+
+        if (status.y) {
+            y = status.y;
+        }
+
+        if (status.width) {
+            width = status.width;
+        }
+
+        if (status.height) {
+            height = status.height;
+        }
+
+        visibility = status.maximize ? Window.Maximized : Window.Windowed;
+    }
+
+    // Called when the user try to close the window.
     onClosing: function(close) {
         // Save the status of the application window.
         AppConfig.saveApplicationWindowStatus(root);
