@@ -1,6 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
+import "qrc:///js/config.js" as AppConfig
 
 /*
 The main window of the application.
@@ -32,5 +33,11 @@ ApplicationWindow {
         PlayerControl {
             anchors.fill: parent
         }
+    }
+
+    // Call when the user try to close the window.
+    onClosing: function(close) {
+        // Save the status of the application window.
+        AppConfig.saveApplicationWindowStatus(root);
     }
 }

@@ -22,6 +22,7 @@
         <file>qml/AlbumContentListViewAlbumInfoHeader.qml</file>
 
         <file>js/simple-audio-library.js</file>
+        <file>js/config.js</file>
 
         <file>images/musiqueIcon.png</file>
         <file>images/musiqueIcon.svg</file>
