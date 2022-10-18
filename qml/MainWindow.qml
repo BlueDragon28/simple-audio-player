@@ -55,7 +55,7 @@ ApplicationWindow {
             height = status.height;
         }
 
-        visibility = status.maximize ? Window.Maximized : Window.Windowed;
+        visibility = status.maximized ? Window.Maximized : Window.Windowed;
     }
 
     // Called when the user try to close the window.
