@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <qvariant.h>
 
+#define WINDOW_CONFIG_NAME "mainWindow"
+#define WINDOW_MAKE_CONFIG_NAME(name) QString(WINDOW_CONFIG_NAME) + '/' + name // helper function to make config window settings name
 #define WINDOW_X "x"
 #define WINDOW_Y "y"
 #define WINDOW_WIDTH "width"
@@ -40,6 +42,8 @@ void AppConfig::saveConfig()
 {
     // Preparing to write settings.
     QSettings settings = openSettings();
+
+    saveWindowStatus(settings);
 }
 
 QMap<QString, QVariant> AppConfig::getMainWindowSettings()
@@ -125,5 +129,18 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
         {
             mainWindowSettings.maximize = true;
         }
+    }
+}
+
+void AppConfig::saveWindowStatus(QSettings& settings)
+{
+    if (settings.isWritable())
+    {
+        // Save the value into the settings registry/config directory.
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_X), mainWindowSettings.x);
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_Y), mainWindowSettings.y);
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_WIDTH), mainWindowSettings.width);
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_HEIGHT), mainWindowSettings.height);
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZE), mainWindowSettings.maximize);
     }
 }

@@ -1,9 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <qdebug.h>
 #include "Player.h"
 #include "CoverImageProvider.h"
 #include "MusicCollectionList.h"
+#include "AppConfig.h"
 
 int main(int argc, char** argv)
 {
@@ -26,5 +28,13 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    return app.exec();
+    int result = app.exec();
+
+    // Saving the application config only when the application exited without problems.
+    if (!result)
+    {
+        AppConfig::saveConfig();
+    }
+
+    return result;
 }

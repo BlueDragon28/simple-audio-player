@@ -16,7 +16,7 @@ function saveApplicationWindowStatus(window) {
             y: window.y,
             width: window.width,
             height: window.height,
-            miximize: window.visibility === QtQuick.Window.Maximized
+            maximize: window.visibility === QtQuick.Window.Maximized
         };
 
         // and set it to the AppConfig C++ singleton class.

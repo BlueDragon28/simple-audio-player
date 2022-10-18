@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <qmap.h>
 #include <qqmlintegration.h>
+#include <qsettings.h>
 #include <qtmetamacros.h>
 
 /*
@@ -39,6 +40,11 @@ public:
 
 private:
     static QSettings openSettings();
+
+    /*
+    Save window status settings into registry/config directory.
+    */
+    static void saveWindowStatus(QSettings& settings);
 
     struct WindowSettings
     {
