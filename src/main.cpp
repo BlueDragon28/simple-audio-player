@@ -17,6 +17,9 @@ int main(int argc, char** argv)
     // Instanciate MusicCollectionList.
     MusicCollectionList::instance();
 
+    // Reading the application config.
+    AppConfig::loadConfig();
+
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());
     engine.addImportPath("qrc:/imports");

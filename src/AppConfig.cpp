@@ -36,6 +36,8 @@ void AppConfig::loadConfig()
 {
     // Preparing to read settings.
     QSettings settings = openSettings();
+
+    loadWindowStatus(settings);
 }
 
 void AppConfig::saveConfig()
@@ -142,5 +144,39 @@ void AppConfig::saveWindowStatus(QSettings& settings)
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_WIDTH), mainWindowSettings.width);
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_HEIGHT), mainWindowSettings.height);
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZE), mainWindowSettings.maximize);
+    }
+}
+
+void AppConfig::loadWindowStatus(QSettings& settings)
+{
+    // Reading the window status from the registry/config directory using the settings object.
+    QVariant vX = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_X));
+    if (vX.isValid() && vX.canConvert<int>())
+    {
+        mainWindowSettings.x = vX.toInt();
+    }
+
+    QVariant vY = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_Y));
+    if (vY.isValid() && vY.canConvert<int>())
+    {
+        mainWindowSettings.y = vY.toInt();
+    }
+
+    QVariant vWidth = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_WIDTH));
+    if (vWidth.isValid() && vWidth.canConvert<int>())
+    {
+        mainWindowSettings.width = vWidth.toInt();
+    }
+
+    QVariant vHeight = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_HEIGHT));
+    if (vHeight.isValid() && vHeight.canConvert<int>())
+    {
+        mainWindowSettings.height = vHeight.toInt();
+    }
+
+    QVariant vMaximize = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZE));
+    if (vMaximize.isValid() && vMaximize.canConvert<bool>())
+    {
+        mainWindowSettings.maximize = vMaximize.toBool();
     }
 }

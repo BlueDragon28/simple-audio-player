@@ -46,6 +46,11 @@ private:
     */
     static void saveWindowStatus(QSettings& settings);
 
+    /*
+    Load window status settings from registry/config directory
+    */
+    static void loadWindowStatus(QSettings& settings);
+
     struct WindowSettings
     {
         int x;
