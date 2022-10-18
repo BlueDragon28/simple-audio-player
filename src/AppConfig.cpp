@@ -24,9 +24,9 @@ bool AppConfig::isMainWindowSettings = true;
 QSettings AppConfig::openSettings()
 {
 #ifndef NDEBUG
-    return QSettings("BlueDragon28", "simple-audio-library");
+    return QSettings("BlueDragon28", "simple-audio-player");
 #else
-    return QSettings("BlueDragon28", "simple-audio-library_debug");
+    return QSettings("BlueDragon28", "simple-audio-player_debug");
 #endif
 }
 
