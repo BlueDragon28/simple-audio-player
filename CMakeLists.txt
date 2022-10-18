@@ -17,6 +17,9 @@ if (UNIX)
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(SAL REQUIRED simple-audio-library_static)
 
+	# include sal headers location
+	include_directories(${SAL_INCLUDE_DIRS})
+
 	# Find taglib library
 	pkg_check_modules(TAGLIB REQUIRED taglib)
 	
