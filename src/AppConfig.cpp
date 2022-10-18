@@ -9,7 +9,7 @@
 #define WINDOW_Y "y"
 #define WINDOW_WIDTH "width"
 #define WINDOW_HEIGHT "height"
-#define WINDOW_MAXIMIZE "maximize"
+#define WINDOW_MAXIMIZED "maximized"
 #define WINDOW_DEFAULT_POS 256
 #define WINDOW_DEFAULT_SIZE_WIDTH 1024
 #define WINDOW_DEFAULT_SIZE_HEIGHT 512
@@ -61,7 +61,7 @@ QMap<QString, QVariant> AppConfig::getMainWindowSettings()
         settings[WINDOW_Y] = std::max(0, mainWindowSettings.y);
         settings[WINDOW_WIDTH] = std::max(0, mainWindowSettings.width);
         settings[WINDOW_HEIGHT] = std::max(0, mainWindowSettings.height);
-        settings[WINDOW_MAXIMIZE] = mainWindowSettings.maximize;
+        settings[WINDOW_MAXIMIZED] = mainWindowSettings.maximize;
     }
 
     return settings;
@@ -121,11 +121,11 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
     }
 
     // Retrieve maximize settings.
-    if (s.contains(WINDOW_MAXIMIZE))
+    if (s.contains(WINDOW_MAXIMIZED))
     {
-        if (s[WINDOW_MAXIMIZE].canConvert<bool>())
+        if (s[WINDOW_MAXIMIZED].canConvert<bool>())
         {
-            mainWindowSettings.maximize = qvariant_cast<bool>(s[WINDOW_MAXIMIZE]);
+            mainWindowSettings.maximize = qvariant_cast<bool>(s[WINDOW_MAXIMIZED]);
         }
         else 
         {
@@ -143,7 +143,7 @@ void AppConfig::saveWindowStatus(QSettings& settings)
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_Y), mainWindowSettings.y);
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_WIDTH), mainWindowSettings.width);
         settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_HEIGHT), mainWindowSettings.height);
-        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZE), mainWindowSettings.maximize);
+        settings.setValue(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZED), mainWindowSettings.maximize);
     }
 }
 
@@ -174,9 +174,9 @@ void AppConfig::loadWindowStatus(QSettings& settings)
         mainWindowSettings.height = vHeight.toInt();
     }
 
-    QVariant vMaximize = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZE));
-    if (vMaximize.isValid() && vMaximize.canConvert<bool>())
+    QVariant vMaximized = settings.value(WINDOW_MAKE_CONFIG_NAME(WINDOW_MAXIMIZED));
+    if (vMaximized.isValid() && vMaximized.canConvert<bool>())
     {
-        mainWindowSettings.maximize = vMaximize.toBool();
+        mainWindowSettings.maximize = vMaximized.toBool();
     }
 }
