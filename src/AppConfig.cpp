@@ -51,10 +51,10 @@ QMap<QString, QVariant> AppConfig::getMainWindowSettings()
 
     if (isMainWindowSettings)
     {
-        settings[WINDOW_X] = mainWindowSettings.x;
-        settings[WINDOW_Y] = mainWindowSettings.y;
-        settings[WINDOW_WIDTH] = mainWindowSettings.width;
-        settings[WINDOW_HEIGHT] = mainWindowSettings.height;
+        settings[WINDOW_X] = std::max(0, mainWindowSettings.x);
+        settings[WINDOW_Y] = std::max(0, mainWindowSettings.y);
+        settings[WINDOW_WIDTH] = std::max(0, mainWindowSettings.width);
+        settings[WINDOW_HEIGHT] = std::max(0, mainWindowSettings.height);
         settings[WINDOW_MAXIMIZE] = mainWindowSettings.maximize;
     }
 
