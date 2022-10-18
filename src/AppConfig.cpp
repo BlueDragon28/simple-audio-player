@@ -8,10 +8,18 @@
 #define WINDOW_WIDTH "width"
 #define WINDOW_HEIGHT "height"
 #define WINDOW_MAXIMIZE "maximize"
-#define WINDOW_DEFAULT_SIZE_AND_POS 256
+#define WINDOW_DEFAULT_POS 256
+#define WINDOW_DEFAULT_SIZE_WIDTH 1024
+#define WINDOW_DEFAULT_SIZE_HEIGHT 512
 
-AppConfig::WindowSettings AppConfig::mainWindowSettings = {};
-bool AppConfig::isMainWindowSettings = false;
+AppConfig::WindowSettings AppConfig::mainWindowSettings = {
+    WINDOW_DEFAULT_POS, // X
+    WINDOW_DEFAULT_POS, // Y
+    WINDOW_DEFAULT_SIZE_WIDTH, // width
+    WINDOW_DEFAULT_SIZE_HEIGHT, // height
+    false // miximize
+};
+bool AppConfig::isMainWindowSettings = true;
 
 QSettings AppConfig::openSettings()
 {
@@ -65,7 +73,7 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
         }
         else 
         {
-            mainWindowSettings.x = WINDOW_DEFAULT_SIZE_AND_POS;
+            mainWindowSettings.x = WINDOW_DEFAULT_POS;
         }
     }
 
@@ -77,7 +85,7 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
         }
         else 
         {
-            mainWindowSettings.y = WINDOW_DEFAULT_SIZE_AND_POS;
+            mainWindowSettings.y = WINDOW_DEFAULT_POS;
         } 
     }
 
@@ -90,7 +98,7 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
         }
         else 
         {
-            mainWindowSettings.width = WINDOW_DEFAULT_SIZE_AND_POS;
+            mainWindowSettings.width = WINDOW_DEFAULT_SIZE_WIDTH;
         }
     }
 
@@ -102,7 +110,7 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
         }
         else
         {
-            mainWindowSettings.height = WINDOW_DEFAULT_SIZE_AND_POS;
+            mainWindowSettings.height = WINDOW_DEFAULT_SIZE_HEIGHT;
         }
     }
 
