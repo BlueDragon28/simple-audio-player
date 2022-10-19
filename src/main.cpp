@@ -7,6 +7,8 @@
 #include "MusicCollectionList.h"
 #include "AppConfig.h"
 
+#include "dbus/SAPMPris.h"
+
 int main(int argc, char** argv)
 {
     QGuiApplication app(argc, argv);
@@ -19,6 +21,8 @@ int main(int argc, char** argv)
 
     // Reading the application config.
     AppConfig::loadConfig();
+
+    SAPMPris mpris;
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());

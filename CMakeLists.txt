@@ -112,7 +112,7 @@ set(RESOURCES "simple-audio-player.qrc")
 include_directories(include/)
 
 # Create the executable.
-qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES})
+qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} "include/dbus/SAPMPris.h" src/dbus/SAPMPris.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Core
     Qt6::Gui
