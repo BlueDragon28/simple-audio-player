@@ -9,8 +9,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# If on Unix, adding the DBus Qt Module.
+if (UNIX)
+	set(FIND_QT_DBUS_MODULE "DBus")
+	set(FIND_QT_DBUS_LIBS "Qt6::DBus")
+endif()
+
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
@@ -113,6 +119,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Sql
+	${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES})
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
