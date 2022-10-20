@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <qtmetamacros.h>
+#include <QDBusPendingReply>
 
 class SAPMPris : public QObject
 {

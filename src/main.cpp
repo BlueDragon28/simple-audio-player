@@ -8,6 +8,7 @@
 #include "AppConfig.h"
 
 #include "dbus/SAPMPris.h"
+#include "dbus/SAPMPrisPlayer.h"
 
 int main(int argc, char** argv)
 {
@@ -23,6 +24,7 @@ int main(int argc, char** argv)
     AppConfig::loadConfig();
 
     SAPMPris mpris;
+    SAPMPrisPlayer player;
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());

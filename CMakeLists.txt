@@ -13,6 +13,13 @@ set(CMAKE_AUTOUIC ON)
 if (UNIX)
 	set(FIND_QT_DBUS_MODULE "DBus")
 	set(FIND_QT_DBUS_LIBS "Qt6::DBus")
+
+	set (DBUS_HEADERS 
+		"include/dbus/SAPMPris.h"
+		"include/dbus/SAPMPrisPlayer.h")
+	set (DBUS_SRC
+		"src/dbus/SAPMPris.cpp"
+		"src/dbus/SAPMPrisPlayer.cpp")
 endif()
 
 # Find Qt6
@@ -112,7 +119,7 @@ set(RESOURCES "simple-audio-player.qrc")
 include_directories(include/)
 
 # Create the executable.
-qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} "include/dbus/SAPMPris.h" src/dbus/SAPMPris.cpp)
+qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Core
     Qt6::Gui
