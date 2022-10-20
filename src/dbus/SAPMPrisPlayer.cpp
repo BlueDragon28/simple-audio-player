@@ -1,8 +1,12 @@
 #include "dbus/SAPMPrisPlayer.h"
 #include <QtDBus/qdbusconnection.h>
 #include <QtDBus/qdbusconnection.h>
+#include <qdbusextratypes.h>
 
-SAPMPrisPlayer::SAPMPrisPlayer()
+SAPMPrisPlayer::SAPMPrisPlayer() :
+    m_playbackStatus("Stopped"),
+    m_metadata(MetaData().toVariantMap()),
+    m_position(0)
 {
     QDBusConnection::sessionBus().registerObject(
         "/org/mpris/MediaPlayer2", 
@@ -58,7 +62,26 @@ void SAPMPrisPlayer::OpenUri(const QString& uri)
 QString SAPMPrisPlayer::playbackStatus() const
 {
     qDebug() << u8"SAPMPrisPlayer::playbackStatus() -> \"Stopped\"";
-    return "Stopped";
+    return m_playbackStatus;
+}
+
+void SAPMPrisPlayer::setPlaybackStatus(PlaybackStatus status)
+{
+    // Updating the playback status.
+    m_playbackStatus = playbackStatusEnumToString(status);
+
+    emit playbackStatusChanged();
+}
+
+QString SAPMPrisPlayer::playbackStatusEnumToString(PlaybackStatus status)
+{
+    // Converting the enum class PlaybackStatus to string for dbus.
+    if (status == PlaybackStatus::PLAYING)
+        return "Playing";
+    else if (status == PlaybackStatus::PAUSED)
+        return "Paused";
+    else
+        return "Stopped";
 }
 
 double SAPMPrisPlayer::rate() const
@@ -70,12 +93,27 @@ double SAPMPrisPlayer::rate() const
 void SAPMPrisPlayer::setRate(double rate)
 {
     qDebug() << u8"SAPMPrisPlayer::setRate(double rate = " + QString::number(rate) + u8")";
+    emit rateChanged(); // Do not update anything.
 }
 
 QVariantMap SAPMPrisPlayer::metadata() const
 {
     qDebug() << u8"SAPMPrisPlayer::metadata()";
     return QVariantMap();
+}
+
+void SAPMPrisPlayer::setMetadata(const MetaData &data)
+{
+    m_metadata = data.toVariantMap(); // Convert the struct to dbus valid value.
+    emit metadataChanged();
+}
+
+QVariantMap SAPMPrisPlayer::MetaData::toVariantMap() const
+{
+    // Converting MetaData struct to valid dbus value.
+    QVariantMap map;
+    map["mpris:trackid"] = QDBusObjectPath(trackID);
+    return map;
 }
 
 double SAPMPrisPlayer::volume() const
@@ -87,12 +125,19 @@ double SAPMPrisPlayer::volume() const
 void SAPMPrisPlayer::setVolume(double volume)
 {
     qDebug() << u8"SAPMPrisPlayer::setVolume(double volume = " + QString::number(volume) + u8")";
+    emit volumeChanged(); // Do not change, method not supported.
 }
 
-double SAPMPrisPlayer::position() const
+long long SAPMPrisPlayer::position() const
 {
     qDebug() << u8"SAPMPrisPlayer::position()";
-    return 0.0;
+    return m_position; // Returning position in microsecond.
+}
+
+void SAPMPrisPlayer::setPosition(long long position)
+{
+    m_position = position * 1000; // Convert millisecond value to microsecond.
+    emit positionChanged();
 }
 
 double SAPMPrisPlayer::minimumRate() const
