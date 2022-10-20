@@ -18,7 +18,7 @@ class SAPMPris : public QObject
     Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes NOTIFY supportedMimeTypesChanged)
 
 public:
-    SAPMPris();
+    SAPMPris(QObject* parent = nullptr);
     ~SAPMPris();
 
 signals:

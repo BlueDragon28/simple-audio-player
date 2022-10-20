@@ -2,7 +2,9 @@
 #define SIMPLEAUDIOPLAYER_SAPMPRISPLAYER_H_
 
 #include <QObject>
+#include <cstddef>
 #include <qdbusextratypes.h>
+#include <qobject.h>
 #include <qtmetamacros.h>
 #include <QDBusObjectPath>
 #include <taglib/flacmetadatablock.h>
@@ -27,7 +29,7 @@ class SAPMPrisPlayer : public QObject
     Q_PROPERTY(bool CanControl READ canControl NOTIFY canControlChanged)
 
 public:
-    SAPMPrisPlayer();
+    SAPMPrisPlayer(QObject* parent = nullptr);
 
 signals:
     void playbackStatusChanged();

@@ -3,7 +3,8 @@
 #include <QtDBus/qdbusconnection.h>
 #include <qdbusextratypes.h>
 
-SAPMPrisPlayer::SAPMPrisPlayer() :
+SAPMPrisPlayer::SAPMPrisPlayer(QObject* parent) :
+    QObject(parent),
     m_playbackStatus("Stopped"),
     m_metadata(MetaData().toVariantMap()),
     m_position(0)

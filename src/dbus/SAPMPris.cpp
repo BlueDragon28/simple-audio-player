@@ -2,7 +2,8 @@
 #include <QDebug>
 #include <QtDBus/qdbusconnection.h>
 
-SAPMPris::SAPMPris()
+SAPMPris::SAPMPris(QObject* parent) :
+    QObject(parent)
 {
     QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.simpleaudioplayer");
     QDBusConnection::sessionBus().registerObject(
