@@ -2,7 +2,6 @@
 #define SIMPLEAUDIOPLAYER_SYSTEM_MEDIA_CONTROL_H_
 
 #include "dbus/SAPMPris.h"
-#include "dbus/SAPMPrisPlayer.h"
 #include <QObject>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
@@ -26,9 +25,9 @@ public:
     };
 
     /*
-    Creating a singlestone instance and returning it.
+    Initialize static variables
     */
-    static SystemMediaControl* instance();
+    static void init();
 
     Q_INVOKABLE static void play(); // Telling the system that a playback is playing.
     Q_INVOKABLE static void pause(); // Telling the system that a playback is paused.
@@ -38,10 +37,7 @@ public:
 private:
     static TrackID parseTrackID(const QVariantMap& vID);
 
-    static std::unique_ptr<SystemMediaControl> _instance;
-
     static std::unique_ptr<SAPMPris> dbusRoot;
-    static std::unique_ptr<SAPMPrisPlayer> dbusRootPlayer;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SYSTEM_MEDIA_CONTROL_H_

@@ -6,9 +6,7 @@
 #include "CoverImageProvider.h"
 #include "MusicCollectionList.h"
 #include "AppConfig.h"
-
-#include "dbus/SAPMPris.h"
-#include "dbus/SAPMPrisPlayer.h"
+#include "SystemMediaControl.h"
 
 int main(int argc, char** argv)
 {
@@ -23,8 +21,8 @@ int main(int argc, char** argv)
     // Reading the application config.
     AppConfig::loadConfig();
 
-    SAPMPris mpris;
-    SAPMPrisPlayer player;
+    // Initialize SystemMediaControl system.
+    SystemMediaControl::init();
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());
