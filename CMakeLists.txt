@@ -15,11 +15,9 @@ if (UNIX)
 	set(FIND_QT_DBUS_LIBS "Qt6::DBus")
 
 	set (DBUS_HEADERS 
-		"include/dbus/SAPMPris.h"
-		"include/dbus/SAPMPrisPlayer.h")
+		"include/dbus/SAPMPris.h")
 	set (DBUS_SRC
-		"src/dbus/SAPMPris.cpp"
-		"src/dbus/SAPMPrisPlayer.cpp")
+		"src/dbus/SAPMPris.cpp")
 endif()
 
 # Find Qt6
