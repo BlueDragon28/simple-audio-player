@@ -34,6 +34,12 @@ ApplicationWindow {
         }
     }
 
+    /*
+    System Media Control, communicate with the system about the stream currently played
+    and to receive signal when the media keys are pressed.
+    */
+    SystemMediaControlItem {}
+
     // Called when the item is initialized.
     Component.onCompleted: {
         const status = AppConfig.loadApplicationWindowStatus();
