@@ -251,8 +251,13 @@ QVariantMap SAPMPris::MetaData::toVariantMap() const
     // Convert MetaData to valid dbus values.
     QVariantMap map;
     map["mpris:trackid"] = QDBusObjectPath(QString("/simpleaudioplayer/%1").arg(trackID));
-    map["xesam:title"] = "Hello There";
-    map["xesam:album"] = "My Super Album";
+    map["xesam:title"] = title;
+    map["xesam:album"] = album;
+
+    // Track Artists
+    QStringList listArtists;
+    listArtists.append(artists);
+    map["xesam:artist"] = listArtists;
     return map;
 }
 

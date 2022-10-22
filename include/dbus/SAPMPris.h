@@ -66,6 +66,9 @@ public:
     struct MetaData
     {
         QString trackID;
+        QString title;
+        QString album;
+        QString artists;
 
         QVariantMap toVariantMap() const;
     };

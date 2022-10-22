@@ -22,6 +22,9 @@ public:
     {
         int index = 0;
         QString path;
+        QString title;
+        QString album;
+        QString artists;
     };
 
     /*

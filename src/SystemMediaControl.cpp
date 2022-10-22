@@ -4,6 +4,9 @@
 
 #define TRACKID_INDEX "index"
 #define TRACKID_PATH "path"
+#define TRACKID_TITLE "title"
+#define TRACKID_ALBUM "album"
+#define TRACKID_ARTISTS "artists"
 
 std::unique_ptr<SAPMPris> SystemMediaControl::dbusRoot;
 
@@ -42,6 +45,9 @@ void SystemMediaControl::newTrack(const QVariantMap& vID)
     SAPMPris::MetaData data;
     TrackID id = parseTrackID(vID);
     data.trackID = QString::number(id.index);
+    data.title = id.title;
+    data.album = id.album;
+    data.artists = id.artists;
     dbusRoot->setMetadata(data);
     qDebug() << "newTrack: " + id.path;
 }
@@ -56,9 +62,24 @@ SystemMediaControl::TrackID SystemMediaControl::parseTrackID(const QVariantMap& 
         id.index = vID[TRACKID_INDEX].toInt();
     }
 
-    if (vID.contains(TRACKID_PATH) && vID[TRACKID_INDEX].canConvert<QString>())
+    if (vID.contains(TRACKID_PATH) && vID[TRACKID_PATH].canConvert<QString>())
     {
         id.path = vID[TRACKID_PATH].toString();
+    }
+
+    if (vID.contains(TRACKID_TITLE) && vID[TRACKID_TITLE].canConvert<QString>())
+    {
+        id.title = vID[TRACKID_TITLE].toString();
+    }
+
+    if (vID.contains(TRACKID_ALBUM) && vID[TRACKID_ALBUM].canConvert<QString>())
+    {
+        id.album = vID[TRACKID_ALBUM].toString();
+    }
+
+    if (vID.contains(TRACKID_ARTISTS) && vID[TRACKID_ARTISTS].canConvert<QString>())
+    {
+        id.artists = vID[TRACKID_ARTISTS].toString();
     }
 
     return id;

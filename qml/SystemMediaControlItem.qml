@@ -37,5 +37,23 @@ Item {
         }
     }
 
+    // Connecting to the TrackTack singleton object to listen to track change
+    Connections {
+        target: TrackTag
+
+        // If the title change, it must mean that every thing else has changed.
+        function onTitleChanged() {
+            /*
+            Retrieve information on the title.
+            */
+            SystemMediaControl.newTrack({
+                index: 0, // No index yet.
+                title: TrackTag.title,
+                album: TrackTag.album,
+                artists: TrackTag.artist
+            });
+        }
+    }
+
     Component.onCompleted: console.log("Completed");
 }
