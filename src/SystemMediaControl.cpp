@@ -57,27 +57,27 @@ SystemMediaControl::TrackID SystemMediaControl::parseTrackID(const QVariantMap& 
     // Convert the javascript object into a C++ struct.
     TrackID id = {};
 
-    if (vID.contains(TRACKID_INDEX) && vID[TRACKID_INDEX].canConvert<int>())
+    if (isVariantMapContain<int>(vID, TRACKID_INDEX))
     {
         id.index = vID[TRACKID_INDEX].toInt();
     }
 
-    if (vID.contains(TRACKID_PATH) && vID[TRACKID_PATH].canConvert<QString>())
+    if (isVariantMapContain<QString>(vID, TRACKID_PATH))
     {
         id.path = vID[TRACKID_PATH].toString();
     }
 
-    if (vID.contains(TRACKID_TITLE) && vID[TRACKID_TITLE].canConvert<QString>())
+    if (isVariantMapContain<QString>(vID, TRACKID_TITLE))
     {
         id.title = vID[TRACKID_TITLE].toString();
     }
 
-    if (vID.contains(TRACKID_ALBUM) && vID[TRACKID_ALBUM].canConvert<QString>())
+    if (isVariantMapContain<QString>(vID, TRACKID_ALBUM))
     {
         id.album = vID[TRACKID_ALBUM].toString();
     }
 
-    if (vID.contains(TRACKID_ARTISTS) && vID[TRACKID_ARTISTS].canConvert<QString>())
+    if (isVariantMapContain<QString>(vID, TRACKID_ARTISTS))
     {
         id.artists = vID[TRACKID_ARTISTS].toString();
     }

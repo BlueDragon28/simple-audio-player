@@ -40,7 +40,19 @@ public:
 private:
     static TrackID parseTrackID(const QVariantMap& vID);
 
+    /*
+    Helper function to help check if a variant is valid.
+    */
+    template<typename T>
+    inline static bool isVariantMapContain(const QVariantMap& vm, const QString& key);
+
     static std::unique_ptr<SAPMPris> dbusRoot;
 };
+
+template<typename T>
+inline bool SystemMediaControl::isVariantMapContain(const QVariantMap& vm, const QString& key)
+{
+    return (vm.contains(key) && vm[key].isValid() && vm[key].canConvert<T>());
+}
 
 #endif // SIMPLEAUDIOPLAYER_SYSTEM_MEDIA_CONTROL_H_
