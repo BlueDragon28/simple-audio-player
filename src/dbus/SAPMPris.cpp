@@ -131,6 +131,9 @@ void SAPMPris::setPlaybackStatus(PlaybackStatus status)
 {
     // Updating the playback status.
     m_playbackStatus = playbackStatusEnumToString(status);
+
+    // Notify MPRIS of the change.
+    notify(NotifyType::PLAYBACK_STATUS);
 }
 
 double SAPMPris::rate() const
@@ -154,6 +157,9 @@ void SAPMPris::setMetadata(const MetaData& data)
 {
     qDebug() << "SAPMPris::setMetadata()";
     m_metadata = data.toVariantMap();
+
+    // Notify MPRIS of the change.
+    notify(NotifyType::METADATA);
 }
 
 double SAPMPris::volume() const
