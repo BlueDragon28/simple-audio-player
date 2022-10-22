@@ -2,10 +2,13 @@
 #include <QDebug>
 #include <QtDBus/qdbusconnection.h>
 #include <qdbusextratypes.h>
+#include <qdbusmessage.h>
 
 const char* SAPMPris::_serviceName = "org.mpris.MediaPlayer2.simpleaudioplayer";
 const char* SAPMPris::_mprisObjectPath = "/org/mpris/MediaPlayer2";
 const char* SAPMPris::_freeDesktopPath = "org.freedesktop.DBus.Properties";
+const char* SAPMPris::_propertyChangedStr = "PropertiesChanged";
+const char* SAPMPris::_mprisPlayerEntity = "org.mpris.MediaPlayer2.Player";
 
 SAPMPris::SAPMPris(QObject* parent) :
     QObject(parent)
@@ -245,4 +248,76 @@ QVariantMap SAPMPris::MetaData::toVariantMap() const
     map["xesam:title"] = "Hello There";
     map["xesam:album"] = "My Super Album";
     return map;
+}
+
+QString SAPMPris::notifyTypeToString(NotifyType type)
+{
+    // Converting the NotifyType to a string value for MPRIS.
+    if (type == NotifyType::PLAYBACK_STATUS)
+    {
+        return "PlaybackStatus";
+    }
+    else if (type == NotifyType::METADATA)
+    {
+        return "Metadata";
+    }
+    else 
+    {
+        return "";
+    }
+}
+
+QVariant SAPMPris::getNotifyValue(NotifyType type)
+{
+    if (type == NotifyType::PLAYBACK_STATUS)
+    {
+        return m_playbackStatus;
+    }
+    else if (type == NotifyType::METADATA)
+    {
+        return m_metadata;
+    }
+    else 
+    {
+        return QVariant();
+    }
+}
+
+void SAPMPris::notify(NotifyType type, const QVariant& value)
+{
+    // Checking if the notify type is valid.
+    if (type != NotifyType::UNKNOWN && value.isValid())
+    {
+        QString propertyName = notifyTypeToString(type);
+
+        // Creating a DBus signal.
+        QDBusMessage signal = QDBusMessage::createSignal(
+            _mprisObjectPath, _freeDesktopPath, _propertyChangedStr);
+        
+        // Storing the property name and the new value into a variant map.
+        QVariantMap map;
+        map[propertyName] = value;
+
+        // Creating the message args with the MPRIS entity (player), the property change and an empty string list.
+        QVariantList args;
+        args.append(_mprisPlayerEntity);
+        args.append(map);
+        args.append(QStringList());
+
+        // Set the args into the signal.
+        signal.setArguments(args);
+
+        // Send the signal.
+        QDBusConnection::sessionBus().send(signal);
+    }
+}
+
+void SAPMPris::notify(NotifyType type)
+{
+    /*
+    Getting the value based on the notify type 
+    and send it to the other notify method.
+    */
+    const QVariant value = getNotifyValue(type);
+    notify(type, value);
 }

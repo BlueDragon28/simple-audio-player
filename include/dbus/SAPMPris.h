@@ -109,6 +109,28 @@ private:
     // Helper methods.
     static QString playbackStatusEnumToString(PlaybackStatus status);
 
+    /*
+    Enum with the type of data that can be send to MPRIS.
+    */
+    enum class NotifyType
+    {
+        UNKNOWN = -1,
+        PLAYBACK_STATUS,
+        METADATA
+    };
+    static QString notifyTypeToString(NotifyType type);
+
+    /*
+    Send a notification to DBus MPRIS interface.
+    */
+    void notify(NotifyType type, const QVariant& value);
+    void notify(NotifyType type);
+
+    /*
+    Retrieve the data based on the type value.
+    */
+    QVariant getNotifyValue(NotifyType type);
+
     // Make the class SystemMediaControl a friend class
     friend class SystemMediaControl;
 
@@ -121,6 +143,8 @@ private:
     static const char* _serviceName;
     static const char* _mprisObjectPath;
     static const char* _freeDesktopPath;
+    static const char* _propertyChangedStr;
+    static const char* _mprisPlayerEntity;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SAPMPRIS_H_
