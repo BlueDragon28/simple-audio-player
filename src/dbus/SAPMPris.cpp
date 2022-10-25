@@ -67,7 +67,7 @@ QString SAPMPris::identity() const
 
 QStringList SAPMPris::supportedUriSchemes() const
 {
-    return { "file" };
+    return QStringList();
 }
 
 QStringList SAPMPris::supportedMimeTypes() const
