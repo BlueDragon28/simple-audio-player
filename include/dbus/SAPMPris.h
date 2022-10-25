@@ -38,7 +38,13 @@ public:
     ~SAPMPris();
 
 signals:
+    // MPRIS Player signal
     void Seeked(long long position);
+
+    // API for SystemMediaControl interface
+    void playPause();
+    void previous();
+    void next();
 
     // Root mpris methods.
 public slots:
@@ -76,6 +82,11 @@ public:
         QVariantMap toVariantMap() const;
     };
 
+    // Interface with SystemMediaControl
+    void setPlaybackStatus(PlaybackStatus status);
+    void setMetadata(const MetaData& data);
+    void setCanNext(bool value);
+
 private:
     // Root properties.
     bool canQuit() const;
@@ -87,13 +98,11 @@ private:
 
     // Player properties.
     QString playbackStatus() const;
-    void setPlaybackStatus(PlaybackStatus status);
 
     double rate() const;
     void setRate(double rate);
 
     QVariantMap metadata() const;
-    void setMetadata(const MetaData& data);
 
     double volume() const;
     void setVolume(double volume);
@@ -122,7 +131,12 @@ private:
     {
         UNKNOWN = -1,
         PLAYBACK_STATUS,
-        METADATA
+        METADATA,
+        CAN_PLAY,
+        CAN_PAUSE,
+        CAN_NEXT,
+        CAN_PREVIOUS,
+        CAN_CONTROL
     };
     static QString notifyTypeToString(NotifyType type);
 
@@ -137,13 +151,17 @@ private:
     */
     QVariant getNotifyValue(NotifyType type);
 
-    // Make the class SystemMediaControl a friend class
-    friend class SystemMediaControl;
-
     // Members variables.
     QString m_playbackStatus;
     QVariantMap m_metadata;
     long long m_position;
+
+    // Playing properties.
+    bool m_canPlay;
+    bool m_canPause;
+    bool m_canNext;
+    bool m_canPrevious;
+    bool m_canControl;
 
     // Static variables
     static const char* _serviceName;
