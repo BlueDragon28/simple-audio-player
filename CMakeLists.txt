@@ -29,13 +29,17 @@ if (UNIX)
 	pkg_check_modules(SAL REQUIRED simple-audio-library_static)
 
 	# include sal headers location
-	include_directories(${SAL_INCLUDE_DIRS})
+	include_directories(${SAL_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
 
 	# Find taglib library
 	pkg_check_modules(TAGLIB REQUIRED taglib)
 	
 	# Add SAL library directory path.
 	link_directories(${SAL_LIBRARY_DIRS})
+
+	# Generate dbus mpris adaptor
+	qt6_add_dbus_adaptor(DBUS_SRC "include/dbus/org.mpris.MediaPlayer2.xml" "dbus/SAPMPris.h" SAPMPris dbus/mprisRoot MPrisRoot)
+	qt6_add_dbus_adaptor(DBUS_SRC "include/dbus/org.mpris.MediaPlayer2.Player.xml" "dbus/SAPMPris.h" SAPMPris dbus/mprisPlayer MPrisPlayer)
 elseif(WIN32)
 	# Find simple-audio-library
 	if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/include/simple-audio-library/AudioPlayer.h") AND
