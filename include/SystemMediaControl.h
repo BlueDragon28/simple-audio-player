@@ -46,7 +46,7 @@ private:
     template<typename T>
     inline static bool isVariantMapContain(const QVariantMap& vm, const QString& key);
 
-    static std::unique_ptr<SAPMPris> dbusRoot;
+    static std::unique_ptr<SAPMPris> dbusMPRIS;
 };
 
 template<typename T>

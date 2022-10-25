@@ -8,7 +8,7 @@
 #define TRACKID_ALBUM "album"
 #define TRACKID_ARTISTS "artists"
 
-std::unique_ptr<SAPMPris> SystemMediaControl::dbusRoot;
+std::unique_ptr<SAPMPris> SystemMediaControl::dbusMPRIS;
 
 SystemMediaControl::SystemMediaControl()
 {}
@@ -16,27 +16,27 @@ SystemMediaControl::SystemMediaControl()
 void SystemMediaControl::init()
 {
     // Initializing the static variables inside the class SystemMediaControl
-    if (!dbusRoot)
+    if (!dbusMPRIS)
     {
-        dbusRoot = std::unique_ptr<SAPMPris>(new SAPMPris());
+        dbusMPRIS = std::unique_ptr<SAPMPris>(new SAPMPris());
     }
 }
 
 void SystemMediaControl::play()
 {
-    dbusRoot->setPlaybackStatus(SAPMPris::PlaybackStatus::PLAYING);
+    dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PLAYING);
     qDebug() << "playing";
 }
 
 void SystemMediaControl::pause()
 {
-    dbusRoot->setPlaybackStatus(SAPMPris::PlaybackStatus::PAUSED);
+    dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PAUSED);
     qDebug() << "pausing";
 }
 
 void SystemMediaControl::stop()
 {
-    dbusRoot->setPlaybackStatus(SAPMPris::PlaybackStatus::STOPPED);
+    dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::STOPPED);
     qDebug() << "stopping";
 }
 
@@ -48,7 +48,7 @@ void SystemMediaControl::newTrack(const QVariantMap& vID)
     data.title = id.title;
     data.album = id.album;
     data.artists = id.artists;
-    dbusRoot->setMetadata(data);
+    dbusMPRIS->setMetadata(data);
     qDebug() << "newTrack: " + id.path;
 }
 
