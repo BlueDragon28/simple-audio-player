@@ -1,7 +1,11 @@
 #ifndef SIMPLEAUDIOPLAYER_SYSTEM_MEDIA_CONTROL_H_
 #define SIMPLEAUDIOPLAYER_SYSTEM_MEDIA_CONTROL_H_
 
+// Include dbus only on Linux.
+#ifdef __linux__
 #include "dbus/SAPMPris.h"
+#endif
+
 #include <QObject>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
@@ -53,7 +57,9 @@ private:
     template<typename T>
     inline static bool isVariantMapContain(const QVariantMap& vm, const QString& key);
 
+#ifdef __linux__
     static std::unique_ptr<SAPMPris> dbusMPRIS;
+#endif
 };
 
 template<typename T>
