@@ -37,7 +37,6 @@ void SystemMediaControl::play()
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PLAYING);
 #endif
-    qDebug() << "playing";
 }
 
 void SystemMediaControl::pause()
@@ -45,7 +44,6 @@ void SystemMediaControl::pause()
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PAUSED);
 #endif
-    qDebug() << "pausing";
 }
 
 void SystemMediaControl::stop()
@@ -53,7 +51,6 @@ void SystemMediaControl::stop()
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::STOPPED);
 #endif
-    qDebug() << "stopping";
 }
 
 void SystemMediaControl::newTrack(const QVariantMap& vID)
@@ -68,7 +65,6 @@ void SystemMediaControl::newTrack(const QVariantMap& vID)
     data.artists = id.artists;
     dbusMPRIS->setMetadata(data);
 #endif
-    qDebug() << "newTrack: " + id.path;
 }
 
 SystemMediaControl::TrackID SystemMediaControl::parseTrackID(const QVariantMap& vID)
