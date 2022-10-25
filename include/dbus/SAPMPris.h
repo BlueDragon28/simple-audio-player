@@ -37,6 +37,9 @@ public:
     SAPMPris(QObject* parent = nullptr);
     ~SAPMPris();
 
+signals:
+    void Seeked(long long position);
+
     // Root mpris methods.
 public slots:
     void Raise();
