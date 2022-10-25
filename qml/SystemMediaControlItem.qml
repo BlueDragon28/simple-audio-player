@@ -2,6 +2,7 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
+import "qrc:///js/simple-audio-library.js" as SAL
 
 /*
 A simple item to interface with the SystemMediaControl C++ interface.
@@ -34,6 +35,10 @@ Item {
                 index: 0,
                 path: Player.currentStream
             });
+
+            // If there is another song after this one, notify mpris.
+            SystemMediaControl.canNext(
+                PlayingList.hasNext());
         }
     }
 
@@ -52,6 +57,26 @@ Item {
                 album: TrackTag.album,
                 artists: TrackTag.artist
             });
+        }
+    }
+
+    // Connecting to the SystemMediaControl C++ class.
+    Connections {
+        target: SystemMediaControl
+
+        // When the System Media Control ask to PlayPause.
+        function onPlayPause() {
+            SAL.playPause();
+        }
+
+        // Restart or going to the previous track.
+        function onPrevious() {
+            SAL.previous();
+        }
+
+        // Going to the next track.
+        function onNext() {
+            SAL.next();
         }
     }
 

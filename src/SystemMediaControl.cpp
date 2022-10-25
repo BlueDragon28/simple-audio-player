@@ -11,7 +11,12 @@
 std::unique_ptr<SAPMPris> SystemMediaControl::dbusMPRIS;
 
 SystemMediaControl::SystemMediaControl()
-{}
+{
+    // Connect the signals of SAPMPris to the SystemMediaControl signals interface.
+    connect(dbusMPRIS.get(), &SAPMPris::playPause, this, &SystemMediaControl::playPause);
+    connect(dbusMPRIS.get(), &SAPMPris::previous, this, &SystemMediaControl::previous);
+    connect(dbusMPRIS.get(), &SAPMPris::next, this, &SystemMediaControl::next);
+}
 
 void SystemMediaControl::init()
 {
@@ -83,4 +88,10 @@ SystemMediaControl::TrackID SystemMediaControl::parseTrackID(const QVariantMap& 
     }
 
     return id;
+}
+
+void SystemMediaControl::canNext(bool value)
+{
+    // Notify MPRIS that there is or not another song after the current ont.
+    dbusMPRIS->setCanNext(value);
 }

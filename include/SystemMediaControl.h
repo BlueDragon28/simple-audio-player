@@ -36,6 +36,13 @@ public:
     Q_INVOKABLE static void pause(); // Telling the system that a playback is paused.
     Q_INVOKABLE static void stop(); // Telling the system that the playback system stopped.
     Q_INVOKABLE static void newTrack(const QVariantMap& id); // Telling the system that a new track is playing.
+    Q_INVOKABLE static void canNext(bool value); // Notify MPRIS that there is or not another song after the current one.
+
+    // Passtrough the signals to the QML interface
+signals:
+    void playPause();
+    void previous();
+    void next();
 
 private:
     static TrackID parseTrackID(const QVariantMap& vID);
