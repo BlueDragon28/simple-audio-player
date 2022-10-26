@@ -9,6 +9,7 @@
 #include <QObject>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
+#include <QVariant>
 
 /*
 This class is an interface to communicate with the system about the state of the playback.
