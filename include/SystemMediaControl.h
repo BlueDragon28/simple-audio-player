@@ -44,6 +44,7 @@ public:
 
     // Passtrough the signals to the QML interface
 signals:
+    void raise();
     void playPause();
     void previous();
     void next();

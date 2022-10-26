@@ -38,7 +38,12 @@ ApplicationWindow {
     System Media Control, communicate with the system about the stream currently played
     and to receive signal when the media keys are pressed.
     */
-    SystemMediaControlItem {}
+    SystemMediaControlItem {
+        // When the System Media Control ask the window to be raised.
+        onRaise: {
+            root.requestActivate();
+        }
+    }
 
     // Called when the item is initialized.
     Component.onCompleted: {

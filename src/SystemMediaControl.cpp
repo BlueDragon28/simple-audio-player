@@ -1,4 +1,5 @@
 #include "SystemMediaControl.h"
+#include "dbus/SAPMPris.h"
 #include <memory>
 
 #define TRACKID_INDEX "index"
@@ -15,6 +16,7 @@ SystemMediaControl::SystemMediaControl()
 {
 #ifdef __linux__
     // Connect the signals of SAPMPris to the SystemMediaControl signals interface.
+    connect(dbusMPRIS.get(), &SAPMPris::raise, this, &SystemMediaControl::raise);
     connect(dbusMPRIS.get(), &SAPMPris::playPause, this, &SystemMediaControl::playPause);
     connect(dbusMPRIS.get(), &SAPMPris::previous, this, &SystemMediaControl::previous);
     connect(dbusMPRIS.get(), &SAPMPris::next, this, &SystemMediaControl::next);

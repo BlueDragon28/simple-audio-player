@@ -10,6 +10,8 @@ A simple item to interface with the SystemMediaControl C++ interface.
 Item {
     id: root
 
+    signal raise();
+
     // Connecting to the Player singleton object and listen to the signal emitted by the SAL library.
     Connections {
         target: Player
@@ -63,6 +65,11 @@ Item {
     // Connecting to the SystemMediaControl C++ class.
     Connections {
         target: SystemMediaControl
+
+        // When the System Media Control ask the window to be raised.
+        function onRaise() {
+            root.raise();
+        }
 
         // When the System Media Control ask to PlayPause.
         function onPlayPause() {
