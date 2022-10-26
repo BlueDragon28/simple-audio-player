@@ -1,5 +1,7 @@
 #include "SystemMediaControl.h"
+#ifdef __linux__
 #include "dbus/SAPMPris.h"
+#endif
 #include <memory>
 
 #define TRACKID_INDEX "index"
