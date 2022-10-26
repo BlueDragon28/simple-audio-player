@@ -40,7 +40,10 @@ SAPMPris::~SAPMPris()
 Root MRPIS
 */
 void SAPMPris::Raise()
-{}
+{
+    // Tell the application to raise and focus the window.
+    emit raise();
+}
 
 void SAPMPris::Quit()
 {}

@@ -42,6 +42,7 @@ signals:
     void Seeked(long long position);
 
     // API for SystemMediaControl interface
+    void raise(); // Emit when dbus want the player to be raised and be focused.
     void playPause();
     void previous();
     void next();
