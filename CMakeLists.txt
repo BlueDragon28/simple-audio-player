@@ -111,9 +111,41 @@ elseif(WIN32)
 	endif()
 endif()
 
-# Search for every headers in sources file.
-file(GLOB HEADERS include/*.h)
-file(GLOB SOURCES src/*.cpp)
+# Set the headers and sources files.
+set(HEADERS
+    "include/AlbumCollectionModel.h"
+    "include/AlbumTrackListModel.h"
+    "include/AppConfig.h"
+    "include/BaseCollectionModel.h"
+    "include/CoverArtTag.h"
+    "include/CoverImageProvider.h"
+    "include/FileSize.h"
+    "include/FileSystemModel.h"
+    "include/MusicCollectionList.h"
+    "include/Player.h"
+    "include/PlayingList.h"
+    "include/SectionListModel.h"
+    "include/SelectionModel.h"
+    "include/SystemMediaControl.h"
+    "include/TrackTag.h")
+
+set(SOURCES
+    "src/main.cpp"
+    "src/AlbumCollectionModel.cpp"
+    "src/AlbumTrackListModel.cpp"
+    "src/AppConfig.cpp"
+    "src/BaseCollectionModel.cpp"
+    "src/CoverArtTag.cpp"
+    "src/CoverImageProvider.cpp"
+    "src/FileSize.cpp"
+    "src/FileSystemModel.cpp"
+    "src/MusicCollectionList.cpp"
+    "src/Player.cpp"
+    "src/PlayingList.cpp"
+    "src/SectionListModel.cpp"
+    "src/SelectionModel.cpp"
+    "src/SystemMediaControl.cpp"
+    "src/TrackTag.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
