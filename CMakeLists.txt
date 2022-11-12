@@ -89,7 +89,7 @@ elseif(WIN32)
 					${SndFile_LIBRARIES})
 
 				message(STATUS "libsndfile found")
-			elseif()
+                        else()
 				message(WARNING "libsndfile not found")
 			endif()
 		endif()
