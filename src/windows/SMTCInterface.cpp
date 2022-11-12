@@ -7,7 +7,7 @@ SMTCInterface::SMTCInterface(QObject* parent) :
 SMTCInterface::~SMTCInterface()
 {}
 
-void SMTCInterface::setPlaybackStatus(PlaybackStatus status)
+void SMTCInterface::setPlaybackStatus(SMTC::PlaybackStatus status)
 {
     m_smtc.playbackStatusChanged(status);
 }

@@ -75,7 +75,7 @@ void SystemMediaControl::play()
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PLAYING);
 #elif WIN32
 #ifdef USE_SMTC
-    smtcInterface->setPlaybackStatus(PlaybackStatus::PLAYING);
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::PLAYING);
 #endif
 #endif
 }
@@ -86,7 +86,7 @@ void SystemMediaControl::pause()
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PAUSED);
 #elif WIN32
 #ifdef USE_SMTC
-    smtcInterface->setPlaybackStatus(PlaybackStatus::PAUSED);
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::PAUSED);
 #endif
 #endif
 }
@@ -97,7 +97,7 @@ void SystemMediaControl::stop()
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::STOPPED);
 #elif WIN32
 #ifdef USE_SMTC
-    smtcInterface->setPlaybackStatus(PlaybackStatus::STOPPED);
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::STOPPED);
 #endif
 #endif
 }
