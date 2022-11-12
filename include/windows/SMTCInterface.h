@@ -25,6 +25,12 @@ public:
     */
     void setTrackInfo(const QString& title, const QString& artists);
 
+// This signal are called everytime a media key is clicked.
+signals:
+    void playPause();
+    void previous();
+    void next();
+
 private:
     SMTC::SAP_SMTC m_smtc;
 };

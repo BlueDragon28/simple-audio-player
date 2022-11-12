@@ -39,7 +39,12 @@ SystemMediaControl::SystemMediaControl()
     connect(dbusMPRIS.get(), &SAPMPris::next, this, &SystemMediaControl::next);
 #elif WIN32
 #ifdef USE_SMTC
-    // ... Not yet implemented.
+    /*
+    Passthrough the signals of the SMTCInterface to this class.
+    */
+    connect(smtcInterface.get(), &SMTCInterface::playPause, this, &SystemMediaControl::playPause);
+    connect(smtcInterface.get(), &SMTCInterface::previous, this, &SystemMediaControl::previous);
+    connect(smtcInterface.get(), &SMTCInterface::next, this, &SystemMediaControl::next);
 #else
     ListenMediaKeys::init();
     m_windowsHook = ListenMediaKeys::instance();
