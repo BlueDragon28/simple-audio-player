@@ -19,6 +19,7 @@ if (UNIX)
 	set (DBUS_SRC
 		"src/dbus/SAPMPris.cpp")
 elseif (WIN32)
+    # Including only on Windows the ListenMediaKeys object to listen for media keys.
     set(LISTEN_MEDIA_KEYS_SRC
         "include/windows/ListenMediaKeys.h"
         "src/windows/ListenMediaKeys.cpp")
