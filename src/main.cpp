@@ -7,6 +7,9 @@
 #include "MusicCollectionList.h"
 #include "AppConfig.h"
 #include "SystemMediaControl.h"
+#ifdef WIN32
+#include "windows/ListenMediaKeys.h"
+#endif
 
 int main(int argc, char** argv)
 {
@@ -41,6 +44,9 @@ int main(int argc, char** argv)
     if (!result)
     {
         AppConfig::saveConfig();
+
+        // If on Windows, deinit ListenMidiaKeys
+        ListenMediaKeys::deinit();
     }
 
     return result;
