@@ -108,6 +108,8 @@ elseif(WIN32)
 				"${CMAKE_SOURCE_DIR}/dependencies/taglib/lib/tag.lib")
 			include_directories("${CMAKE_SOURCE_DIR}/dependencies/taglib/include/")
 			message(STATUS "taglib found")
+        else()
+            message(FATAL_ERROR "taglib not found")
 	endif()
 endif()
 
