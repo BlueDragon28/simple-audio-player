@@ -18,6 +18,10 @@ if (UNIX)
 		"include/dbus/SAPMPris.h")
 	set (DBUS_SRC
 		"src/dbus/SAPMPris.cpp")
+elseif (WIN32)
+    set(LISTEN_MEDIA_KEYS_SRC
+        "include/windows/ListenMediaKeys.h"
+        "src/windows/ListenMediaKeys.cpp")
 endif()
 
 # Find Qt6
@@ -153,7 +157,7 @@ set(RESOURCES "simple-audio-player.qrc")
 include_directories(include/)
 
 # Create the executable.
-qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC})
+qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Core
     Qt6::Gui

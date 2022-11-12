@@ -1,6 +1,8 @@
 #include "SystemMediaControl.h"
 #ifdef __linux__
 #include "dbus/SAPMPris.h"
+#elif WIN32
+#include "windows/ListenMediaKeys.h"
 #endif
 #include <memory>
 
@@ -15,6 +17,9 @@ std::unique_ptr<SAPMPris> SystemMediaControl::dbusMPRIS;
 #endif
 
 SystemMediaControl::SystemMediaControl()
+#ifdef WIN32
+    : m_windowsHook(nullptr)
+#endif
 {
 #ifdef __linux__
     // Connect the signals of SAPMPris to the SystemMediaControl signals interface.
@@ -22,6 +27,13 @@ SystemMediaControl::SystemMediaControl()
     connect(dbusMPRIS.get(), &SAPMPris::playPause, this, &SystemMediaControl::playPause);
     connect(dbusMPRIS.get(), &SAPMPris::previous, this, &SystemMediaControl::previous);
     connect(dbusMPRIS.get(), &SAPMPris::next, this, &SystemMediaControl::next);
+#elif WIN32
+    ListenMediaKeys::init();
+    m_windowsHook = ListenMediaKeys::instance();
+
+    connect(m_windowsHook, &ListenMediaKeys::playPause, this, &SystemMediaControl::playPause);
+    connect(m_windowsHook, &ListenMediaKeys::previous, this, &SystemMediaControl::previous);
+    connect(m_windowsHook, &ListenMediaKeys::next, this, &SystemMediaControl::next);
 #endif
 }
 

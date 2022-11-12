@@ -4,6 +4,9 @@
 // Include dbus only on Linux.
 #ifdef __linux__
 #include "dbus/SAPMPris.h"
+#elif WIN32
+// Include the keyboard hooks for Windows.
+#include "windows/ListenMediaKeys.h"
 #endif
 
 #include <QObject>
@@ -61,6 +64,8 @@ private:
 
 #ifdef __linux__
     static std::unique_ptr<SAPMPris> dbusMPRIS;
+#elif WIN32
+    ListenMediaKeys* m_windowsHook;
 #endif
 };
 
