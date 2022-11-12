@@ -23,6 +23,9 @@ elseif (WIN32)
     set(LISTEN_MEDIA_KEYS_SRC
         "include/windows/ListenMediaKeys.h"
         "src/windows/ListenMediaKeys.cpp")
+
+    # Option to use between keys hooks and System Media Transport Control interface for media control.
+    option(USE_SMTC "Use the System Media Transport Control interface instead of a key hook to listen for media control" ON)
 endif()
 
 # Find Qt6
@@ -113,7 +116,27 @@ elseif(WIN32)
 				"${CMAKE_SOURCE_DIR}/dependencies/taglib/lib/tag.lib")
 			include_directories("${CMAKE_SOURCE_DIR}/dependencies/taglib/include/")
 			message(STATUS "taglib found")
-	endif()
+        endif()
+
+
+        if (USE_SMTC)
+            # Find simple-audio-player-smtc
+            if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-player-smtc/simple-audio-player-smtc.lib") AND
+                    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-player-smtc/SAP_SMTC.h"))
+
+                # Store the path to the lib into a variable
+                set(SAP_SMTC_LIB "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-player-smtc/simple-audio-player-smtc.lib")
+                message(STATUS "simple-audio-library-smtc found")
+
+                # Include the header directory.
+                include_directories("${CMAKE_SOURCE_DIR}/dependencies/simple-audio-player-smtc/")
+
+                # Include the SMTCInterface object.
+                set(SMTC_INTERFACE_SRC
+                    "include/windows/SMTCInterface.h"
+                    "src/windows/SMTCInterface.cpp")
+            endif()
+        endif()
 endif()
 
 # Set the headers and sources files.
@@ -154,11 +177,14 @@ set(SOURCES
 
 set(RESOURCES "simple-audio-player.qrc")
 
+# Configure the config.h.in file.
+configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
+
 # Include the include directory
-include_directories(include/)
+include_directories(include/  "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
-qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC})
+qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Core
     Qt6::Gui
@@ -167,7 +193,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Sql
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
-    ${TAGLIB_LIBRARIES})
+    ${TAGLIB_LIBRARIES}
+    "${SAP_SMTC_LIB}")
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 qt_add_qml_module(${PROJECT_NAME} URI "SimpleAudioPlayer" VERSION 1.0)
