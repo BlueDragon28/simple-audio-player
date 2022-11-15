@@ -14,11 +14,11 @@ The simple-audio-player use the [**CMake**](https://cmake.org/) build generator,
 
 To compile on Windows, you must include the dependencies in the dependencies' folder. Each of the dependencies must be in the appropriate folder.
 
-- SAL -> dependencies/simple-audio-library/
-- PortAudio -> dependencies/portaudio/
-- FLAC++ -> dependencies/flac/
-- libsndfile -> dependencies/libsndfile/
-- taglib -> dependencies/taglib/
+- [SAL](https://github.com/BlueDragon28/simple-audio-library) -> dependencies/simple-audio-library/
+- [PortAudio](https://github.com/PortAudio/portaudio) -> dependencies/portaudio/
+- [FLAC++](https://github.com/xiph/flac) -> dependencies/flac/
+- [libsndfile](https://github.com/libsndfile/libsndfile) -> dependencies/libsndfile/
+- [taglib](https://github.com/taglib/taglib) -> dependencies/taglib/
 
 ### Linux
 
