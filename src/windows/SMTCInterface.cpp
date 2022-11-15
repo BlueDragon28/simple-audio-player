@@ -37,3 +37,8 @@ void SMTCInterface::setTrackInfo(const QString &title, const QString &artists)
         title.toUtf8().constData(),
         artists.toUtf8().constData());
 }
+
+void SMTCInterface::setCanNext(bool value)
+{
+    m_smtc.setCanNext(value);
+}

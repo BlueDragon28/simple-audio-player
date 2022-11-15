@@ -25,6 +25,13 @@ public:
     */
     void setTrackInfo(const QString& title, const QString& artists);
 
+    /*
+    Tell the system if it can go to the next track.
+    If there is no track to play after the current one, this allow
+    the system to inform the user about it.
+    */
+    void setCanNext(bool value);
+
 // This signal are called everytime a media key is clicked.
 signals:
     void playPause();

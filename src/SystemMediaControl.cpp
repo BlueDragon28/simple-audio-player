@@ -163,5 +163,9 @@ void SystemMediaControl::canNext(bool value)
 #ifdef __linux__
     // Notify MPRIS that there is or not another song after the current one.
     dbusMPRIS->setCanNext(value);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setCanNext(value);
+#endif
 #endif
 }
