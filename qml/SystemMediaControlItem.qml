@@ -86,6 +86,4 @@ Item {
             SAL.next();
         }
     }
-
-    Component.onCompleted: console.log("Completed");
 }
