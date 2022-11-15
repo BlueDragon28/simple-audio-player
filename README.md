@@ -19,6 +19,12 @@ To compile on Windows, you must include the dependencies in the dependencies' fo
 - [FLAC++](https://github.com/xiph/flac) -> dependencies/flac/
 - [libsndfile](https://github.com/libsndfile/libsndfile) -> dependencies/libsndfile/
 - [taglib](https://github.com/taglib/taglib) -> dependencies/taglib/
+- [simple-audio-player-smtc](https://github.com/BlueDragon28/simple-audio-player-smtc) -> Interface with the Windows Runtime System Media Transport Control API. You need to compile it using the Visual Studio solution to the same compilation type and architecture of this project, and copy this files into dependencies/simple-audio-player-smtc (buildOutput must be changed with the real binary output) :
+   - simple-audio-player-smtc/SAP_SMTC.h
+   - *buildOutput*/simple-audio-player-smtc.lib
+   - *buildOutput*/simple-audio-player-smtc.dll  
+  
+  If you do not want or can't compile simple-audio-player-smtc, you can disable it with the cmake option **USE_SMTC** `-DUSE_SMTC=off`. You will still be able to control playback with the media keys.
 
 ### Linux
 
