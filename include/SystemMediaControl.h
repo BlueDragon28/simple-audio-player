@@ -4,6 +4,15 @@
 // Include dbus only on Linux.
 #ifdef __linux__
 #include "dbus/SAPMPris.h"
+#elif WIN32
+#include "config.h"
+#ifdef USE_SMTC
+// Include the SMTC interface.
+#include "windows/SMTCInterface.h"
+#else
+// Include the keyboard hooks for Windows.
+#include "windows/ListenMediaKeys.h"
+#endif
 #endif
 
 #include <QObject>
@@ -61,6 +70,12 @@ private:
 
 #ifdef __linux__
     static std::unique_ptr<SAPMPris> dbusMPRIS;
+#elif WIN32
+#ifdef USE_SMTC
+    static std::unique_ptr<SMTCInterface> smtcInterface;
+#else
+    ListenMediaKeys* m_windowsHook;
+#endif
 #endif
 };
 

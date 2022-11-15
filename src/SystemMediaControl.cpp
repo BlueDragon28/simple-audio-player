@@ -1,6 +1,12 @@
 #include "SystemMediaControl.h"
 #ifdef __linux__
 #include "dbus/SAPMPris.h"
+#elif WIN32
+#ifdef USE_SMTC
+#include "windows/SMTCInterface.h"
+#else
+#include "windows/ListenMediaKeys.h"
+#endif
 #endif
 #include <memory>
 
@@ -12,9 +18,18 @@
 
 #ifdef __linux__
 std::unique_ptr<SAPMPris> SystemMediaControl::dbusMPRIS;
+#elif WIN32
+#ifdef USE_SMTC
+std::unique_ptr<SMTCInterface> SystemMediaControl::smtcInterface;
+#endif
 #endif
 
 SystemMediaControl::SystemMediaControl()
+#ifdef WIN32
+#ifndef USE_SMTC
+    : m_windowsHook(nullptr)
+#endif
+#endif
 {
 #ifdef __linux__
     // Connect the signals of SAPMPris to the SystemMediaControl signals interface.
@@ -22,6 +37,22 @@ SystemMediaControl::SystemMediaControl()
     connect(dbusMPRIS.get(), &SAPMPris::playPause, this, &SystemMediaControl::playPause);
     connect(dbusMPRIS.get(), &SAPMPris::previous, this, &SystemMediaControl::previous);
     connect(dbusMPRIS.get(), &SAPMPris::next, this, &SystemMediaControl::next);
+#elif WIN32
+#ifdef USE_SMTC
+    /*
+    Passthrough the signals of the SMTCInterface to this class.
+    */
+    connect(smtcInterface.get(), &SMTCInterface::playPause, this, &SystemMediaControl::playPause);
+    connect(smtcInterface.get(), &SMTCInterface::previous, this, &SystemMediaControl::previous);
+    connect(smtcInterface.get(), &SMTCInterface::next, this, &SystemMediaControl::next);
+#else
+    ListenMediaKeys::init();
+    m_windowsHook = ListenMediaKeys::instance();
+
+    connect(m_windowsHook, &ListenMediaKeys::playPause, this, &SystemMediaControl::playPause);
+    connect(m_windowsHook, &ListenMediaKeys::previous, this, &SystemMediaControl::previous);
+    connect(m_windowsHook, &ListenMediaKeys::next, this, &SystemMediaControl::next);
+#endif
 #endif
 }
 
@@ -33,6 +64,13 @@ void SystemMediaControl::init()
     {
         dbusMPRIS = std::unique_ptr<SAPMPris>(new SAPMPris());
     }
+#elif WIN32
+#ifdef USE_SMTC
+    if (!smtcInterface)
+    {
+        smtcInterface = std::unique_ptr<SMTCInterface>(new SMTCInterface());
+    }
+#endif
 #endif
 }
 
@@ -40,6 +78,10 @@ void SystemMediaControl::play()
 {
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PLAYING);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::PLAYING);
+#endif
 #endif
 }
 
@@ -47,6 +89,10 @@ void SystemMediaControl::pause()
 {
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::PAUSED);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::PAUSED);
+#endif
 #endif
 }
 
@@ -54,6 +100,10 @@ void SystemMediaControl::stop()
 {
 #ifdef __linux__
     dbusMPRIS->setPlaybackStatus(SAPMPris::PlaybackStatus::STOPPED);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setPlaybackStatus(SMTC::PlaybackStatus::STOPPED);
+#endif
 #endif
 }
 
@@ -68,6 +118,10 @@ void SystemMediaControl::newTrack(const QVariantMap& vID)
     data.album = id.album;
     data.artists = id.artists;
     dbusMPRIS->setMetadata(data);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setTrackInfo(id.title, id.artists);
+#endif
 #endif
 }
 
@@ -107,7 +161,11 @@ SystemMediaControl::TrackID SystemMediaControl::parseTrackID(const QVariantMap& 
 void SystemMediaControl::canNext(bool value)
 {
 #ifdef __linux__
-    // Notify MPRIS that there is or not another song after the current ont.
+    // Notify MPRIS that there is or not another song after the current one.
     dbusMPRIS->setCanNext(value);
+#elif WIN32
+#ifdef USE_SMTC
+    smtcInterface->setCanNext(value);
+#endif
 #endif
 }
