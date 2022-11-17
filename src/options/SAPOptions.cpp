@@ -20,9 +20,31 @@ OptionsDialog::~OptionsDialog()
 
 void OptionsDialog::buildInterface()
 {
-    QPushButton *btn = new QPushButton("Hello There", this);
-    connect(btn, &QPushButton::clicked, this, &OptionsDialog::accept);
-    connect(btn, &QPushButton::clicked, this, &OptionsDialog::deleteLater);
+    QVBoxLayout* vLayout = new QVBoxLayout(this);
+    
+    // Line seperation.
+    QFrame* line = new QFrame(this);
+    line->setFrameShape(QFrame::HLine);
+
+    vLayout->addStretch(1);
+    vLayout->addWidget(line);
+
+    // Button at the button of the layout.
+    QHBoxLayout* hLayout = new QHBoxLayout(this);
+
+    // Cancel button.
+    QPushButton* cancel = new QPushButton(tr("Cancel"), this);
+    connect(cancel, &QPushButton::clicked, this, &OptionsDialog::reject);
+
+    // Accept button.
+    QPushButton* apply = new QPushButton(tr("Apply"), this);
+    connect(apply, &QPushButton::clicked, this, &OptionsDialog::accept);
+
+    hLayout->addStretch(1);
+    hLayout->addWidget(cancel);
+    hLayout->addWidget(apply);
+
+    vLayout->addLayout(hLayout);
 }
 
 /*
