@@ -1,6 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
+import SimpleAudioPlayer 1.0
 import "qrc:///js/config.js" as AppConfig
 
 /*
@@ -16,6 +17,11 @@ ApplicationWindow {
         Menu {
             title: qsTr("&File")
             Action { text: qsTr("Quit"); onTriggered: root.close(); }
+        }
+
+        Menu {
+            title: qsTr("&Edit")
+            Action { text: qsTr("Options"); onTriggered: SAPOptions.openOptions(); }
         }
     }
 

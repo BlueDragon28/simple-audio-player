@@ -156,7 +156,8 @@ set(HEADERS
     "include/SectionListModel.h"
     "include/SelectionModel.h"
     "include/SystemMediaControl.h"
-    "include/TrackTag.h")
+    "include/TrackTag.h"
+	"include/options/SAPOptions.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -174,7 +175,8 @@ set(SOURCES
     "src/SectionListModel.cpp"
     "src/SelectionModel.cpp"
     "src/SystemMediaControl.cpp"
-    "src/TrackTag.cpp")
+    "src/TrackTag.cpp"
+	"src/options/SAPOptions.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
@@ -182,7 +184,7 @@ set(RESOURCES "simple-audio-player.qrc")
 configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
 
 # Include the include directory
-include_directories(include/  "${CMAKE_BINARY_DIR}/include")
+include_directories(include/ include/options "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
 qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
@@ -191,8 +193,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Quick
     Qt6::QuickControls2
-	Qt6::Widgets
     Qt6::Sql
+	Qt6::Widgets
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES}
