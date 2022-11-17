@@ -29,7 +29,7 @@ elseif (WIN32)
 endif()
 
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
@@ -191,6 +191,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Quick
     Qt6::QuickControls2
+	Qt6::Widgets
     Qt6::Sql
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
