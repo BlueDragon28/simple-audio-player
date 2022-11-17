@@ -28,7 +28,7 @@ To compile on Windows, you must include the dependencies in the dependencies' fo
 
 ### Linux
 
-Install the dependencies' library using your package manager, they are available is most distributions.
+Install the dependencies' library using your package manager, they are available in most distributions.
 
 ## License
 
