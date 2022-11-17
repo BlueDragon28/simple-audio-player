@@ -1,7 +1,11 @@
 #include "options/SAPOptions.h"
 #include <QtWidgets/qdialog.h>
 #include <QtWidgets/QPushButton>
-#include <qforeach.h>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QFrame>
+#include <qboxlayout.h>
+#include <qpushbutton.h>
 
 /*
 ========================================================
@@ -13,6 +17,7 @@ OptionsDialog::OptionsDialog() :
     QDialog(nullptr)
 {
     buildInterface();
+    connect(this, &OptionsDialog::finished, this, [this](){this->deleteLater();});
 }
 
 OptionsDialog::~OptionsDialog()
