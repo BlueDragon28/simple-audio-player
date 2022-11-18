@@ -25,6 +25,16 @@ private:
     Creating the QTabWidget view with all the content.
     */
     void createMainView(QVBoxLayout* layout);
+
+    /*
+    ========================================================
+    ================== QTabWidget tab ======================
+    ========================================================
+    */
+    /*
+    Musics Collection
+    */
+    QWidget* createMusicTab();
 };
 
 /*

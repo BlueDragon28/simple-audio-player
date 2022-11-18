@@ -2,7 +2,11 @@
 #include <QtWidgets/qdialog.h>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QFileDialog>
 #include <qboxlayout.h>
+#include <qlistwidget.h>
 #include <qpushbutton.h>
 
 /*
@@ -63,10 +67,62 @@ void OptionsDialog::createMainView(QVBoxLayout* layout)
     {
         // Creating the QTabWidget
         QTabWidget* tab = new QTabWidget(this);
-        tab->addTab(new QWidget(), "Test");
+        tab->addTab(createMusicTab(), "Music Collection"); // Music tab
         
         layout->addWidget(tab);
     }
+}
+
+QWidget* OptionsDialog::createMusicTab()
+{
+    QWidget* tab = new QWidget();
+
+    // Creating the main layout of the tab.
+    QVBoxLayout* vLayout = new QVBoxLayout(tab);
+
+    // The Group layout for the music folders collection.
+    QGroupBox* collectionGroup = new QGroupBox(tr("Collections Folders:"), tab);
+    vLayout->addWidget(collectionGroup);
+
+    // Layout of the collectionGroup widget.
+    QVBoxLayout* collectionLayout = new QVBoxLayout();
+    collectionLayout->setContentsMargins(0, 0, 0, 0);
+    collectionGroup->setLayout(collectionLayout);
+
+    // A list with the folders list.
+    QListWidget* foldersList = new QListWidget(tab);
+    collectionLayout->addWidget(foldersList);
+
+    // Btn to add a new folder into the list.
+    QPushButton* addFolderBtn = new QPushButton(tr("Add Folder"), collectionGroup);
+    collectionLayout->addWidget(addFolderBtn);
+
+    // Action to add a new button to the list.
+    connect(addFolderBtn, &QPushButton::clicked, [this, foldersList]() {
+        const QString directory = QFileDialog::getExistingDirectory(this, tr("Select a folder"));
+        if (!directory.isEmpty())
+        {
+            bool isPresent = false;
+
+            // Check if the folder has not been already added.
+            for (int i = 0; i < foldersList->count(); i++)
+            {
+                const QListWidgetItem* item = foldersList->item(i);
+                if (item->text().compare(directory) == 0)
+                {
+                    isPresent = true;
+                    break;
+                }
+            }
+
+            if (!isPresent)
+            {
+                foldersList->addItem(directory);
+            }
+        }
+    });
+
+    return tab;
 }
 
 /*
