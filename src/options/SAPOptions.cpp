@@ -1,9 +1,7 @@
 #include "options/SAPOptions.h"
 #include <QtWidgets/qdialog.h>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QFrame>
+#include <QtWidgets/QTabWidget>
 #include <qboxlayout.h>
 #include <qpushbutton.h>
 
@@ -26,13 +24,20 @@ OptionsDialog::~OptionsDialog()
 void OptionsDialog::buildInterface()
 {
     QVBoxLayout* vLayout = new QVBoxLayout(this);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    vLayout->addLayout(mainLayout, 1);
+
+    /*
+    Main content of the dialog.
+    */
+    createMainView(mainLayout);
     
     // Line seperation.
     QFrame* line = new QFrame(this);
     line->setFrameShape(QFrame::HLine);
-
-    vLayout->addStretch(1);
-    vLayout->addWidget(line);
+    vLayout->addWidget(line, 0);
 
     // Button at the button of the layout.
     QHBoxLayout* hLayout = new QHBoxLayout(this);
@@ -49,7 +54,19 @@ void OptionsDialog::buildInterface()
     hLayout->addWidget(cancel);
     hLayout->addWidget(apply);
 
-    vLayout->addLayout(hLayout);
+    vLayout->addLayout(hLayout, 0);
+}
+
+void OptionsDialog::createMainView(QVBoxLayout* layout)
+{
+    if (layout)
+    {
+        // Creating the QTabWidget
+        QTabWidget* tab = new QTabWidget(this);
+        tab->addTab(new QWidget(), "Test");
+        
+        layout->addWidget(tab);
+    }
 }
 
 /*

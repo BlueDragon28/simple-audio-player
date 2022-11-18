@@ -5,6 +5,8 @@
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
 
+class QVBoxLayout;
+
 /*
 The Dialog with the options selection inside.
 */
@@ -18,6 +20,11 @@ public:
 
 private:
     void buildInterface();
+
+    /*
+    Creating the QTabWidget view with all the content.
+    */
+    void createMainView(QVBoxLayout* layout);
 };
 
 /*
