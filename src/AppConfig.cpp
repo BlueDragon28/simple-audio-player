@@ -1,6 +1,7 @@
 #include "AppConfig.h"
 #include <QSettings>
 #include <algorithm>
+#include <qsettings.h>
 #include <qvariant.h>
 
 #define WINDOW_CONFIG_NAME "mainWindow"
@@ -14,6 +15,10 @@
 #define WINDOW_DEFAULT_SIZE_WIDTH 1024
 #define WINDOW_DEFAULT_SIZE_HEIGHT 512
 
+#define MUSIC_COLLECTION_CONFIG_NAME "collection"
+#define MUSIC_COLLECTION_MAKE_CONFIG_NAME(name) QString(MUSIC_COLLECTION_CONFIG_NAME) + '/' + name
+#define MUSIC_COLLECTION_PATH_LIST "dirList"
+
 AppConfig::WindowSettings AppConfig::mainWindowSettings = {
     WINDOW_DEFAULT_POS, // X
     WINDOW_DEFAULT_POS, // Y
@@ -22,6 +27,11 @@ AppConfig::WindowSettings AppConfig::mainWindowSettings = {
     false // miximize
 };
 bool AppConfig::isMainWindowSettings = true;
+
+AppConfig::MusicCollectionList AppConfig::m_musicCollectionPathList = {
+    .path = QStringList(),
+    .exists = false  
+};
 
 QSettings AppConfig::openSettings()
 {
@@ -134,6 +144,25 @@ void AppConfig::setMainWindowSettings(const QMap<QString, QVariant> &s)
     }
 }
 
+QStringList AppConfig::getMusicCollectionPathList(bool* exists)
+{
+    // If exists is valid, set it to the value of m_musicCollectionPathList.exists.
+    if (exists)
+    {
+        *exists = m_musicCollectionPathList.exists;
+    }
+
+    // Returning the list of m_musicCollectionPathList.
+    return m_musicCollectionPathList.path;
+}
+
+void AppConfig::setMusicCollectionPathList(const QStringList& pathList)
+{
+    // Update the path list.
+    m_musicCollectionPathList.path = pathList;
+    m_musicCollectionPathList.exists = true;
+}
+
 void AppConfig::saveWindowStatus(QSettings& settings)
 {
     if (settings.isWritable())
@@ -178,5 +207,28 @@ void AppConfig::loadWindowStatus(QSettings& settings)
     if (vMaximized.isValid() && vMaximized.canConvert<bool>())
     {
         mainWindowSettings.maximize = vMaximized.toBool();
+    }
+}
+
+void AppConfig::saveMusicCollectionPathList(QSettings& settings)
+{
+    if (settings.isWritable())
+    {
+        // Save only the music collectin path list if the user set it.
+        if (m_musicCollectionPathList.exists)
+        {
+            settings.setValue(MUSIC_COLLECTION_MAKE_CONFIG_NAME(MUSIC_COLLECTION_PATH_LIST), m_musicCollectionPathList.path);
+        }
+    }
+}
+
+void AppConfig::loadMusicCollectionPathList(QSettings& settings)
+{
+    // Load the music collection path list from the registry/config directory.
+    QVariant vPathList = settings.value(MUSIC_COLLECTION_MAKE_CONFIG_NAME(MUSIC_COLLECTION_PATH_LIST));
+    if (vPathList.isValid() && vPathList.canConvert<QStringList>())
+    {
+        m_musicCollectionPathList.path = vPathList.toStringList();
+        m_musicCollectionPathList.exists = true;
     }
 }

@@ -1,6 +1,7 @@
 #ifndef SIMPLE_AUDIO_PLAYER_APPCONFIG_H_
 #define SIMPLE_AUDIO_PLAYER_APPCONFIG_H_
 
+#include "MusicCollectionList.h"
 #include <QObject>
 #include <QSettings>
 #include <qmap.h>
@@ -38,6 +39,17 @@ public:
     */
     Q_INVOKABLE static void setMainWindowSettings(const QMap<QString, QVariant>& settings);
 
+    /*
+    Return the music collection path list.
+    This is the list to listen to get the music collection (ex: albums)
+    */
+    static QStringList getMusicCollectionPathList(bool* exists = nullptr);
+
+    /*
+    Save in memory settings the music collection path list to listen.
+    */
+    static void setMusicCollectionPathList(const QStringList& pathList);
+
 private:
     static QSettings openSettings();
 
@@ -51,6 +63,16 @@ private:
     */
     static void loadWindowStatus(QSettings& settings);
 
+    /*
+    Save the music collection path list into registry/config directory.
+    */
+    static void saveMusicCollectionPathList(QSettings& settings);
+
+    /*
+    Load the music collection path list from registry/config directory.
+    */
+    static void loadMusicCollectionPathList(QSettings& settings);
+
     struct WindowSettings
     {
         int x;
@@ -61,6 +83,13 @@ private:
     };
     static WindowSettings mainWindowSettings;
     static bool isMainWindowSettings;
+
+    struct MusicCollectionList
+    {
+        QStringList path;
+        bool exists;
+    };
+    static MusicCollectionList m_musicCollectionPathList;
 };
 
 #endif // SIMPLE_AUDIO_PLAYER_APPCONFIG_H_
