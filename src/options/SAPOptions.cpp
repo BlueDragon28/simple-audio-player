@@ -18,7 +18,8 @@
 */
 
 OptionsDialog::OptionsDialog() :
-    QDialog(nullptr)
+    QDialog(nullptr),
+    m_folderList(nullptr)
 {
     buildInterface();
     connect(this, &OptionsDialog::finished, this, [this](){this->deleteLater();});
@@ -100,9 +101,9 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
     collectionGroup->setLayout(collectionLayout);
 
     // A list with the folders list.
-    QListWidget* foldersList = new QListWidget(parent);
-    initCollectionListWidget(foldersList); // Initialize the foldersList widget with the collection music path list to listen to.
-    collectionLayout->addWidget(foldersList);
+    m_folderList = new QListWidget(parent);
+    initCollectionListWidget(); // Initialize the foldersList widget with the collection music path list to listen to.
+    collectionLayout->addWidget(m_folderList);
 
     // The layout for the collectionGroup.
     QHBoxLayout* collectionBtnLayout = new QHBoxLayout();
@@ -117,13 +118,13 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
     collectionBtnLayout->addWidget(addFolderBtn);
 
     // Action to remove a path from the list.
-    connect(delFolderBtn, &QPushButton::clicked, [foldersList]() {
-        QList<QListWidgetItem*> selectedItems = foldersList->selectedItems();
+    connect(delFolderBtn, &QPushButton::clicked, [this]() {
+        QList<QListWidgetItem*> selectedItems = m_folderList->selectedItems();
 
         for (QListWidgetItem* item : selectedItems)
         {
-            if (foldersList->takeItem(
-                foldersList->row(item)))
+            if (m_folderList->takeItem(
+                m_folderList->row(item)))
             {
                 delete item;
             }
@@ -131,16 +132,16 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
     });
 
     // Action to add a new path to the list.
-    connect(addFolderBtn, &QPushButton::clicked, [this, foldersList]() {
+    connect(addFolderBtn, &QPushButton::clicked, [this]() {
         const QString directory = QFileDialog::getExistingDirectory(this, tr("Select a folder"));
         if (!directory.isEmpty())
         {
             bool isPresent = false;
 
             // Check if the folder has not been already added.
-            for (int i = 0; i < foldersList->count(); i++)
+            for (int i = 0; i < m_folderList->count(); i++)
             {
-                const QListWidgetItem* item = foldersList->item(i);
+                const QListWidgetItem* item = m_folderList->item(i);
                 if (item->text().compare(directory) == 0)
                 {
                     isPresent = true;
@@ -150,15 +151,15 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
 
             if (!isPresent)
             {
-                foldersList->addItem(directory);
+                m_folderList->addItem(directory);
             }
         }
     });
 }
 
-void OptionsDialog::initCollectionListWidget(QListWidget* listWidget)
+void OptionsDialog::initCollectionListWidget()
 {
-    if (listWidget)
+    if (m_folderList)
     {
         bool isExists = false; // If the music collection path list is set.
         QStringList pathList = AppConfig::getMusicCollectionPathList(&isExists);
@@ -168,7 +169,7 @@ void OptionsDialog::initCollectionListWidget(QListWidget* listWidget)
         {
             for (const QString& path : pathList)
             {
-                listWidget->addItem(path);
+                m_folderList->addItem(path);
             }
 
             qDebug() << "nooooooooo";
@@ -176,7 +177,7 @@ void OptionsDialog::initCollectionListWidget(QListWidget* listWidget)
         // If the list config do not exists, use default value.
         else 
         {
-            listWidget->addItem(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).at(0));
+            m_folderList->addItem(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).at(0));
             qDebug() << "Hooo";
         }
     }

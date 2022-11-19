@@ -38,7 +38,9 @@ private:
     */
     QWidget* createMusicTab();
     void createMusicCollectionList(QBoxLayout* layout, QWidget* parent);
-    void initCollectionListWidget(QListWidget* listWidget);
+    void initCollectionListWidget();
+
+    QListWidget* m_folderList;
 };
 
 /*
