@@ -93,11 +93,33 @@ QWidget* OptionsDialog::createMusicTab()
     QListWidget* foldersList = new QListWidget(tab);
     collectionLayout->addWidget(foldersList);
 
+    // The layout for the collectionGroup.
+    QHBoxLayout* collectionBtnLayout = new QHBoxLayout();
+    collectionLayout->addLayout(collectionBtnLayout);
+    
+    // Btn to remove selected item from the list.
+    QPushButton* delFolderBtn = new QPushButton(tr("Remove Folder"), collectionGroup);
+    collectionBtnLayout->addWidget(delFolderBtn);
+
     // Btn to add a new folder into the list.
     QPushButton* addFolderBtn = new QPushButton(tr("Add Folder"), collectionGroup);
-    collectionLayout->addWidget(addFolderBtn);
+    collectionBtnLayout->addWidget(addFolderBtn);
 
-    // Action to add a new button to the list.
+    // Action to remove a path from the list.
+    connect(delFolderBtn, &QPushButton::clicked, [foldersList]() {
+        QList<QListWidgetItem*> selectedItems = foldersList->selectedItems();
+
+        for (QListWidgetItem* item : selectedItems)
+        {
+            if (foldersList->takeItem(
+                foldersList->row(item)))
+            {
+                delete item;
+            }
+        }
+    });
+
+    // Action to add a new path to the list.
     connect(addFolderBtn, &QPushButton::clicked, [this, foldersList]() {
         const QString directory = QFileDialog::getExistingDirectory(this, tr("Select a folder"));
         if (!directory.isEmpty())
