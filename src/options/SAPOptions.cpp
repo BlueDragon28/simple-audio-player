@@ -1,10 +1,12 @@
 #include "options/SAPOptions.h"
+#include "AppConfig.h"
 #include <QtWidgets/qdialog.h>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QFileDialog>
+#include <QStandardPaths>
 #include <qboxlayout.h>
 #include <qlistwidget.h>
 #include <qpushbutton.h>
@@ -99,6 +101,7 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
 
     // A list with the folders list.
     QListWidget* foldersList = new QListWidget(parent);
+    initCollectionListWidget(foldersList); // Initialize the foldersList widget with the collection music path list to listen to.
     collectionLayout->addWidget(foldersList);
 
     // The layout for the collectionGroup.
@@ -151,6 +154,33 @@ void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* p
             }
         }
     });
+}
+
+void OptionsDialog::initCollectionListWidget(QListWidget* listWidget)
+{
+    if (listWidget)
+    {
+        bool isExists = false; // If the music collection path list is set.
+        QStringList pathList = AppConfig::getMusicCollectionPathList(&isExists);
+
+        // If the list exists, put the list into the listWidget.
+        if (isExists)
+        {
+            for (const QString& path : pathList)
+            {
+                listWidget->addItem(path);
+            }
+
+            qDebug() << "nooooooooo";
+        }
+        // If the list config do not exists, use default value.
+        else 
+        {
+            listWidget->addItem(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).at(0));
+            qDebug() << "Hooo";
+        }
+    }
+    qDebug() << "is Called";
 }
 
 /*

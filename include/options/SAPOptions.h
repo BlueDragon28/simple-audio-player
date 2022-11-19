@@ -7,6 +7,7 @@
 #include <qtmetamacros.h>
 
 class QVBoxLayout;
+class QListWidget;
 
 /*
 The Dialog with the options selection inside.
@@ -37,6 +38,7 @@ private:
     */
     QWidget* createMusicTab();
     void createMusicCollectionList(QBoxLayout* layout, QWidget* parent);
+    void initCollectionListWidget(QListWidget* listWidget);
 };
 
 /*
