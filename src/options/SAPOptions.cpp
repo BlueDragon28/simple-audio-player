@@ -80,9 +80,17 @@ QWidget* OptionsDialog::createMusicTab()
     // Creating the main layout of the tab.
     QVBoxLayout* vLayout = new QVBoxLayout(tab);
 
+    // Creating the collection path list.
+    createMusicCollectionList(vLayout, tab);
+
+    return tab;
+}
+
+void OptionsDialog::createMusicCollectionList(QBoxLayout* mainLayout, QWidget* parent)
+{
     // The Group layout for the music folders collection.
-    QGroupBox* collectionGroup = new QGroupBox(tr("Collections Folders:"), tab);
-    vLayout->addWidget(collectionGroup);
+    QGroupBox* collectionGroup = new QGroupBox(tr("Collections Folders:"), parent);
+    mainLayout->addWidget(collectionGroup);
 
     // Layout of the collectionGroup widget.
     QVBoxLayout* collectionLayout = new QVBoxLayout();
@@ -90,7 +98,7 @@ QWidget* OptionsDialog::createMusicTab()
     collectionGroup->setLayout(collectionLayout);
 
     // A list with the folders list.
-    QListWidget* foldersList = new QListWidget(tab);
+    QListWidget* foldersList = new QListWidget(parent);
     collectionLayout->addWidget(foldersList);
 
     // The layout for the collectionGroup.
@@ -143,8 +151,6 @@ QWidget* OptionsDialog::createMusicTab()
             }
         }
     });
-
-    return tab;
 }
 
 /*

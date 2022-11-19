@@ -2,6 +2,7 @@
 #define SIMPLEAUDIOPLAYER_SAPOPTIONS_H_
 
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QBoxLayout>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
 
@@ -35,6 +36,7 @@ private:
     Musics Collection
     */
     QWidget* createMusicTab();
+    void createMusicCollectionList(QBoxLayout* layout, QWidget* parent);
 };
 
 /*
