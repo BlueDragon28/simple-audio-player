@@ -1,4 +1,5 @@
 #include "MusicCollectionList.h"
+#include "AppConfig.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QStandardPaths>
@@ -24,9 +25,23 @@ std::unique_ptr<MusicCollectionList> MusicCollectionList::_instance = nullptr;
 MusicCollectionList::MusicCollectionList() :
     m_error(false),
     m_db(QSqlDatabase::addDatabase("QSQLITE")),
-    m_foldersList(QStandardPaths::standardLocations(QStandardPaths::MusicLocation)), // Returning the a list of the user music locations.
+    m_foldersList(AppConfig::getMusicCollectionPathList()), // Returning the a list of the user music locations.
     m_isCollectionRead(false)
 {
+    // Set the music collections folders list.
+    // If there is a list available, use it.
+    bool exists = false;
+    QStringList folderList = AppConfig::getMusicCollectionPathList(&exists);
+    if (exists)
+    {
+        m_foldersList = folderList;
+    }
+    // Otherwise, use the default music folders entry of the system.
+    else
+    {
+        m_foldersList = QStandardPaths::standardLocations(QStandardPaths::MusicLocation);
+    }
+
     // Creating a SQL database in memory.
     m_db.setDatabaseName(":memory:");
     if (!m_db.open())
