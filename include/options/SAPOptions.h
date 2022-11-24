@@ -29,6 +29,11 @@ private:
     void createMainView(QVBoxLayout* layout);
 
     /*
+    Save the settings when the apply button is clicked.
+    */
+    void applyChange();
+
+    /*
     ========================================================
     ================== QTabWidget tab ======================
     ========================================================
@@ -39,6 +44,7 @@ private:
     QWidget* createMusicTab();
     void createMusicCollectionList(QBoxLayout* layout, QWidget* parent);
     void initCollectionListWidget();
+    void saveCollectionList();
 
     QListWidget* m_folderList;
 };

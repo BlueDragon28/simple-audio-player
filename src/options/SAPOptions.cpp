@@ -55,7 +55,7 @@ void OptionsDialog::buildInterface()
 
     // Accept button.
     QPushButton* apply = new QPushButton(tr("Apply"), this);
-    connect(apply, &QPushButton::clicked, this, &OptionsDialog::accept);
+    connect(apply, &QPushButton::clicked, this, &OptionsDialog::applyChange);
 
     hLayout->addStretch(1);
     hLayout->addWidget(cancel);
@@ -74,6 +74,13 @@ void OptionsDialog::createMainView(QVBoxLayout* layout)
         
         layout->addWidget(tab);
     }
+}
+
+void OptionsDialog::applyChange()
+{
+    saveCollectionList();
+
+    accept();
 }
 
 QWidget* OptionsDialog::createMusicTab()
@@ -171,17 +178,26 @@ void OptionsDialog::initCollectionListWidget()
             {
                 m_folderList->addItem(path);
             }
-
-            qDebug() << "nooooooooo";
         }
         // If the list config do not exists, use default value.
         else 
         {
             m_folderList->addItem(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).at(0));
-            qDebug() << "Hooo";
         }
     }
-    qDebug() << "is Called";
+}
+
+void OptionsDialog::saveCollectionList()
+{
+    // Extract the folder path from the QListWidgetItem objects of m_folderList QListWidget.
+    QStringList collectionsList;
+    for (int i = 0; i < m_folderList->count(); i++)
+    {
+        collectionsList.append(m_folderList->item(i)->text());
+    }
+    
+    // Send the list to AppConfig.
+    AppConfig::setMusicCollectionPathList(collectionsList);
 }
 
 /*
