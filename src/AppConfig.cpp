@@ -48,6 +48,7 @@ void AppConfig::loadConfig()
     QSettings settings = openSettings();
 
     loadWindowStatus(settings);
+    loadMusicCollectionPathList(settings);
 }
 
 void AppConfig::saveConfig()
@@ -56,6 +57,7 @@ void AppConfig::saveConfig()
     QSettings settings = openSettings();
 
     saveWindowStatus(settings);
+    saveMusicCollectionPathList(settings);
 }
 
 QMap<QString, QVariant> AppConfig::getMainWindowSettings()
@@ -217,7 +219,14 @@ void AppConfig::saveMusicCollectionPathList(QSettings& settings)
         // Save only the music collectin path list if the user set it.
         if (m_musicCollectionPathList.exists)
         {
-            settings.setValue(MUSIC_COLLECTION_MAKE_CONFIG_NAME(MUSIC_COLLECTION_PATH_LIST), m_musicCollectionPathList.path);
+            if (!m_musicCollectionPathList.path.isEmpty())
+            {
+                settings.setValue(MUSIC_COLLECTION_MAKE_CONFIG_NAME(MUSIC_COLLECTION_PATH_LIST), m_musicCollectionPathList.path);
+            }
+            else
+            {
+                settings.setValue(MUSIC_COLLECTION_MAKE_CONFIG_NAME(MUSIC_COLLECTION_PATH_LIST), "");
+            }
         }
     }
 }
@@ -230,5 +239,14 @@ void AppConfig::loadMusicCollectionPathList(QSettings& settings)
     {
         m_musicCollectionPathList.path = vPathList.toStringList();
         m_musicCollectionPathList.exists = true;
+
+        // If there is only one item in the list and its an empty string, then, clear the list.
+        if (m_musicCollectionPathList.path.size() == 1)
+        {
+            if (m_musicCollectionPathList.path.at(0).isEmpty())
+            {
+                m_musicCollectionPathList.path.clear();
+            }
+        }
     }
 }
