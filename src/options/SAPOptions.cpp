@@ -1,4 +1,5 @@
 #include "options/SAPOptions.h"
+#include "options/AboutDialog.h"
 #include "AppConfig.h"
 #include <QtWidgets/qdialog.h>
 #include <QtWidgets/QFrame>
@@ -206,7 +207,8 @@ void OptionsDialog::saveCollectionList()
 ========================================================
 */
 SAPOptions::SAPOptions() :
-    m_dialog(nullptr)
+    m_dialog(nullptr),
+    m_aboutDialog(nullptr)
 {}
 
 SAPOptions::~SAPOptions()
@@ -215,6 +217,11 @@ SAPOptions::~SAPOptions()
     if (m_dialog)
     {
         delete m_dialog;
+    }
+
+    if (m_aboutDialog)
+    {
+        delete m_aboutDialog;
     }
 }
 
@@ -235,6 +242,28 @@ void SAPOptions::openOptions()
         if (this->m_dialog == dialog)
         {
             this->m_dialog = nullptr;
+        }
+    });
+
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
+}
+
+void SAPOptions::openAbout()
+{
+    if (m_aboutDialog)
+    {
+        return;
+    }
+
+    AboutDialog* dialog = new AboutDialog();
+    m_aboutDialog = dialog;
+
+    connect(dialog, &AboutDialog::destroyed, [this, dialog]() {
+        if (this->m_aboutDialog == dialog)
+        {
+            this->m_aboutDialog = nullptr;
         }
     });
 

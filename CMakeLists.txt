@@ -157,7 +157,8 @@ set(HEADERS
     "include/SelectionModel.h"
     "include/SystemMediaControl.h"
     "include/TrackTag.h"
-	"include/options/SAPOptions.h")
+	"include/options/SAPOptions.h"
+	"include/options/AboutDialog.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -176,7 +177,8 @@ set(SOURCES
     "src/SelectionModel.cpp"
     "src/SystemMediaControl.cpp"
     "src/TrackTag.cpp"
-	"src/options/SAPOptions.cpp")
+	"src/options/SAPOptions.cpp"
+	"src/options/AboutDialog.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 

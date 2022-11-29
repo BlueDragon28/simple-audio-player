@@ -23,6 +23,11 @@ ApplicationWindow {
             title: qsTr("&Edit")
             Action { text: qsTr("Options"); onTriggered: SAPOptions.openOptions(); }
         }
+
+        Menu {
+            title: qsTr("Help")
+            Action { text: qsTr("About"); onTriggered: SAPOptions.openAbout(); }
+        }
     }
 
     // Main content of the window.

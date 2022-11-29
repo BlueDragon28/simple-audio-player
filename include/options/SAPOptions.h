@@ -8,6 +8,7 @@
 
 class QVBoxLayout;
 class QListWidget;
+class AboutDialog;
 
 /*
 The Dialog with the options selection inside.
@@ -68,8 +69,14 @@ public slots:
     */
     void openOptions();
 
+    /*
+    Open the about dialog.
+    */
+    void openAbout();
+
 private:
     OptionsDialog* m_dialog;
+    AboutDialog* m_aboutDialog;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SAPOPTIONS_H_
