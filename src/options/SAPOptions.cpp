@@ -24,6 +24,8 @@ OptionsDialog::OptionsDialog() :
 {
     buildInterface();
     connect(this, &OptionsDialog::finished, this, [this](){this->deleteLater();});
+
+    setWindowTitle(tr("Options"));
 }
 
 OptionsDialog::~OptionsDialog()
