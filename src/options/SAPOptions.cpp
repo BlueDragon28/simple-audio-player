@@ -210,7 +210,7 @@ void OptionsDialog::saveCollectionList()
 ========================================================
 */
 SAPOptions::SAPOptions() :
-    m_dialog(nullptr),
+    m_optionsDialog(nullptr),
     m_aboutDialog(nullptr),
     m_licenseDialog(nullptr)
 {}
@@ -218,9 +218,9 @@ SAPOptions::SAPOptions() :
 SAPOptions::~SAPOptions()
 {
     // Delete m_dialog if exists.
-    if (m_dialog)
+    if (m_optionsDialog)
     {
-        delete m_dialog;
+        delete m_optionsDialog;
     }
 
     if (m_aboutDialog)
@@ -257,7 +257,7 @@ void SAPOptions::openDialog(T** memberVar)
 
 void SAPOptions::openOptions()
 {
-    openDialog(&m_dialog);
+    openDialog(&m_optionsDialog);
 }
 
 void SAPOptions::openAbout()

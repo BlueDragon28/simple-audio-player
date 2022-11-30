@@ -87,7 +87,7 @@ private:
     template<typename T>
     void openDialog(T** memberVar);
 
-    OptionsDialog* m_dialog;
+    OptionsDialog* m_optionsDialog;
     AboutDialog* m_aboutDialog;
     LicenseDialog* m_licenseDialog;
 };
