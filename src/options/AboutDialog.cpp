@@ -5,6 +5,7 @@
 #include <qlabel.h>
 #include <qnamespace.h>
 #include <qpushbutton.h>
+#include <simple-audio-library/AudioPlayer.h>
 
 AboutDialog::AboutDialog() :
     QDialog()
@@ -24,20 +25,20 @@ void AboutDialog::buildInterface()
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     QHBoxLayout* bottomLayout = new QHBoxLayout(this);
 
-    QLabel* aboutLabel = new QLabel(
+    QLabel* aboutLabel = new QLabel(QString(
         "<p>"
         "<b>name:</b> " SAP_NAME "<br>"
         "<b>version:</b> " SAP_VERSION "<br>"
         "<b>license:</b> " SAP_LICENSE "<br>"
         "<br>"
         "<b>simple-audio-library:</b><br>"
-        "<b>version:</b> 0.1<br>"
+        "<b>version:</b> %1<br>"
         "<b>license:</b> MIT<br>"
         "<br>"
         "<b>Qt</b><br>"
         "<b>version:</br> " QT_VERSION_STR "<br>"
         "<b>license:</br> LGPL <br>"
-        "</p>"
+        "</p>").arg(QString::fromStdString(SAL::AudioPlayer::version()))
     );
     aboutLabel->setAlignment(Qt::AlignVCenter);
     mainLayout->addWidget(aboutLabel);
