@@ -229,71 +229,43 @@ SAPOptions::~SAPOptions()
     }
 }
 
-void SAPOptions::openOptions()
+template<typename T>
+void SAPOptions::openDialog(T** memberVar)
 {
-    // Check if there is not a dialog already open.
-    if (m_dialog) 
+    // memberVar is the pointer the member variable of the SAPOptions class storing a pointer to the dailog object.
+    if (*memberVar)
     {
         return;
     }
 
-    // Creating a new instance of OptionsDialog and run it.
-    OptionsDialog* dialog = new OptionsDialog();
-    m_dialog = dialog;
+    // Creating a new instance of T and run it.
+    T* dialog = new T();
+    *memberVar = dialog;
 
-    // When the dialog is destroyed, set m_dialog to nullptr.
-    connect(dialog, &OptionsDialog::destroyed, [this, dialog]() {
-        if (this->m_dialog == dialog)
+    // When the dialog is destroyed, set *memberVar to nullptr.
+    connect(dialog, &T::destroyed, [memberVar, dialog]() {
+        if (*memberVar == dialog)
         {
-            this->m_dialog = nullptr;
+            *memberVar = nullptr;
         }
     });
 
     dialog->show();
     dialog->raise();
     dialog->activateWindow();
+}
+
+void SAPOptions::openOptions()
+{
+    openDialog(&m_dialog);
 }
 
 void SAPOptions::openAbout()
 {
-    if (m_aboutDialog)
-    {
-        return;
-    }
-
-    AboutDialog* dialog = new AboutDialog();
-    m_aboutDialog = dialog;
-
-    connect(dialog, &AboutDialog::destroyed, [this, dialog]() {
-        if (this->m_aboutDialog == dialog)
-        {
-            this->m_aboutDialog = nullptr;
-        }
-    });
-
-    dialog->show();
-    dialog->raise();
-    dialog->activateWindow();
+    openDialog(&m_aboutDialog);
 }
 
 void SAPOptions::openLicense()
 {
-    if (m_licenseDialog)
-    {
-        return;
-    }
-
-    LicenseDialog* dialog = new LicenseDialog();
-    m_licenseDialog = dialog;
-
-    connect(dialog, &LicenseDialog::destroyed, [this, dialog]() {
-        if (this->m_licenseDialog == dialog)
-        {
-            this->m_licenseDialog = nullptr;
-        }
-    });
-
-    dialog->show();
-    dialog->raise();
-    dialog->activateWindow();
+    openDialog(&m_licenseDialog);
 }

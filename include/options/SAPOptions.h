@@ -81,6 +81,12 @@ public slots:
     void openLicense();
 
 private:
+    /*
+    Template code to open a dialog.
+    */
+    template<typename T>
+    void openDialog(T** memberVar);
+
     OptionsDialog* m_dialog;
     AboutDialog* m_aboutDialog;
     LicenseDialog* m_licenseDialog;
