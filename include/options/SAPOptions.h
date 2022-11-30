@@ -9,6 +9,7 @@
 class QVBoxLayout;
 class QListWidget;
 class AboutDialog;
+class LicenseDialog;
 
 /*
 The Dialog with the options selection inside.
@@ -74,9 +75,15 @@ public slots:
     */
     void openAbout();
 
+    /*
+    Open the license dialog.
+    */
+    void openLicense();
+
 private:
     OptionsDialog* m_dialog;
     AboutDialog* m_aboutDialog;
+    LicenseDialog* m_licenseDialog;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SAPOPTIONS_H_

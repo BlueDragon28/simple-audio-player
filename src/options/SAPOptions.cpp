@@ -1,4 +1,5 @@
 #include "options/SAPOptions.h"
+#include "LicenseDialog.h"
 #include "options/AboutDialog.h"
 #include "AppConfig.h"
 #include <QtWidgets/qdialog.h>
@@ -210,7 +211,8 @@ void OptionsDialog::saveCollectionList()
 */
 SAPOptions::SAPOptions() :
     m_dialog(nullptr),
-    m_aboutDialog(nullptr)
+    m_aboutDialog(nullptr),
+    m_licenseDialog(nullptr)
 {}
 
 SAPOptions::~SAPOptions()
@@ -266,6 +268,28 @@ void SAPOptions::openAbout()
         if (this->m_aboutDialog == dialog)
         {
             this->m_aboutDialog = nullptr;
+        }
+    });
+
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
+}
+
+void SAPOptions::openLicense()
+{
+    if (m_licenseDialog)
+    {
+        return;
+    }
+
+    LicenseDialog* dialog = new LicenseDialog();
+    m_licenseDialog = dialog;
+
+    connect(dialog, &LicenseDialog::destroyed, [this, dialog]() {
+        if (this->m_licenseDialog == dialog)
+        {
+            this->m_licenseDialog = nullptr;
         }
     });
 

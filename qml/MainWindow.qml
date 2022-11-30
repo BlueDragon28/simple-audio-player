@@ -27,6 +27,7 @@ ApplicationWindow {
         Menu {
             title: qsTr("Help")
             Action { text: qsTr("About"); onTriggered: SAPOptions.openAbout(); }
+            Action { text: qsTr("License"); onTriggered: SAPOptions.openLicense(); }
         }
     }
 
