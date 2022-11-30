@@ -227,6 +227,11 @@ SAPOptions::~SAPOptions()
     {
         delete m_aboutDialog;
     }
+
+    if (m_licenseDialog)
+    {
+        delete m_licenseDialog;
+    }
 }
 
 template<typename T>
