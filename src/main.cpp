@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <qdebug.h>
@@ -14,16 +14,16 @@
 
 int main(int argc, char** argv)
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     // Setting application icon
     app.setWindowIcon(QIcon(":/images/musiqueIcon.svg"));
 
-    // Instanciate MusicCollectionList.
-    MusicCollectionList::instance();
-
     // Reading the application config.
     AppConfig::loadConfig();
+
+    // Instanciate MusicCollectionList.
+    MusicCollectionList::instance();
 
     // Initialize SystemMediaControl system.
     SystemMediaControl::init();

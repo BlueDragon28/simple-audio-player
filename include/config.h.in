@@ -1,6 +1,12 @@
 #ifndef SIMPLEAUDIOPLAYER_CONFIG_H_
 #define SIMPLEAUDIOPLAYER_CONFIG_H_
 
+// Options
 #cmakedefine USE_SMTC
+
+// Informations
+#define SAP_NAME "@PROJECT_NAME@"
+#define SAP_VERSION "@PROJECT_VERSION@"
+#define SAP_LICENSE "MIT"
 
 #endif // SIMPLEAUDIOPLAYER_CONFIG_H_

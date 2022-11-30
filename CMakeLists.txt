@@ -29,7 +29,7 @@ elseif (WIN32)
 endif()
 
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
@@ -156,7 +156,10 @@ set(HEADERS
     "include/SectionListModel.h"
     "include/SelectionModel.h"
     "include/SystemMediaControl.h"
-    "include/TrackTag.h")
+    "include/TrackTag.h"
+	"include/options/SAPOptions.h"
+	"include/options/AboutDialog.h"
+	"include/options/LicenseDialog.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -174,7 +177,10 @@ set(SOURCES
     "src/SectionListModel.cpp"
     "src/SelectionModel.cpp"
     "src/SystemMediaControl.cpp"
-    "src/TrackTag.cpp")
+    "src/TrackTag.cpp"
+	"src/options/SAPOptions.cpp"
+	"src/options/AboutDialog.cpp"
+	"src/options/LicenseDialog.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
@@ -182,7 +188,7 @@ set(RESOURCES "simple-audio-player.qrc")
 configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
 
 # Include the include directory
-include_directories(include/  "${CMAKE_BINARY_DIR}/include")
+include_directories(include/ include/options "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
 qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
@@ -192,6 +198,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Sql
+	Qt6::Widgets
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES}
