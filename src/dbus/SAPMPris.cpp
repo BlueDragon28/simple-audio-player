@@ -92,7 +92,9 @@ void SAPMPris::Previous()
 }
 
 void SAPMPris::Pause()
-{}
+{
+    emit playPause();
+}
 
 void SAPMPris::PlayPause()
 {
@@ -103,7 +105,9 @@ void SAPMPris::Stop()
 {}
 
 void SAPMPris::Play()
-{}
+{
+    emit playPause();
+}
 
 void SAPMPris::Seek(long long offset)
 {}
