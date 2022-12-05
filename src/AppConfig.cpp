@@ -29,8 +29,8 @@ AppConfig::WindowSettings AppConfig::mainWindowSettings = {
 bool AppConfig::isMainWindowSettings = true;
 
 AppConfig::MusicCollectionList AppConfig::m_musicCollectionPathList = {
-    .path = QStringList(),
-    .exists = false  
+    QStringList(),
+    false
 };
 
 QSettings AppConfig::openSettings()
