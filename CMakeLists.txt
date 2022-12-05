@@ -53,53 +53,57 @@ elseif(WIN32)
 	if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/include/simple-audio-library/AudioPlayer.h") AND
 		(EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/include/simple-audio-library/CallbackInterface.h"))
 
-		# Check if SAL is static
-		if (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/lib/simple-audio-library.lib")
+                # Check for the SAL library file.
+                if (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/lib/simple-audio-library.lib")
 			# Set SAL library and include directory path.
 			set(SAL_LIBRARIES ${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/lib/simple-audio-library.lib)
 			include_directories(
 				"${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/include/")
 
-			# Find PortAudio
-			if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/include/portaudio.h") AND
-                                (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib"))
-				# Include directory of PortAudio
-				include_directories(${CMAKE_SOURCE_DIR}/dependencies/portaudio/include)
+
+                        # Find PortAudio
+                        if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/include/portaudio.h") AND
+                            (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib"))
+                                # Include directory of PortAudio
+                                include_directories(${CMAKE_SOURCE_DIR}/dependencies/portaudio/include)
                                 set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
 
-				message(STATUS "PortAudio found")
-			else()
-				message(FATAL_ERROR "Cannot find portaudio")
-			endif()
-
-			# Find FLAC++
-			if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/include/FLAC++/decoder.h") AND
-				(EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib"))
-				# Include directory of FLAC++ library
-				include_directories("${CMAKE_SOURCE_DIR}/dependencies/flac/include/")
-				# Set the FLAC++ library path
-				set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib")
-
-				message(STATUS "FLAC++ found")
-			else ()
-				message(WARNING "Cannot find FLAC++ library")
-			endif()
-
-			# Find LIBSNDFILE
-			if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/include/sndfile.hh") AND
-			    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/lib/sndfile.lib"))
-				# Get informations from libsndfile using cmake find_package
-				set(CMAKE_PREFIX_PATH 
-					"${CMAKE_PREFIX_PATH}"
-					"${CMAKE_SOURCE_DIR}/dependencies/libsndfile/cmake")
-				find_package(SndFile REQUIRED)
-				set(SAL_LIBRARIES "${SAL_LIBRARIES}" 
-					${SndFile_LIBRARIES})
-
-				message(STATUS "libsndfile found")
+                                message(STATUS "PortAudio found")
                         else()
-				message(WARNING "libsndfile not found")
-			endif()
+                                message(FATAL_ERROR "Cannot find portaudio")
+                        endif()
+
+                        # Include only the dependencies only if SAL is compiled statically
+                        if (NOT EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/bin/simple-audio-library.dll")
+                            # Find FLAC++
+                            if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/include/FLAC++/decoder.h") AND
+                                    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib"))
+                                    # Include directory of FLAC++ library
+                                    include_directories("${CMAKE_SOURCE_DIR}/dependencies/flac/include/")
+                                    # Set the FLAC++ library path
+                                    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib")
+
+                                    message(STATUS "FLAC++ found")
+                            else ()
+                                    message(WARNING "Cannot find FLAC++ library")
+                            endif()
+
+                            # Find LIBSNDFILE
+                            if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/include/sndfile.hh") AND
+                                (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/lib/sndfile.lib"))
+                                    # Get informations from libsndfile using cmake find_package
+                                    set(CMAKE_PREFIX_PATH
+                                            "${CMAKE_PREFIX_PATH}"
+                                            "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/cmake")
+                                    find_package(SndFile REQUIRED)
+                                    set(SAL_LIBRARIES "${SAL_LIBRARIES}"
+                                            ${SndFile_LIBRARIES})
+
+                                    message(STATUS "libsndfile found")
+                            else()
+                                    message(WARNING "libsndfile not found")
+                            endif()
+                        endif()
 		endif()
 	endif()
 	
