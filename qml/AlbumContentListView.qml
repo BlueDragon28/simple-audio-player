@@ -42,6 +42,7 @@ Rectangle {
             height: parent.height - (viewHeader.height + albumInfoHeader.height)
             clip: true
             spacing: 0
+            boundsBehavior: Flickable.StopAtBounds
 
             // Tracks list model.
             model: AlbumTracksListModel {

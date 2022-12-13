@@ -42,6 +42,7 @@ Item {
                 height: parent.height
                 cellWidth: 200
                 cellHeight: 250
+                boundsBehavior: Flickable.StopAtBounds
 
                 model: AlbumCollectionModel {
                     id: albumModel

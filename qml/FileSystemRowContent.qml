@@ -43,6 +43,7 @@ Item {
             width: parent.width
             height: parent.height - viewHeader.height
             clip: true
+            boundsBehavior: Flickable.StopAtBounds
 
             /*
             This model store the directories and files list inside a folder.
