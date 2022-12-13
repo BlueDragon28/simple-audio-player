@@ -34,7 +34,7 @@ find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DB
 if (UNIX)
 	# Find simple-audio-library
 	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(SAL REQUIRED simple-audio-library_static)
+	pkg_check_modules(SAL REQUIRED simple-audio-library)
 
 	# include sal headers location
 	include_directories(${SAL_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
