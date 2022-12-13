@@ -35,7 +35,7 @@ void AboutDialog::buildInterface()
         "<b>version:</b> %1<br>"
         "<b>license:</b> MIT<br>"
         "<br>"
-        "<b>Qt</b><br>"
+        "<b>Qt:</b><br>"
         "<b>version:</br> " QT_VERSION_STR "<br>"
         "<b>license:</br> LGPL <br>"
         "</p>").arg(QString::fromStdString(SAL::AudioPlayer::version()))
