@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=simple-audio-player
+Comment=A Simple Audio Player Capable Of Reading Many Files Format And Parsing Music Collection.
+Comment[fr]=Un Lecteur Audio Très Simpliste Capable De Lire Une Large Variété De Format Audio.
+GenericName=Audio Player
+Exec=@CMAKE_INSTALL_PREFIX@/bin/simple-audio-player
+Icon=
+Categories=Audio;Music;Player;
