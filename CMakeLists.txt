@@ -142,6 +142,8 @@ elseif(WIN32)
                     "src/windows/SMTCInterface.cpp")
             endif()
         endif()
+		
+    set (WIN32_EXECUTABLE WIN32)
 endif()
 
 # Set the headers and sources files.
@@ -195,7 +197,7 @@ configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
 include_directories(include/ include/options "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
-qt_add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
+qt_add_executable(${PROJECT_NAME} ${WIN32_EXECUTABLE} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Core
     Qt6::Gui
