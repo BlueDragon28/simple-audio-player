@@ -32,6 +32,6 @@ Install the dependencies' library using your package manager, they are available
 
 ## License
 
-The library is licensed under the **MIT** license. Check the [LICENSE](LICENSE) file.
+The software is licensed under the **MIT** license. Check the [LICENSE](LICENSE) file.
 
 Some of the images are from <a href="https://www.flaticon.com/free-icons/search" title="search icons">Search icons created by Chanut - Flaticon</a>.
