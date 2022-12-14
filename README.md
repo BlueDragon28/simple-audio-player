@@ -1,10 +1,10 @@
-# simple-audio-player
+# Simple-audio-player
 
-**simple-audio-player** is a basic audio player writen in C++17 using the **simple-audio-library** has audio back-end. It's supporting a large variety of files formats and support also parsing music collection.
+**Simple-audio-player** is a basic audio player writen in C++17 using the **simple-audio-library** has audio back-end. It's supporting a large variety of files formats and support also parsing music collection.
 
 ## Features
 
-**simple-audio-player** support playback of many audio files formats. You can choose between the file system and the music collection to play sound. For fast album cover loading, create an image and save it named **large_cover.png** or **small_cover.png** inside the album folder. It is also possible to choose which folders to parse for the music collection in the options.
+**Simple-audio-player** support playback of many audio files formats. You can choose between the file system and the music collection to play sound. For fast album cover loading, create an image and save it named **large_cover.png** or **small_cover.png** inside the album folder. It is also possible to choose which folders to parse for the music collection in the options.
 
 ## Compilation
 
