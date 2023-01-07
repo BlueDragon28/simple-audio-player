@@ -17,6 +17,7 @@ function setRandom(value) {
             let playingList
             if (originalList.length > 0) {
                 playingList = originalList
+                originalList = [];
             } else {
                 playingList = SAP.PlayingList.list
             }
