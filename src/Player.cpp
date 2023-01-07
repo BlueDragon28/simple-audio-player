@@ -136,8 +136,6 @@ void Player::open(const QStringList& filesPath, bool isShuffledChanged)
         filesPath.cbegin() + firstIndex,
         filesPath.cend());
 
-    qDebug() << "isShuffledChanged: " << isShuffledChanged;
-
     foreach (const QString& path, copyFilesPath)
     {
 #ifdef WIN32
