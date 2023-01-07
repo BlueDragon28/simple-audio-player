@@ -22,7 +22,7 @@ function setRandom(value) {
             }
 
             let currentItem = SAP.PlayingList.current
-            open(playingList, currentItem)
+            open(playingList, currentItem, true)
         }
     }
 }
@@ -66,7 +66,7 @@ function randomize(playingList, firstToPlay) {
 }
 
 // Open a new list.
-function open(filePath, firstElement = "") {
+function open(filePath, firstElement = "", shuffleChanged = false) {
     if (typeof filePath === "string") {
         if (SAP.Player.isReadable(filePath)) {
             SAP.Player.open(filePath)
@@ -90,7 +90,7 @@ function open(filePath, firstElement = "") {
         if (firstElement.length > 0) {
             SAP.PlayingList.next(firstElement) // Move the list to the selected item.
         }
-        SAP.Player.open(SAP.PlayingList.listFromIndex())
+        SAP.Player.open(SAP.PlayingList.listFromIndex(), shuffleChanged)
         SAP.Player.play()
     }
 }

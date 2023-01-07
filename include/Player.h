@@ -76,7 +76,7 @@ public slots:
     Open an audio file.
     */
     void open(const QString& filePath);
-    void open(const QStringList& filesPath);
+    void open(const QStringList& filesPath, bool isShuffledChanged = false);
 
     /*
     Start playing or resuming the stream.

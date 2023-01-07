@@ -108,10 +108,37 @@ void Player::open(const QString& filePath)
 #endif
 }
 
-void Player::open(const QStringList& filesPath)
+void Player::open(const QStringList& filesPath, bool isShuffledChanged)
 {
     bool clearQueue = true;
-    foreach (const QString& path, filesPath)
+
+    // Making a copy of filesPath and do not include the first element if 
+    QStringList copyFilesPath;
+
+    int firstIndex = 0;
+
+    if (isShuffledChanged)
+    {
+        m_player->keepOnlyCurrentPlayback();
+
+        if (isPlaying() && filesPath.size() >= 2)
+        {
+            firstIndex = 1;
+            clearQueue = false;
+        }
+        else 
+        {
+            return;
+        }
+    }
+
+    copyFilesPath.append(
+        filesPath.cbegin() + firstIndex,
+        filesPath.cend());
+
+    qDebug() << "isShuffledChanged: " << isShuffledChanged;
+
+    foreach (const QString& path, copyFilesPath)
     {
 #ifdef WIN32
         m_player->open(path.toUtf8().constData(), clearQueue);
