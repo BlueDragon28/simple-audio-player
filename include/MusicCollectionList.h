@@ -83,6 +83,9 @@ private:
     // Insert an artists into artists collection SQL table.
     bool insertArtistIntoCollection(long long trackID, long long artistID);
 
+    // Insert a track into tracks SQL table.
+    long long insertTrack(const QString& filePath, const QString& trackName, int trackNumber, long long albumID);
+
     // Insert name into table (tableName).
     long long insertNameIntoTable(const QString& name, const QString& tableName);
 

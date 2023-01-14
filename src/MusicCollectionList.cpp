@@ -211,36 +211,10 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
     }
 
     // Insert tracks.
-    QString statement = QString(
-                "INSERT INTO " TRACKS_NAME " (filePath, trackName, trackNumber, album) "
-                "VALUES (\"%1\", \"%2\", %3, %4);")
-            .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""), tag.title.replace("\"", "\"\""))
-                    .arg(tag.trackNumber).arg(albumID);
+    long long trackID = insertTrack(fileInfo.absoluteFilePath(), tag.title, tag.trackNumber, albumID);
 
-    QSqlQuery query(m_db);
-    if (!query.exec(statement))
+    if (trackID < 0)
     {
-        qDebug() << statement << QString("Failed to insert tracks %1 into table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
-        return;
-    }
-
-    // Getting last inserted track.
-    statement = QString(
-        "SELECT ID FROM " TRACKS_NAME " WHERE filePath = \"%1\";")
-            .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""));
-
-    long long trackID = -1;
-    if (query.exec(statement)) 
-    {
-        if (query.next()) 
-        {
-            trackID = query.value(0).toLongLong();
-        }
-    }
-
-    if (trackID < 0) 
-    {
-        qDebug() << statement << QString("Failed to get tracks ID of track %1 from table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
         return;
     }
 
@@ -297,6 +271,55 @@ bool MusicCollectionList::insertArtistIntoCollection(long long trackID, long lon
     }
 
     return true;
+}
+
+long long MusicCollectionList::insertTrack(const QString& filePath, const QString& trackName, int trackNumber, long long albumID)
+{
+    /*
+    Inserting a track and retrieving the ID.
+    */
+
+    if (filePath.isEmpty() || trackName.trimmed().isEmpty() || albumID <= 0)
+    {
+        return -1;
+    }
+
+    // Insert tracks.
+    QString statement = QString(
+                "INSERT INTO " TRACKS_NAME " (filePath, trackName, trackNumber, album) "
+                "VALUES (\"%1\", \"%2\", %3, %4);")
+            .arg(QString(filePath).replace("\"", "\"\""), 
+                trackName.trimmed().replace("\"", "\"\""))
+            .arg(trackNumber).arg(albumID);
+
+    QSqlQuery query(m_db);
+    if (!query.exec(statement))
+    {
+        qDebug() << statement << QString("Failed to insert tracks %1 into table %2. %3").arg(trackName, TRACKS_NAME, query.lastError().text());
+        return -1;
+    }
+
+    // Get track ID
+    statement = QString(
+        "SELECT ID FROM " TRACKS_NAME " WHERE filePath = \"%1\";")
+            .arg(QString(filePath).replace("\"", "\"\""));
+
+    long long trackID = -1;
+    if (query.exec(statement)) 
+    {
+        if (query.next()) 
+        {
+            trackID = query.value(0).toLongLong();
+        }
+    }
+
+    if (trackID < 0) 
+    {
+        qDebug() << statement << QString("Failed to get tracks ID of track %1 from table %2. %3").arg(trackName, TRACKS_NAME, query.lastError().text());
+        return -1;
+    }
+
+    return trackID;
 }
 
 long long MusicCollectionList::insertNameIntoTable(const QString& name, const QString& tableName)
