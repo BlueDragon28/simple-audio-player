@@ -261,6 +261,16 @@ long long MusicCollectionList::insertArtistName(const QString& artistName)
         return 0;
     }
 
+    // Check is artist is not already present in Artists SQL table
+    long long artistID = findNameFromTable(artist, ARTISTS_NAME);
+
+    if (artistID > 0)
+    {
+        qDebug() << QString("artists %2 already exists")
+            .arg(QString(artist).replace("\"", "\"\""));
+        return artistID;
+    }
+
     return insertNameIntoTable(artist, ARTISTS_NAME);
 }
 
