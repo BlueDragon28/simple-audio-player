@@ -489,10 +489,10 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
 {
     // Retrieve the files path of the tracks of an album (albumName).
     QString statement = QString(
-        "SELECT filePath, trackName, trackNumber, " ALBUMS_NAME ".name AS albumName, " ARTISTS_NAME ".name AS artistsName "
+        "SELECT filePath, trackName, trackNumber, " ALBUMS_NAME ".name AS albumName " //, " ARTISTS_NAME ".name AS artistsName "
         "FROM " TRACKS_NAME " "
         "INNER JOIN " ALBUMS_NAME " ON " ALBUMS_NAME ".ID = " TRACKS_NAME ".album "
-        "INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
+        //"INNER JOIN " ARTISTS_NAME " ON " ARTISTS_NAME ".ID = " TRACKS_NAME ".artists "
         "WHERE " ALBUMS_NAME ".name  = \"%1\" "
         "ORDER BY trackNumber ASC;").arg(QString(albumName).replace("\"", "\"\""));
 
@@ -508,7 +508,7 @@ QList<MusicCollectionList::TrackInfo> MusicCollectionList::retrieveTrackListFrom
             track.trackName = query.value(1).toString();
             track.trackNumber = query.value(2).toInt();
             track.albumName = query.value(3).toString();
-            track.artistsName = query.value(4).toString();
+            //track.artistsName = query.value(4).toString();
             trackList.append(track);
         }
 
