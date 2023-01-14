@@ -9,14 +9,14 @@ std::unique_ptr<MusicCollectionList> MusicCollectionList::_instance = nullptr;
 
 // MACRO to help create SQL tables and check if the creation successed.
 #define SQL_CREATE_TABLE(statement, tableName, sqlQuery) \
-    if (!query.exec(statement)) \
+    if (!sqlQuery.exec(statement)) \
     { \
-        qDebug() << QString("Failed to create SQL table " tableName " ") + query.lastError().text(); \
+        qDebug() << QString("Failed to create SQL table " tableName " ") + sqlQuery.lastError().text(); \
         m_error = true; \
-        query.clear(); \
+        sqlQuery.clear(); \
         return; \
     } \
-    query.clear();
+    sqlQuery.clear();
 
 #define CHECK_ERROR(valueToReturn) \
     if (m_error) \
