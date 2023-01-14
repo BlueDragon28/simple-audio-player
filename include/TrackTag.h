@@ -83,6 +83,11 @@ private:
     inline Tag getTag() const;
 
     /*
+    Check if there is an album cover image in the album directory.
+    */
+    static QString getCoverArtImageFile(const QString& filePath);
+
+    /*
     Get file type base from the identification in the header of the file.
     */
     static AudioFileType getFileTypeFromHeader(const QString& filePath);

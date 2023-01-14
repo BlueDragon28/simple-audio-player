@@ -6,6 +6,8 @@
 #include <QImage>
 #include <QFile>
 #include <QDataStream>
+#include <qfileinfo.h>
+#include <qforeach.h>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <taglib/tpropertymap.h>
@@ -182,21 +184,8 @@ QPixmap TrackTag::getCoverArt(const QString& filePath)
 {
     if (!filePath.isEmpty() && QFileInfo::exists(filePath))
     {
-        // Get the list of files inside the track directory.
-        QDir trackDirectory = QFileInfo(filePath).absoluteDir();
-        QFileInfoList filesInfo = trackDirectory.entryInfoList(QDir::Files);
-
-        // Check if there is a file named "large_cover.png" or "small_cover.png" in the folder.
-        QString coverPath;
-        foreach (const QFileInfo& fileInfo, filesInfo)
-        {
-            if (fileInfo.fileName() == "large_cover.png" ||
-                fileInfo.fileName() == "small_cover.png")
-            {
-                coverPath = fileInfo.absoluteFilePath();
-                break;
-            }
-        }
+        // Check if there is a cover art image file for the track
+        QString coverPath = getCoverArtImageFile(filePath);
 
         // If the cover is found, opening it.
         if (!coverPath.isEmpty())
@@ -331,4 +320,36 @@ TrackTag::AudioFileType TrackTag::getFileTypeFromHeader(const QString& filePath)
     }
 
     return AudioFileType::UNKNOWN;
+}
+
+QString TrackTag::getCoverArtImageFile(const QString& filePath)
+{
+    if (filePath.isEmpty() || !QFileInfo::exists(filePath)) 
+    {
+        return "";
+    }
+
+    // A list of some popular image files extensions
+    static const QStringList imageFilesExntensions = {
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "bmp"
+    };
+
+    // Retrieve the files in the directory and check for cover image file
+    QDir trackDirectory = QFileInfo(filePath).absoluteDir();
+    QFileInfoList filesInfo = trackDirectory.entryInfoList(QDir::Files);
+
+    foreach (const QFileInfo& fileInfo, filesInfo)
+    {
+        if ((fileInfo.baseName() == "large_cover" || fileInfo.baseName() == "small_cover") &&
+            imageFilesExntensions.contains(fileInfo.suffix()))
+        {
+            return fileInfo.absoluteFilePath();
+        }
+    }
+
+    return "";
 }
