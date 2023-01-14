@@ -4,6 +4,9 @@
 #include <QSqlError>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <qforeach.h>
+#include <qnamespace.h>
+#include <qsqlquery.h>
 
 std::unique_ptr<MusicCollectionList> MusicCollectionList::_instance = nullptr;
 
@@ -91,8 +94,7 @@ void MusicCollectionList::createTables()
             "   filePath TEXT,"
             "   trackName TEXT,"
             "   trackNumber INTEGER,"
-            "   album INTEGER,"
-            "   artists INTEGER);";
+            "   album INTEGER);";
 
     SQL_CREATE_TABLE(statement, TRACKS_NAME, query);
 
@@ -104,12 +106,20 @@ void MusicCollectionList::createTables()
 
     SQL_CREATE_TABLE(statement, ALBUMS_NAME, query);
 
-    // Creating the Artists SQL table.
+    // Creating the Artists Collection SQL table.
     statement =
-            "CREATE TABLE " ARTISTS_NAME " ("
-            "   ID INTEGER PRIMARY KEY,"
-            "   name TEXT);";
+            "CREATE TABLE " ARTISTS_COLLECTION_NAME " ("
+            "   track INTEGER,"
+            "   artist INTEGER);";
 
+    SQL_CREATE_TABLE(statement, ARTISTS_COLLECTION_NAME, query);
+
+    // Creating the Artiss SQL table.
+    statement =
+        "CREATE TABLE " ARTISTS_NAME "("
+        "   ID INTEGER PRIMARY KEY,"
+        "   name TEXT);";
+    
     SQL_CREATE_TABLE(statement, ARTISTS_NAME, query);
 }
 
@@ -200,26 +210,93 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
         return;
     }
 
-    // Insert artists name.
-    long long artistID = insertNameIntoTable(tag.artist, ARTISTS_NAME);
-
-    if (artistID < 0)
-    {
-        return;
-    }
-
     // Insert tracks.
     QString statement = QString(
-                "INSERT INTO " TRACKS_NAME " (filePath, trackName, trackNumber, album, artists) "
-                "VALUES (\"%1\", \"%2\", %3, %4, %5);")
+                "INSERT INTO " TRACKS_NAME " (filePath, trackName, trackNumber, album) "
+                "VALUES (\"%1\", \"%2\", %3, %4);")
             .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""), tag.title.replace("\"", "\"\""))
-                    .arg(tag.trackNumber).arg(albumID).arg(artistID);
+                    .arg(tag.trackNumber).arg(albumID);
 
     QSqlQuery query(m_db);
     if (!query.exec(statement))
     {
         qDebug() << statement << QString("Failed to insert tracks %1 into table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
+        return;
     }
+
+    // Getting last inserted track.
+    statement = QString(
+        "SELECT ID FROM " TRACKS_NAME " WHERE filePath = \"%1\";")
+            .arg(fileInfo.absoluteFilePath().replace("\"", "\"\""));
+
+    long long trackID = -1;
+    if (query.exec(statement)) 
+    {
+        if (query.next()) 
+        {
+            trackID = query.value(0).toLongLong();
+        }
+    }
+
+    if (trackID < 0) 
+    {
+        qDebug() << statement << QString("Failed to get tracks ID of track %1 from table %2. %3").arg(tag.title, TRACKS_NAME, query.lastError().text());
+        return;
+    }
+
+    // Inserting artists into table artists and artistsCollection
+    const QStringList artists = tag.artist.split(",", Qt::SkipEmptyParts);
+
+    foreach (const QString& artist, artists)
+    {
+        // Insert artists name.
+        long long artistID = insertArtistName(artist);
+
+        if (artistID <= 0)
+        {
+            qDebug() << QString("Failed to insert artist %1 into table %2").arg(artist, ARTISTS_NAME);
+            continue;
+        }
+
+        if (!insertArtistIntoCollection(trackID, artistID))
+        {
+            qDebug() << QString("Failed to insert artist %1 into table %2").arg(artist, ARTISTS_COLLECTION_NAME);
+        }
+    }
+}
+
+long long MusicCollectionList::insertArtistName(const QString& artistName)
+{
+    const QString artist = artistName.trimmed();
+
+    if (artist.isEmpty())
+    {
+        return 0;
+    }
+
+    return insertNameIntoTable(artist, ARTISTS_NAME);
+}
+
+bool MusicCollectionList::insertArtistIntoCollection(long long trackID, long long artistID)
+{
+    if (trackID <= 0 || artistID <= 0)
+    {
+        return false;
+    }
+
+    QSqlQuery query(m_db);
+
+    QString statement = QString(
+        "INSERT INTO " ARTISTS_COLLECTION_NAME " (track, artist) "
+        "VALUES (%1, %2);")
+            .arg(trackID).arg(artistID);
+
+    if (!query.exec(statement))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 long long MusicCollectionList::insertNameIntoTable(const QString& name, const QString& tableName)

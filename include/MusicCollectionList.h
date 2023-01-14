@@ -15,6 +15,7 @@
 
 #define TRACKS_NAME "Tracks"
 #define ALBUMS_NAME "Albums"
+#define ARTISTS_COLLECTION_NAME "ArtistsCollection"
 #define ARTISTS_NAME "Artists"
 
 /*
@@ -75,6 +76,12 @@ private:
 
     // Insert a tag in the SQL table.
     void insertTag(const QFileInfo& fileInfo, TrackTag::Tag& tag);
+
+    // Insert an artist into the artists SQL table.
+    long long insertArtistName(const QString& artistName);
+
+    // Insert an artists into artists collection SQL table.
+    bool insertArtistIntoCollection(long long trackID, long long artistID);
 
     // Insert name into table (tableName).
     long long insertNameIntoTable(const QString& name, const QString& tableName);
