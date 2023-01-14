@@ -219,9 +219,22 @@ void MusicCollectionList::insertTag(const QFileInfo& fileInfo, TrackTag::Tag& ta
     }
 
     // Inserting artists into table artists and artistsCollection
-    const QStringList artists = tag.artist.split(",", Qt::SkipEmptyParts);
+    parseAndInsertArtists(trackID, tag.artist);
+}
 
-    foreach (const QString& artist, artists)
+void MusicCollectionList::parseAndInsertArtists(long long trackID, const QString& artists)
+{
+    /*
+    Split artists string by comma and inserting each one into tracks table and tracks collection table
+    */
+    if (trackID < 0 || artists.trimmed().isEmpty())
+    {
+        return;
+    }
+
+    const QStringList splittedArtists = artists.split(",", Qt::SkipEmptyParts);
+
+    foreach (const QString& artist, splittedArtists)
     {
         // Insert artists name.
         long long artistID = insertArtistName(artist);

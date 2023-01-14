@@ -77,6 +77,9 @@ private:
     // Insert a tag in the SQL table.
     void insertTag(const QFileInfo& fileInfo, TrackTag::Tag& tag);
 
+    // Splitting the artists and inserting each one into both artists table and collection table
+    void parseAndInsertArtists(long long trackID, const QString& artists);
+
     // Insert an artist into the artists SQL table.
     long long insertArtistName(const QString& artistName);
 
