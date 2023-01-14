@@ -420,16 +420,16 @@ int MusicCollectionList::numberOfItemInTable(const QString& tableName) const
 
     // Retrieve the items in the SQL table.
     QString statement =
-            QString("SELECT %1 FROM %2 ORDER BY %1 ASC;")
+            QString("SELECT COUNT(%1) FROM %2;")
                 .arg("name", tableName);
 
     // Count the numbers of items.
     int count = 0;
     if (query.exec(statement))
     {
-        while (query.next())
+        if (query.next())
         {
-            count++;
+            count = query.value(0).toInt();
         }
     }
 
