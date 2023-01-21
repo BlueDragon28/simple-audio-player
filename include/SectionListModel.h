@@ -19,7 +19,7 @@ public:
     enum SectionType
     {
         FILE_SYSTEM,
-        MUSIC,
+        ALBUMS,
     };
     Q_ENUM(SectionType);
 

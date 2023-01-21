@@ -6,7 +6,7 @@
         <file>qml/AudioFileContent.qml</file>
         <file>qml/PlayerControl.qml</file>
         <file>qml/FileSystemView.qml</file>
-        <file>qml/MusicContent.qml</file>
+        <file>qml/AlbumsSection.qml</file>
         <file>qml/FolderPathLineEdit.qml</file>
         <file>qml/FileSystemRowContent.qml</file>
         <file>qml/PlayPauseButton.qml</file>

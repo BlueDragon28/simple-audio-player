@@ -33,7 +33,7 @@ SectionListModel::SectionListModel(QObject* parent) :
     QAbstractListModel(parent),
     m_data({
         SectionListType("File system", FILE_SYSTEM),
-        SectionListType("Music", MUSIC)
+        SectionListType("Albums", ALBUMS)
     })
 {}
 

@@ -5,7 +5,7 @@ import SimpleAudioPlayer 1.0
 
 /*
 This is the side panel of the audio player.
-Ths user can select from a list of content (filesystem, music...).
+The user can select from a list of content (filesystem, albums...).
 */
 Item {
     id: root
