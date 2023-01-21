@@ -266,8 +266,6 @@ long long MusicCollectionList::insertArtistName(const QString& artistName)
 
     if (artistID > 0)
     {
-        qDebug() << QString("artists %2 already exists")
-            .arg(QString(artist).replace("\"", "\"\""));
         return artistID;
     }
 
