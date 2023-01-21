@@ -21,6 +21,7 @@
         <file>qml/AlbumContentListViewHeader.qml</file>
         <file>qml/AlbumContentListViewAlbumInfoHeader.qml</file>
         <file>qml/SystemMediaControlItem.qml</file>
+        <file>qml/PlayList.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>

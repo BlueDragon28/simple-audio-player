@@ -20,6 +20,7 @@ public:
     {
         FILE_SYSTEM,
         ALBUMS,
+        PLAYLIST,
     };
     Q_ENUM(SectionType);
 

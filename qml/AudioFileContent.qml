@@ -17,6 +17,8 @@ Item {
             state = "File System"
         } else if (sectionType == SectionListModel.ALBUMS) {
             state = "Albums"
+        } else if (sectionType == SectionListModel.PLAYLIST) {
+            state = "Playlist"
         } else {
             state = ""
         }
@@ -34,6 +36,10 @@ Item {
         State {
             name: "Albums"
             PropertyChanges { target: stackLayout; currentIndex: 1; }
+        },
+        State {
+            name: "Playlist"
+            PropertyChanges { target: stackLayout; currentIndex: 2; }
         }
     ]
 
@@ -48,5 +54,6 @@ Item {
 
         FileSystemView {}
         AlbumsSection {}
+        PlayList {}
     }
 }

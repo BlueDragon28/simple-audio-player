@@ -1,4 +1,5 @@
 #include "SectionListModel.h"
+#include "MusicCollectionList.h"
 
 SectionListModel::SectionListType::SectionListType() :
     m_type(SectionListModel::FILE_SYSTEM)
@@ -33,7 +34,8 @@ SectionListModel::SectionListModel(QObject* parent) :
     QAbstractListModel(parent),
     m_data({
         SectionListType("File system", FILE_SYSTEM),
-        SectionListType("Albums", ALBUMS)
+        SectionListType("Albums", ALBUMS),
+        SectionListType("Playlist", PLAYLIST)
     })
 {}
 
