@@ -13,6 +13,20 @@ Item {
         anchors.fill: parent
         color: "white"
 
+        ToolBar {
+            id: topBar
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+            width: parent.width
+            height: 34
+
+            Label {
+                anchors.centerIn: parent
+                text: "Playlist"
+            }
+        }
+
         Label {
             anchors.centerIn: parent
             text: "PlayList Section"
