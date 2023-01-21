@@ -27,9 +27,11 @@ Item {
             }
         }
 
-        Label {
-            anchors.centerIn: parent
-            text: "PlayList Section"
+        PlayListContent {
+            anchors.top: topBar.bottom
+            anchors.left: parent.left
+            width: parent.width
+            height: parent.height - topBar.height
         }
     }
 }
