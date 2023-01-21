@@ -13,11 +13,11 @@ Item {
     */
     property int sectionType: 0
     onSectionTypeChanged: {
-        if (sectionType == SectionListModel.FILE_SYSTEM) {
+        if (sectionType === SectionListModel.FILE_SYSTEM) {
             state = "File System"
-        } else if (sectionType == SectionListModel.ALBUMS) {
+        } else if (sectionType === SectionListModel.ALBUMS) {
             state = "Albums"
-        } else if (sectionType == SectionListModel.PLAYLIST) {
+        } else if (sectionType === SectionListModel.PLAYLIST) {
             state = "Playlist"
         } else {
             state = ""
