@@ -9,6 +9,10 @@ Displaying the content of the current playlist.
 Item {
     id: root
 
+    function addItem(filesPath) {
+        playlistContentModel.add(filesPath);
+    }
+
     ListView {
         id: playlistContent
         anchors.fill: parent
@@ -32,7 +36,7 @@ Item {
             width: playlistContent.width
             contentHeight: trackName.height
             isItemSelected: isSelected
-            isPlaying: Player.currentStream === filePath
+            isPlaying: Player.currentStream === filepath
 
             // Track Number
             Label {
