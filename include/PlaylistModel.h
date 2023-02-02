@@ -13,6 +13,12 @@ class PlaylistModel : public SelectionModel
     Q_OBJECT
     QML_ELEMENT
 
+    enum TracksRole {
+        FILEPATH = MAX_ROLE,
+        NAME,
+        ARTISTS
+    };
+
 public:
     PlaylistModel(QObject* parent = nullptr);
     virtual ~PlaylistModel();
@@ -21,12 +27,6 @@ public:
     virtual QHash<int, QByteArray> roleNames() const override;
 
 private:
-    enum TracksRole {
-        FILEPATH = MAX_ROLE,
-        NAME,
-        ARTISTS
-    };
-
     struct Track {
         QString filepath;
         QString name;
