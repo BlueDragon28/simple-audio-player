@@ -18,8 +18,37 @@ Item {
 
         spacing: 0
 
+        delegate: playlistDelegate
+
         model: PlaylistModel {
             id: playlistContentModel
+        }
+    }
+
+    Component {
+        id: playlistDelegate
+
+        TrackListRowBaseItem {
+            width: playlistContent.width
+            contentHeight: trackName.height
+            isItemSelected: isSelected
+            isPlaying: Player.currentStream === filePath
+
+            // Track Number
+            Label {
+                id: trackName
+                width: 150
+                clip: true
+                text: name
+            }
+
+            // Track name
+            Label {
+                id: trackArtists
+                width: 50
+                clip: true
+                text: artists
+            }
         }
     }
 }
