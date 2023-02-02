@@ -19,6 +19,13 @@ class PlaylistModel : public SelectionModel
         ARTISTS
     };
 
+public slots:
+    /*
+    Add files to the list.
+    It retrieve the tags from the file.
+    */
+    void add(const QVariantList& vFilePath);
+
 public:
     PlaylistModel(QObject* parent = nullptr);
     virtual ~PlaylistModel();

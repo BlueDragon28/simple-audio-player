@@ -233,3 +233,11 @@ void SelectionModel::setItemList(const QVariantList& variantList)
         m_listData[i] = {false, variantList.at(i)};
     }
 }
+
+void SelectionModel::addItemList(const QVariantList& variantList)
+{
+    for (const QVariant variant : variantList)
+    {
+        m_listData.append({false, variant});
+    }
+}

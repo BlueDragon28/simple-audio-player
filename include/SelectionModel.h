@@ -77,6 +77,11 @@ public:
     */
     void setItemList(const QVariantList& variantList);
 
+    /*
+    Add items to the list.
+    */
+    void addItemList(const QVariantList& variantList);
+
 protected:
     /*
     Return the lowest index inside m_selectionOrder list.

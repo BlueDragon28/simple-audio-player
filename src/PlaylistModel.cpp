@@ -1,6 +1,9 @@
 #include "PlaylistModel.h"
 #include "SelectionModel.h"
+#include "TrackTag.h"
 #include <qabstractitemmodel.h>
+#include <qfileinfo.h>
+#include <qurl.h>
 #include <qhash.h>
 
 PlaylistModel::PlaylistModel(QObject* parent) :
@@ -65,4 +68,52 @@ QHash<int, QByteArray> PlaylistModel::roleNames() const
     roles[NAME] = "name";
     roles[ARTISTS] = "artists";
     return roles;
+}
+
+void PlaylistModel::add(const QVariantList& vFilePath)
+{
+    if (vFilePath.isEmpty()) 
+    {
+        return;
+    }
+
+    QVariantList vTracksList;
+    for (const QVariant& variant : vFilePath)
+    {
+        if (!variant.canConvert<QString>())
+        {
+            continue;
+        }
+
+        QString filePath = variant.toUrl().toLocalFile();
+
+        qDebug() << filePath;
+        if (!QFileInfo::exists(filePath))
+        {
+            continue;
+        }
+
+        bool retrieveTagSuccess = false;
+        TrackTag::Tag fileTag = TrackTag::getTagFromFile(filePath, &retrieveTagSuccess);
+
+        if (!retrieveTagSuccess)
+        {
+            continue;
+        }
+
+        Track trackTag = {
+            filePath,
+            fileTag.title,
+            fileTag.artist
+        };
+
+        vTracksList.append(QVariant::fromValue(trackTag));
+    }
+
+    if (!vTracksList.isEmpty())
+    {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        addItemList(vTracksList);
+        endInsertRows();
+    }
 }
