@@ -13,6 +13,8 @@ class PlaylistModel : public SelectionModel
     Q_OBJECT
     QML_ELEMENT
 
+    Q_PROPERTY(QStringList pathList READ pathList);
+
     enum TracksRole {
         FILEPATH = MAX_ROLE,
         NAME,
@@ -39,6 +41,8 @@ private:
         QString name;
         QString artists;
     };
+
+    QStringList pathList() const;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_

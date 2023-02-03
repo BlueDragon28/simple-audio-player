@@ -117,3 +117,28 @@ void PlaylistModel::add(const QVariantList& vFilePath)
         endInsertRows();
     }
 }
+
+QStringList PlaylistModel::pathList() const
+{
+    const QVariantList variantList = itemList();
+
+    if (variantList.isEmpty())
+    {
+        return {};
+    }
+
+    QStringList paths;
+    for (const QVariant& variant : variantList)
+    {
+        if (!variant.canConvert<Track>())
+        {
+            continue;
+        }
+
+        Track track = qvariant_cast<Track>(variant);
+
+        paths.append(track.filepath);
+    }
+
+    return paths;
+}
