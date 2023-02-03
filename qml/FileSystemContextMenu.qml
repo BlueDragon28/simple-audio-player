@@ -8,9 +8,18 @@ Menu {
     id: root
 
     signal play()
+    signal addToPlaylist()
 
     MenuItem {
         text: "Play"
         onTriggered: root.play()
+    }
+
+    MenuItem {
+        text: "Add To Playlist"
+
+        onTriggered: function() {
+            root.addToPlaylist();
+        }
     }
 }

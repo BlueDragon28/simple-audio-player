@@ -85,7 +85,7 @@ void PlaylistModel::add(const QVariantList& vFilePath)
             continue;
         }
 
-        QString filePath = variant.toUrl().toLocalFile();
+        QString filePath = variant.toString();
 
         qDebug() << filePath;
         if (!QFileInfo::exists(filePath))

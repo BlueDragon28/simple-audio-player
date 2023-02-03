@@ -61,6 +61,11 @@ Item {
             FileSystemContextMenu {
                 id: contextMenu
                 onPlay: SAL.playSelectedMusic(fileSystemModel.selectedFilesList())
+
+                onAddToPlaylist: function() {
+                    const selectedFiles = fileSystemModel.selectedFilesList();
+                    AddToPlaylistInterface.addTracks(selectedFiles);
+                }
             }
         }
     }

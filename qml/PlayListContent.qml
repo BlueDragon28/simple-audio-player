@@ -89,4 +89,12 @@ Item {
             }
         }
     }
+
+    Connections {
+        target: AddToPlaylistInterface
+
+        function onTracksAdded(tracksPath) {
+            playlistContentModel.add(tracksPath);   
+        }
+    }
 }

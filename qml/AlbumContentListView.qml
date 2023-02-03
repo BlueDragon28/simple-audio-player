@@ -57,6 +57,11 @@ Rectangle {
             FileSystemContextMenu {
                 id: contextMenu
                 onPlay: SAL.playSelectedMusic(trackListModel.selectedTracksList());
+
+                onAddToPlaylist: function() {
+                    const selectedFiles = trackListModel.selectedTracksList();
+                    AddToPlaylistInterface.addTracks(selectedFiles);
+                }
             }
         }
 
