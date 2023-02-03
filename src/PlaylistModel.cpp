@@ -112,7 +112,8 @@ void PlaylistModel::add(const QVariantList& vFilePath)
 
     if (!vTracksList.isEmpty())
     {
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        const int lastVTracksListIndex = vTracksList.size() - 1;
+        beginInsertRows(QModelIndex(), rowCount(), rowCount() + lastVTracksListIndex);
         addItemList(vTracksList);
         endInsertRows();
     }
