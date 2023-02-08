@@ -28,6 +28,8 @@ public slots:
     */
     void add(const QVariantList& vFilePath);
 
+    QStringList selectedTracksList() const;
+
 public:
     PlaylistModel(QObject* parent = nullptr);
     virtual ~PlaylistModel();

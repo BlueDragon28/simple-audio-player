@@ -16,6 +16,10 @@ Item {
 
     PlayListContextMenu {
         id: contextMenu
+
+        onPlay: function() {
+            SAL.playSelectedMusic(playlistContentModel.selectedTracksList());
+        }
     }
 
     ListView {

@@ -142,3 +142,20 @@ QStringList PlaylistModel::pathList() const
 
     return paths;
 }
+
+QStringList PlaylistModel::selectedTracksList() const
+{
+    QVariantList variantList = selectedItemList();
+
+    QStringList filePathList;
+
+    // Retrieving the file path from the list and store it into the file path string.
+    foreach (const QVariant& variant, variantList)
+    {
+        Track trackInfo =
+                qvariant_cast<Track>(variant);
+        filePathList.append(trackInfo.filepath);
+    }
+
+    return filePathList;
+}
