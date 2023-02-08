@@ -26,19 +26,31 @@ Item {
         }
     }
 
-    ListView {
-        id: playlistContent
-        anchors.fill: parent
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
-
+    ColumnLayout {
+        width: parent.width
+        height: parent.height
         spacing: 0
 
-        delegate: playlistDelegate
+        PlayListContentHeader {
+            id: playlistHeader
+            Layout.preferredWidth: parent.width
+        }
 
-        model: PlaylistModel {
-            id: playlistContentModel
+        ListView {
+            id: playlistContent
+            Layout.preferredWidth: parent.width
+            Layout.fillHeight: true
+
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            spacing: 0
+
+            delegate: playlistDelegate
+
+            model: PlaylistModel {
+                id: playlistContentModel
+            }
         }
     }
 
@@ -51,18 +63,18 @@ Item {
             isItemSelected: isSelected
             isPlaying: Player.currentStream === filepath
 
-            // Track Number
+            // Track Name
             Label {
                 id: trackName
-                width: 150
+                width: playlistHeader.nameWidth
                 clip: true
                 text: name
             }
 
-            // Track name
+            // Track Artists
             Label {
                 id: trackArtists
-                width: 50
+                width: playlistHeader.artistWidth
                 clip: true
                 text: artists
             }

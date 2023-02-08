@@ -24,6 +24,7 @@
         <file>qml/PlayList.qml</file>
         <file>qml/PlayListContent.qml</file>
         <file>qml/PlayListContextMenu.qml</file>
+        <file>qml/PlayListContentHeader.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>
