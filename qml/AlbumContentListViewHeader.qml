@@ -3,7 +3,7 @@ import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 
 /*
-Header element of the album content list view header.
+Header element of the album content list view.
 */
 Item {
     id: root
@@ -21,7 +21,6 @@ Item {
             anchors.fill: parent
             orientation: Qt.Horizontal
 
-            // Artist name
             Item {
                 id: trackNumber
 
@@ -37,7 +36,6 @@ Item {
                 }
             }
 
-            // Track name column.
             Item {
                 id: name
 
@@ -53,7 +51,6 @@ Item {
                 }
             }
 
-            // Artist name
             Item {
                 id: artist
 
