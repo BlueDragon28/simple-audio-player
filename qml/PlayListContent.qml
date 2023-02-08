@@ -14,6 +14,10 @@ Item {
         playlistContentModel.add(filesPath);
     }
 
+    PlayListContextMenu {
+        id: contextMenu
+    }
+
     ListView {
         id: playlistContent
         anchors.fill: parent
@@ -65,8 +69,8 @@ Item {
                     } else {
                         playlistContentModel.selectAtIndex(index)
                     }
-                /*} else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
-                     contextMenu.popup() */
+                } else if (mouse.button === Qt.RightButton) { // Right button click: open context menu.
+                     contextMenu.popup()
                 } else { // Middle button click: deselect all selection.
                     playlistContentModel.clearSelection()
                 }
@@ -84,7 +88,6 @@ Item {
                     return;
                 }
 
-                // Read the album, starting from the current item.
                 SAL.open(playlistContentModel.pathList, filepath)
             }
         }
