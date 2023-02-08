@@ -8,9 +8,15 @@ Menu {
     id: root
 
     signal play()
+    signal removeSelected()
 
     MenuItem {
         text: "Play"
         onTriggered: root.play()
+    }
+
+    MenuItem {
+        text: "Remove Selected"
+        onTriggered: root.removeSelected()
     }
 }

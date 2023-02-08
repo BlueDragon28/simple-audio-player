@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QList>
+#include <qtmetamacros.h>
 
 /*
 Handle selection.
@@ -81,6 +82,11 @@ public:
     Add items to the list.
     */
     void addItemList(const QVariantList& variantList);
+
+    /*
+    Remove selected items from the list.
+    */
+    Q_INVOKABLE void removeSelectedItems();
 
 protected:
     /*

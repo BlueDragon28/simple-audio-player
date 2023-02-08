@@ -1,4 +1,5 @@
 #include "SelectionModel.h"
+#include <algorithm>
 
 SelectionModel::SelectionModel(QObject* parent) :
     QAbstractListModel(parent)
@@ -239,5 +240,22 @@ void SelectionModel::addItemList(const QVariantList& variantList)
     for (const QVariant variant : variantList)
     {
         m_listData.append({false, variant});
+    }
+}
+
+void SelectionModel::removeSelectedItems()
+{
+    QList<int> selectedIndicesCopy(m_selectionOrder);
+
+    std::sort(selectedIndicesCopy.begin(), selectedIndicesCopy.end(),
+        [](int nb1, int nb2) -> bool {
+            return nb1 > nb2;
+        });
+
+    for(int index : selectedIndicesCopy)
+    {
+        beginRemoveRows(QModelIndex(), index, index);
+        m_listData.remove(index);
+        endRemoveRows();
     }
 }

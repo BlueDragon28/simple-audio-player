@@ -20,6 +20,10 @@ Item {
         onPlay: function() {
             SAL.playSelectedMusic(playlistContentModel.selectedTracksList());
         }
+
+        onRemoveSelected: function() {
+            playlistContentModel.removeSelectedItems();
+        }
     }
 
     ListView {
