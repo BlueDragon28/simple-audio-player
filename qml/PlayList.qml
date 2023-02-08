@@ -27,18 +27,6 @@ Item {
                 anchors.centerIn: parent
                 text: "Playlist"
             }
-
-            Button {
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.topMargin: 3
-
-                text: "Add"
-
-                onClicked: function() {
-                    fileDialog.open()
-                }
-            }
         }
 
         PlayListContent {
@@ -48,11 +36,5 @@ Item {
             width: parent.width
             height: parent.height - topBar.height
         }
-    }
-
-    FileDialog {
-        id: fileDialog
-        currentFolder: StandardPaths.standardLocations(StandardPaths.MusicLocation)[0]
-        onAccepted: playListContent.addItem(selectedFiles)
     }
 }
