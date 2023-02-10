@@ -35,4 +35,5 @@ void CoverArtTag::resetCoverImage()
 {
     std::scoped_lock lock(m_coverMutex);
     m_coverImage.reset();
+    m_albumName = "";
 }
