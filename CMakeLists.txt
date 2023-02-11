@@ -166,6 +166,7 @@ set(HEADERS
     "include/TrackTag.h"
     "include/PlaylistModel.h"
     "include/AddToPlaylistInterface.h"
+    "include/SystemFileDialog.h"
 	"include/options/SAPOptions.h"
 	"include/options/AboutDialog.h"
 	"include/options/LicenseDialog.h")
@@ -189,6 +190,7 @@ set(SOURCES
     "src/TrackTag.cpp"
     "src/PlaylistModel.cpp"
     "src/AddToPlaylistInterface.cpp"
+    "src/SystemFileDialog.cpp"
 	"src/options/SAPOptions.cpp"
 	"src/options/AboutDialog.cpp"
 	"src/options/LicenseDialog.cpp")
