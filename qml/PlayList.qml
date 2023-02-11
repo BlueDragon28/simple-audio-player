@@ -10,7 +10,7 @@ This is the playlist section, the user can create and play his favorite sounds.
 */
 Item {
     id: root
-
+    
     Rectangle {
         anchors.fill: parent
         color: "white"
@@ -27,6 +27,17 @@ Item {
                 anchors.centerIn: parent
                 text: "Playlist"
             }
+
+            Row {
+                anchors.fill: parent
+                anchors.margins: 4
+
+                Button {
+                    text: "Save"
+                    height: parent.height
+                    onClicked: saveDialog.open()
+                }
+            }
         }
 
         PlayListContent {
@@ -35,6 +46,14 @@ Item {
             anchors.left: parent.left
             width: parent.width
             height: parent.height - topBar.height
+        }
+    }
+
+    PlayListContentSaveDialog {
+        id: saveDialog
+
+        onAccepted: function(filePath) {
+            playListContent.savePlaylist(filePath);
         }
     }
 }

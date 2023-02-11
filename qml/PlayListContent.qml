@@ -14,6 +14,10 @@ Item {
         playlistContentModel.add(filesPath);
     }
 
+    function savePlaylist(filePath) {
+        playlistContentModel.saveToJSON(filePath);
+    }
+
     PlayListContextMenu {
         id: contextMenu
 
