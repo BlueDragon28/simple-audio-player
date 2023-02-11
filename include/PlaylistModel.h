@@ -3,6 +3,9 @@
 
 #include "SelectionModel.h"
 #include <qhash.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
 #include <qlist.h>
 #include <qnamespace.h>
 #include <qqmlintegration.h>
@@ -30,6 +33,11 @@ public slots:
 
     QStringList selectedTracksList() const;
 
+    /*
+    Save the playlist to a file
+    */
+    void saveToJSON(const QString& jsonPath) const;
+
 public:
     PlaylistModel(QObject* parent = nullptr);
     virtual ~PlaylistModel();
@@ -45,6 +53,11 @@ private:
     };
 
     QStringList pathList() const;
+
+    QByteArray prepareJSON() const;
+    QJsonObject setJSONRootObject() const;
+    QJsonArray jsonArrayOfPlaylistTracks() const;
+    bool saveToFile(const QString& filePath, const QByteArray& jsonDocument) const;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_

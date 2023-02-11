@@ -3,8 +3,12 @@
 #include "TrackTag.h"
 #include <qabstractitemmodel.h>
 #include <qfileinfo.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
 #include <qurl.h>
 #include <qhash.h>
+#include <qsavefile.h>
 
 PlaylistModel::PlaylistModel(QObject* parent) :
     SelectionModel(parent)
@@ -138,4 +142,65 @@ QStringList PlaylistModel::selectedTracksList() const
     }
 
     return filePathList;
+}
+
+void PlaylistModel::saveToJSON(const QString& jsonPath) const
+{
+    QByteArray playlistJson = prepareJSON();
+    bool result = saveToFile(jsonPath, playlistJson);
+}
+
+QByteArray PlaylistModel::prepareJSON() const
+{
+    QJsonDocument jsonDocument;
+    jsonDocument.setObject(setJSONRootObject());
+    return jsonDocument.toJson(QJsonDocument::Indented);
+}
+
+QJsonObject PlaylistModel::setJSONRootObject() const
+{
+    QJsonObject rootObject;
+    rootObject.insert("data", jsonArrayOfPlaylistTracks());
+    return rootObject;
+}
+
+QJsonArray PlaylistModel::jsonArrayOfPlaylistTracks() const
+{
+    QVariantList vItemList = itemList();
+
+    QJsonArray jsonTracksList;
+
+    for (const QVariant& vTrack : vItemList)
+    {
+        if (!vTrack.isValid() || !vTrack.canConvert<Track>())
+        {
+            continue;
+        }
+
+        Track track = qvariant_cast<Track>(vTrack);
+
+        QJsonObject jsonTrack;
+        jsonTrack.insert("filepath", track.filepath);
+        jsonTrack.insert("title", track.name);
+        jsonTrack.insert("artists", track.artists);
+        
+        jsonTracksList.append(jsonTrack);
+    }
+
+    return jsonTracksList;
+}
+
+bool PlaylistModel::saveToFile(const QString& filePath, const QByteArray& jsonDocument) const
+{
+    QSaveFile file(filePath);
+
+    if (!file.open(QSaveFile::WriteOnly | QSaveFile::Text))
+    {
+        return false;
+    }
+    
+    QTextStream out(&file);
+    out << jsonDocument;
+
+    return file.commit();
 }
