@@ -13,7 +13,8 @@
 
 PlaylistModel::PlaylistModel(QObject* parent) :
     SelectionModel(parent),
-    m_playlistTitle("Unknown Playlist")
+    m_playlistTitle("Unknown Playlist"),
+    m_isFromFile(false)
 {}
 
 PlaylistModel::~PlaylistModel()
@@ -118,6 +119,38 @@ void PlaylistModel::setPlaylistTitle(const QString& title)
 
     m_playlistTitle = title;
     emit playlistTitleChanged();
+}
+
+QString PlaylistModel::filePath() const
+{
+    return m_filePath;
+}
+
+void PlaylistModel::setFilePath(const QString& filePath)
+{
+    if (filePath.compare(m_filePath) == 0)
+    {
+        return;
+    }
+
+    m_filePath = filePath;
+    emit filePathChanged();
+}
+
+bool PlaylistModel::isFromFile() const
+{
+    return m_isFromFile;
+}
+
+void PlaylistModel::setIsFromFile(bool isFromFile)
+{
+    if (isFromFile == m_isFromFile)
+    {
+        return;
+    }
+
+    m_isFromFile = isFromFile;
+    emit isFromFileChanged();
 }
 
 QStringList PlaylistModel::pathList() const

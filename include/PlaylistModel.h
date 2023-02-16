@@ -18,6 +18,8 @@ class PlaylistModel : public SelectionModel
 
     Q_PROPERTY(QString playlistTitle READ playlistTitle NOTIFY playlistTitleChanged)
     Q_PROPERTY(QStringList pathList READ pathList);
+    Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
+    Q_PROPERTY(bool isFromFile READ isFromFile NOTIFY isFromFileChanged)
 
     enum TracksRole {
         FILEPATH = MAX_ROLE,
@@ -27,6 +29,8 @@ class PlaylistModel : public SelectionModel
 
 public:
     QString playlistTitle() const;
+    QString filePath() const;
+    bool isFromFile() const;
 
 public slots:
     /*
@@ -56,6 +60,8 @@ public:
 
 signals:
     void playlistTitleChanged();
+    void filePathChanged();
+    void isFromFileChanged();
 
 private:
     struct Track {
@@ -79,8 +85,12 @@ private:
     void applyPlaylist(const QList<Track>& tracksList);
 
     void setPlaylistTitle(const QString& playlistTitle);
+    void setFilePath(const QString& filePath);
+    void setIsFromFile(bool isFromFile);
 
     QString m_playlistTitle;
+    QString m_filePath;
+    bool m_isFromFile;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_
