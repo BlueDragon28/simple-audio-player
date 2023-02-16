@@ -9,6 +9,7 @@
 #include <qurl.h>
 #include <qhash.h>
 #include <qsavefile.h>
+#include <qvariant.h>
 
 PlaylistModel::PlaylistModel(QObject* parent) :
     SelectionModel(parent)
@@ -329,7 +330,7 @@ bool PlaylistModel::extractPlaylistList(const QJsonValue& playlistValue)
 
     QJsonArray playlistArray = playlistValue.toArray();
     
-    QList<Track> tracksList(playlistArray.size());
+    QList<Track> tracksList;
 
     for (const QJsonValue& item : playlistArray)
     {
@@ -346,8 +347,17 @@ bool PlaylistModel::extractPlaylistList(const QJsonValue& playlistValue)
 
 void PlaylistModel::applyPlaylist(const QList<Track>& tracksList)
 {
-    for (const Track& track : tracksList)
+    beginRemoveRows(QModelIndex(), 0, rowCount()-1);
+    clear();
+    endRemoveRows();
+
+    QVariantList vTracksList(tracksList.size());
+    for (int i = 0; i < tracksList.size(); i++)
     {
-        qDebug() << "filePath:" << track.filepath << "title:" << track.name << "artists:" << track.artists;
+        vTracksList[i] = QVariant::fromValue(tracksList.at(i));
     }
+
+    setItemList(vTracksList);
+    beginInsertRows(QModelIndex(), 0, vTracksList.size()-1);
+    endInsertRows();
 }
