@@ -21,7 +21,7 @@ Item {
 
     SystemFileDialog {
         id: fileDialog
-        fileMode: mode === "SAVE" ? SystemFileDialog.FileMode.SAVE_FILE : mode === "OPEN" ? SystemFileDialog.FileMode.OPEN_FILE : SystemFileDialog.FileMode.OPEN_FILE
+        fileMode: mode === "SAVE" ? SystemFileDialog.SAVE_FILE : mode === "OPEN" ? SystemFileDialog.OPEN_FILE : SystemFileDialog.OPEN_FILE
 
         onAccepted: root.accepted(fileDialog.selectedFile)
     }
