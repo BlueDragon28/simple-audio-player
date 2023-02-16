@@ -283,6 +283,8 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
 
     const QString title = QFileInfo(jsonPath).baseName();
     setPlaylistTitle(title);
+    setFilePath(jsonPath);
+    setIsFromFile(true);
 }
 
 QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const
