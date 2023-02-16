@@ -233,7 +233,13 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
         return;
     }
 
-    parseJSON(jsonStrData);
+    if (!parseJSON(jsonStrData))
+    {
+        return;
+    }
+
+    const QString title = QFileInfo(jsonPath).baseName();
+    setPlaylistTitle(title);
 }
 
 QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const
@@ -256,7 +262,7 @@ QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) co
     return fileData.toUtf8();
 }
 
-void PlaylistModel::parseJSON(const QByteArray& jsonData)
+bool PlaylistModel::parseJSON(const QByteArray& jsonData)
 {
     QJsonParseError parseError;
     QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData, &parseError);
@@ -264,13 +270,16 @@ void PlaylistModel::parseJSON(const QByteArray& jsonData)
     if (parseError.error != QJsonParseError::NoError)
     {
         qDebug() << "anErrorOccurred";
-        return;
+        return false;
     }
 
     if (!extractRootObject(jsonDocument))
     {
         qDebug() << "Failed to parse QJsonDocument";
+        return false;
     }
+
+    return true;
 }
 
 bool PlaylistModel::extractRootObject(const QJsonDocument& jsonDocument)
