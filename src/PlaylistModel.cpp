@@ -215,7 +215,7 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
         return;
     }
 
-    qDebug() << jsonStrData;
+    parseJSON(jsonStrData);
 }
 
 QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const
@@ -236,4 +236,118 @@ QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) co
 
     *result = true;
     return fileData.toUtf8();
+}
+
+void PlaylistModel::parseJSON(const QByteArray& jsonData)
+{
+    QJsonParseError parseError;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData, &parseError);
+
+    if (parseError.error != QJsonParseError::NoError)
+    {
+        qDebug() << "anErrorOccurred";
+        return;
+    }
+
+    if (!extractRootObject(jsonDocument))
+    {
+        qDebug() << "Failed to parse QJsonDocument";
+    }
+}
+
+bool PlaylistModel::extractRootObject(const QJsonDocument& jsonDocument)
+{
+    if (jsonDocument.isEmpty() || !jsonDocument.isObject())
+    {
+        qDebug() << "JSON Document is or is not an object";
+        return false;
+    }
+
+    QJsonObject rootObject = jsonDocument.object();
+    
+    if (rootObject.isEmpty())
+    {
+        qDebug() << "Root object is empty";
+        return false;
+    }
+
+    QJsonValue dataValue = rootObject.value("data");
+
+    return extractPlaylistList(dataValue);
+}
+
+bool PlaylistModel::extractTrackFromQJsonValue(
+        const QJsonValue& item, 
+        QList<Track>& tracksList) const 
+{
+    if (item.isUndefined() || item.isNull() || !item.isObject())
+    {
+        qDebug() << "Array item is undefined, null or is not an object";
+        return false;
+    }
+
+    QJsonObject trackObject = item.toObject();
+
+    if (trackObject.isEmpty() ||
+        !trackObject.contains("artists") ||
+        !trackObject.contains("filepath") ||
+        !trackObject.contains("title"))
+    {
+        qDebug() << "Invalid track object";
+        return false;
+    }
+
+    QVariant vFilePath = trackObject.value("filepath");
+    QVariant vTitle = trackObject.value("title");
+    QVariant vArtists = trackObject.value("artists");
+
+    if (!vFilePath.isValid() || !vFilePath.convert(QMetaType::fromType<QString>()) ||
+        !vTitle.isValid() || !vTitle.convert(QMetaType::fromType<QString>()) ||
+        !vArtists.isValid() || !vArtists.convert(QMetaType::fromType<QString>()))
+    {
+        qDebug() << "Invalid tracks QVariant item";
+        return false;
+    }
+
+    Track track = {
+        vFilePath.toString(),
+        vTitle.toString(),
+        vArtists.toString()
+    };
+
+    tracksList.append(track);
+    return true;
+}
+
+bool PlaylistModel::extractPlaylistList(const QJsonValue& playlistValue)
+{
+    if (playlistValue.isUndefined() || playlistValue.isNull() || !playlistValue.isArray())
+    {
+        qDebug() << "Playlist list is undefined, null or is not an array";
+        return false;
+    }
+
+    QJsonArray playlistArray = playlistValue.toArray();
+    
+    QList<Track> tracksList(playlistArray.size());
+
+    for (const QJsonValue& item : playlistArray)
+    {
+        if (!extractTrackFromQJsonValue(item, tracksList))
+        {
+            qDebug() << "Failed to extrack a track from a QJsonValue";
+            return false;
+        }
+    }
+
+    applyPlaylist(tracksList);
+    return true;
+}
+
+void PlaylistModel::applyPlaylist(const QList<Track>& tracksList)
+{
+    for (const Track& track : tracksList)
+    {
+        qDebug() << "filePath:" << track.filepath << "title:" << track.name << "artists:" << track.artists;
+    }
 }

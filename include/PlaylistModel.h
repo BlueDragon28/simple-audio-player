@@ -65,6 +65,11 @@ private:
     bool saveToFile(const QString& filePath, const QByteArray& jsonDocument) const;
 
     QByteArray readFromFile(const QString& filePath, bool* result = nullptr) const;
+    void parseJSON(const QByteArray& jsonData);
+    bool extractRootObject(const QJsonDocument& jsonDocument);
+    bool extractTrackFromQJsonValue(const QJsonValue& item, QList<Track>& tracksList) const;
+    bool extractPlaylistList(const QJsonValue& playlistValue);
+    void applyPlaylist(const QList<Track>& tracksList);
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_
