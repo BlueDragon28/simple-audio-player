@@ -37,6 +37,12 @@ Item {
                     height: parent.height
                     onClicked: saveDialog.open()
                 }
+
+                Button {
+                    text: "Open"
+                    height: parent.height
+                    onClicked: openDialog.open()
+                }
             }
         }
 
@@ -59,6 +65,18 @@ Item {
 
         onAccepted: function(filePath) {
             playListContent.savePlaylist(filePath);
+        }
+    }
+
+    SystemDialog {
+        id: openDialog
+        title: "Open Playlist"
+        mode: "OPEN"
+        directory: StandardPaths.standardLocations(StandardPaths.MusicLocation)[0]
+        nameFilters: ["JSON (*.json)", "All Files (*)"]
+
+        onAccepted: function(filePath) {
+            playListContent.loadPlaylist(filePath);
         }
     }
 }

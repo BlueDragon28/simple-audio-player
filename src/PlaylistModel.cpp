@@ -204,3 +204,36 @@ bool PlaylistModel::saveToFile(const QString& filePath, const QByteArray& jsonDo
 
     return file.commit();
 }
+
+void PlaylistModel::loadFromJSON(const QString& jsonPath) 
+{
+    bool isOpenSuccess = false;
+    QByteArray jsonStrData = readFromFile(jsonPath, &isOpenSuccess);
+
+    if (!isOpenSuccess)
+    {
+        return;
+    }
+
+    qDebug() << jsonStrData;
+}
+
+QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const
+{
+    QFile file(filePath);
+
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        if (result)
+        {
+            *result = false;
+        }
+        return QByteArray();
+    }
+
+    QTextStream stream(&file);
+    QString fileData = stream.readAll();
+
+    *result = true;
+    return fileData.toUtf8();
+}

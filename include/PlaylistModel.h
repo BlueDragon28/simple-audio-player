@@ -34,9 +34,14 @@ public slots:
     QStringList selectedTracksList() const;
 
     /*
-    Save the playlist to a file
+    Save the playlist to a file.
     */
     void saveToJSON(const QString& jsonPath) const;
+    
+    /*
+    Load a playlist from a JSON file.
+    */
+    void loadFromJSON(const QString& jsonPath);
 
 public:
     PlaylistModel(QObject* parent = nullptr);
@@ -58,6 +63,8 @@ private:
     QJsonObject setJSONRootObject() const;
     QJsonArray jsonArrayOfPlaylistTracks() const;
     bool saveToFile(const QString& filePath, const QByteArray& jsonDocument) const;
+
+    QByteArray readFromFile(const QString& filePath, bool* result = nullptr) const;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_
