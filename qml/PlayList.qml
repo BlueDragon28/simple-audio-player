@@ -35,7 +35,13 @@ Item {
                 Button {
                     text: "Save"
                     height: parent.height
-                    onClicked: saveDialog.open()
+                    onClicked: function() {
+                        if (playListContent.isFromFile) {
+                            return playListContent.savePlaylist();
+                        }
+
+                        saveDialog.open();
+                    }
                 }
 
                 Button {

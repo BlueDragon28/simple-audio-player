@@ -11,12 +11,21 @@ Item {
     id: root
 
     property alias playlistTitle: playlistContentModel.playlistTitle
+    property alias isFromFile: playlistContentModel.isFromFile
 
     function addItem(filesPath) {
         playlistContentModel.add(filesPath);
     }
 
     function savePlaylist(filePath) {
+        if (!filePath) {
+            filePath = playlistContentModel.filePath;
+
+            if (!filePath || !filePath.trim().length) {
+                return;
+            }
+        }
+        
         playlistContentModel.saveToJSON(filePath);
     }
 
