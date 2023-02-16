@@ -12,7 +12,8 @@
 #include <qvariant.h>
 
 PlaylistModel::PlaylistModel(QObject* parent) :
-    SelectionModel(parent)
+    SelectionModel(parent),
+    m_playlistTitle("Unknown Playlist")
 {}
 
 PlaylistModel::~PlaylistModel()
@@ -101,6 +102,22 @@ void PlaylistModel::add(const QVariantList& vFilePath)
         addItemList(vTracksList);
         endInsertRows();
     }
+}
+
+QString PlaylistModel::playlistTitle() const
+{
+    return m_playlistTitle;
+}
+
+void PlaylistModel::setPlaylistTitle(const QString& title)
+{
+    if (title.compare(m_playlistTitle) == 0)
+    {
+        return;
+    }
+
+    m_playlistTitle = title;
+    emit playlistTitleChanged();
 }
 
 QStringList PlaylistModel::pathList() const

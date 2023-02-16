@@ -16,6 +16,7 @@ class PlaylistModel : public SelectionModel
     Q_OBJECT
     QML_ELEMENT
 
+    Q_PROPERTY(QString playlistTitle READ playlistTitle NOTIFY playlistTitleChanged)
     Q_PROPERTY(QStringList pathList READ pathList);
 
     enum TracksRole {
@@ -23,6 +24,9 @@ class PlaylistModel : public SelectionModel
         NAME,
         ARTISTS
     };
+
+public:
+    QString playlistTitle() const;
 
 public slots:
     /*
@@ -50,6 +54,9 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
+signals:
+    void playlistTitleChanged();
+
 private:
     struct Track {
         QString filepath;
@@ -70,6 +77,10 @@ private:
     bool extractTrackFromQJsonValue(const QJsonValue& item, QList<Track>& tracksList) const;
     bool extractPlaylistList(const QJsonValue& playlistValue);
     void applyPlaylist(const QList<Track>& tracksList);
+
+    void setPlaylistTitle(const QString& playlistTitle);
+
+    QString m_playlistTitle;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_

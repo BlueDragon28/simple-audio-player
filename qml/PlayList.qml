@@ -25,7 +25,7 @@ Item {
 
             Label {
                 anchors.centerIn: parent
-                text: "Playlist"
+                text: playListContent.playlistTitle
             }
 
             Row {

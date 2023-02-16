@@ -10,6 +10,8 @@ Displaying the content of the current playlist.
 Item {
     id: root
 
+    property alias playlistTitle: playlistContentModel.playlistTitle
+
     function addItem(filesPath) {
         playlistContentModel.add(filesPath);
     }
