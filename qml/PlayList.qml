@@ -49,8 +49,13 @@ Item {
         }
     }
 
-    PlayListContentSaveDialog {
+    SystemDialog {
         id: saveDialog
+        title: "Save Playlist"
+        mode: "SAVE"
+        directory: StandardPaths.standardLocations(StandardPaths.MusicLocation)[0]
+        defaultSuffix: "json"
+        nameFilters: ["JSON (*.json)", "All Files (*)"]
 
         onAccepted: function(filePath) {
             playListContent.savePlaylist(filePath);
