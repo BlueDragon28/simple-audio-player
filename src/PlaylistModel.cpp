@@ -195,10 +195,20 @@ QStringList PlaylistModel::selectedTracksList() const
     return filePathList;
 }
 
-void PlaylistModel::saveToJSON(const QString& jsonPath) const
+void PlaylistModel::saveToJSON(const QString& jsonPath)
 {
     QByteArray playlistJson = prepareJSON();
     bool result = saveToFile(jsonPath, playlistJson);
+
+    if (!result)
+    {
+        return;
+    }
+
+    const QString playlistTitle = QFileInfo(jsonPath).baseName();
+    setPlaylistTitle(playlistTitle);
+    setFilePath(jsonPath);
+    setIsFromFile(true);
 }
 
 QByteArray PlaylistModel::prepareJSON() const

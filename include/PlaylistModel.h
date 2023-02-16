@@ -44,7 +44,7 @@ public slots:
     /*
     Save the playlist to a file.
     */
-    void saveToJSON(const QString& jsonPath) const;
+    void saveToJSON(const QString& jsonPath);
     
     /*
     Load a playlist from a JSON file.
