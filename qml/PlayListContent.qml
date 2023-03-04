@@ -12,6 +12,7 @@ Item {
 
     property alias playlistTitle: playlistContentModel.playlistTitle
     property alias isFromFile: playlistContentModel.isFromFile
+    property alias isModified: playlistContentModel.isModified
 
     function addItem(filesPath) {
         playlistContentModel.add(filesPath);

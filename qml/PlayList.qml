@@ -41,6 +41,10 @@ Item {
                     icon.source: "qrc:///images/diskette.png"
                     icon.width: topBar.height
                     onClicked: function() {
+                        if (!playListContent.isModified) {
+                            return;
+                        }
+
                         if (playListContent.isFromFile) {
                             return playListContent.savePlaylist();
                         }
