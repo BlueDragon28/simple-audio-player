@@ -35,12 +35,12 @@ Item {
     }
 
     function isSaved(action) {
-        if (typeof action === "string") {
-            root.checkSaveAction = action
-        }
-
         if (!playListContent.isModified) {
             return true;
+        }
+
+        if (typeof action === "string") {
+            root.checkSaveAction = action
         }
 
         documenModifiedDialog.open()
