@@ -10,6 +10,22 @@ This is the playlist section, the user can create and play his favorite sounds.
 */
 Item {
     id: root
+
+    function savePlaylist() {
+        if (!playListContent.isModified) {
+            return;
+        }
+
+        if (playListContent.isFromFile) {
+            return playListContent.savePlaylist();
+        }
+
+        saveDialog.open();
+    }
+
+    function openPlaylist() {
+        openDialog.open()
+    }
     
     Rectangle {
         anchors.fill: parent
@@ -40,17 +56,7 @@ Item {
                     height: parent.height
                     icon.source: "qrc:///images/diskette.png"
                     icon.width: topBar.height
-                    onClicked: function() {
-                        if (!playListContent.isModified) {
-                            return;
-                        }
-
-                        if (playListContent.isFromFile) {
-                            return playListContent.savePlaylist();
-                        }
-
-                        saveDialog.open();
-                    }
+                    onClicked: root.savePlaylist()
                 }
 
                 Button {
@@ -59,7 +65,7 @@ Item {
                     height: parent.height
                     icon.source: "qrc:///images/folder.png"
                     icon.width: topBar.height
-                    onClicked: openDialog.open()
+                    onClicked: root.openPlaylist()
                 }
             }
         }
