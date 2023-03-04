@@ -2,7 +2,7 @@ import QtCore 6.2
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
-import QtQuick.Dialogs 6.2
+import QtQuick.Dialogs 6.3
 import SimpleAudioPlayer 1.0
 
 /*
@@ -10,6 +10,8 @@ This is the playlist section, the user can create and play his favorite sounds.
 */
 Item {
     id: root
+
+    property string checkSaveAction: ""
 
     function savePlaylist() {
         if (!playListContent.isModified) {
@@ -23,7 +25,25 @@ Item {
         saveDialog.open();
     }
 
+    function isSaved(action) {
+        if (typeof action === "string") {
+            root.checkSaveAction = action
+        }
+
+        if (!playListContent.isModified) {
+            return true;
+        }
+
+        documenModifiedDialog.open()
+
+        return false;
+    }
+
     function openPlaylist() {
+        if (!isSaved("OPEN")) {
+            return;
+        }
+
         openDialog.open()
     }
     
@@ -89,6 +109,10 @@ Item {
 
         onAccepted: function(filePath) {
             playListContent.savePlaylist(filePath);
+
+            if (checkSaveAction === "OPEN") {
+                openPlaylist();
+            }
         }
     }
 
@@ -102,5 +126,12 @@ Item {
         onAccepted: function(filePath) {
             playListContent.loadPlaylist(filePath);
         }
+    }
+
+    MessageDialog {
+        id: documenModifiedDialog
+        text: "The playlist has beed modified.\nDo you want to save it?"
+        buttons: MessageDialog.Save | MessageDialog.Cancel
+        onAccepted: root.savePlaylist()
     }
 }
