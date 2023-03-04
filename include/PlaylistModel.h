@@ -28,6 +28,12 @@ class PlaylistModel : public SelectionModel
     };
 
 public:
+    PlaylistModel(QObject* parent = nullptr);
+    virtual ~PlaylistModel();
+
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual QHash<int, QByteArray> roleNames() const override;
+
     QString playlistTitle() const;
     QString filePath() const;
     bool isFromFile() const;
@@ -50,13 +56,6 @@ public slots:
     Load a playlist from a JSON file.
     */
     void loadFromJSON(const QString& jsonPath);
-
-public:
-    PlaylistModel(QObject* parent = nullptr);
-    virtual ~PlaylistModel();
-
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    virtual QHash<int, QByteArray> roleNames() const override;
 
 signals:
     void playlistTitleChanged();
@@ -91,6 +90,7 @@ private:
     QString m_playlistTitle;
     QString m_filePath;
     bool m_isFromFile;
+    bool m_isModified;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_
