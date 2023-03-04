@@ -41,5 +41,7 @@
         <file>images/nextSound.png</file>
         <file>images/previousSound.png</file>
         <file>images/rand.png</file>
+        <file>images/diskette.png</file>
+        <file>images/folder.png</file>
     </qresource>
 </RCC>

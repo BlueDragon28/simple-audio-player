@@ -30,11 +30,16 @@ Item {
 
             Row {
                 anchors.fill: parent
-                anchors.margins: 4
+                anchors.topMargin: 3
+                anchors.bottomMargin: 3
+                spacing: 4
 
                 Button {
-                    text: "Save"
+                    id: someButton
+                    width: height
                     height: parent.height
+                    icon.source: "qrc:///images/diskette.png"
+                    icon.width: topBar.height
                     onClicked: function() {
                         if (playListContent.isFromFile) {
                             return playListContent.savePlaylist();
@@ -46,7 +51,10 @@ Item {
 
                 Button {
                     text: "Open"
+                    width: height
                     height: parent.height
+                    icon.source: "qrc:///images/folder.png"
+                    icon.width: topBar.height
                     onClicked: openDialog.open()
                 }
             }
