@@ -41,7 +41,7 @@ Item {
         }
 
         onRemoveSelected: function() {
-            playlistContentModel.removeSelectedItems();
+            playlistContentModel.removeSelected();
         }
     }
 

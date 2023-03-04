@@ -14,7 +14,8 @@
 PlaylistModel::PlaylistModel(QObject* parent) :
     SelectionModel(parent),
     m_playlistTitle("Unknown Playlist"),
-    m_isFromFile(false)
+    m_isFromFile(false),
+    m_isModified(false)
 {}
 
 PlaylistModel::~PlaylistModel()
@@ -102,12 +103,22 @@ void PlaylistModel::add(const QVariantList& vFilePath)
         beginInsertRows(QModelIndex(), rowCount(), rowCount() + lastVTracksListIndex);
         addItemList(vTracksList);
         endInsertRows();
+
+        setIsModified(true);
     }
+}
+
+void PlaylistModel::removeSelected()
+{
+    removeSelectedItems();
+    setIsModified(true);
 }
 
 QString PlaylistModel::playlistTitle() const
 {
-    return m_playlistTitle;
+    const QString title = QString("%1%2")
+        .arg((m_isModified ? "*" : ""), m_playlistTitle);
+    return title;
 }
 
 void PlaylistModel::setPlaylistTitle(const QString& title)
@@ -209,6 +220,7 @@ void PlaylistModel::saveToJSON(const QString& jsonPath)
     setPlaylistTitle(playlistTitle);
     setFilePath(jsonPath);
     setIsFromFile(true);
+    setIsModified(false);
 }
 
 QByteArray PlaylistModel::prepareJSON() const
@@ -285,6 +297,7 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
     setPlaylistTitle(title);
     setFilePath(jsonPath);
     setIsFromFile(true);
+    setIsModified(false);
 }
 
 QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const
@@ -431,4 +444,21 @@ void PlaylistModel::applyPlaylist(const QList<Track>& tracksList)
     setItemList(vTracksList);
     beginInsertRows(QModelIndex(), 0, vTracksList.size()-1);
     endInsertRows();
+}
+
+bool PlaylistModel::isModified() const
+{
+    return m_isModified;
+}
+
+void PlaylistModel::setIsModified(bool value)
+{
+    if (value == m_isModified)
+    {
+        return;
+    }
+
+    m_isModified = value;
+    emit isModifiedChanged();
+    emit playlistTitleChanged();
 }
