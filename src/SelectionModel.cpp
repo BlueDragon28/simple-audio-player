@@ -258,4 +258,6 @@ void SelectionModel::removeSelectedItems()
         m_listData.remove(index);
         endRemoveRows();
     }
+
+    clearSelection();
 }
