@@ -12,6 +12,7 @@ Item {
     id: root
 
     property string checkSaveAction: ""
+    property bool bypassCheckSave: false
 
     function engageNextAction() {
         if (checkSaveAction === "OPEN") {
@@ -19,6 +20,7 @@ Item {
         }
 
         checkSaveAction = "";
+        bypassCheckSave = false;
     }
 
     function savePlaylist() {
@@ -43,13 +45,18 @@ Item {
             root.checkSaveAction = action
         }
 
-        documenModifiedDialog.open()
+        if (documentModifiedDialog.dialogIsOpen) {
+            return false;
+        }
+        
+        documentModifiedDialog.dialogIsOpen = true;
+        documentModifiedDialog.open();
 
         return false;
     }
 
     function openPlaylist() {
-        if (!isSaved("OPEN")) {
+        if (!isSaved("OPEN") && !bypassCheckSave) {
             return;
         }
 
@@ -136,9 +143,19 @@ Item {
     }
 
     MessageDialog {
-        id: documenModifiedDialog
+        id: documentModifiedDialog
         text: "The playlist has beed modified.\nDo you want to save it?"
         buttons: MessageDialog.Save | MessageDialog.Cancel
-        onAccepted: root.savePlaylist()
+        onAccepted: function() {
+            root.savePlaylist()
+            dialogIsOpen = false;
+        }
+        onRejected: function() {
+            bypassCheckSave = true;
+            root.engageNextAction();
+            dialogIsOpen = false;
+        }
+
+        property bool dialogIsOpen: false
     }
 }
