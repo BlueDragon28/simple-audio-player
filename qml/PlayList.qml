@@ -13,13 +13,22 @@ Item {
 
     property string checkSaveAction: ""
 
+    function engageNextAction() {
+        if (checkSaveAction === "OPEN") {
+            openPlaylist();
+        }
+
+        checkSaveAction = "";
+    }
+
     function savePlaylist() {
         if (!playListContent.isModified) {
             return;
         }
 
         if (playListContent.isFromFile) {
-            return playListContent.savePlaylist();
+            playListContent.savePlaylist();
+            return engageNextAction();
         }
 
         saveDialog.open();
@@ -110,9 +119,7 @@ Item {
         onAccepted: function(filePath) {
             playListContent.savePlaylist(filePath);
 
-            if (checkSaveAction === "OPEN") {
-                openPlaylist();
-            }
+            engageNextAction();
         }
     }
 
