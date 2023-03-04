@@ -163,22 +163,26 @@ void SystemFileDialog::applyFileMode()
     case FileMode::OPEN_FILE:
     {
         m_dialog->setFileMode(QFileDialog::ExistingFile);
+        m_dialog->setAcceptMode(QFileDialog::AcceptOpen);
     } break;
 
     case FileMode::OPEN_FILES:
     {
         m_dialog->setFileMode(QFileDialog::ExistingFiles);
+        m_dialog->setAcceptMode(QFileDialog::AcceptOpen);
     } break;
 
     case FileMode::SELECT_DIRECTORY:
     {
         m_dialog->setFileMode(QFileDialog::Directory);
+        m_dialog->setAcceptMode(QFileDialog::AcceptOpen);
     } break;
 
     case FileMode::SAVE_FILE:
     default:
     {
         m_dialog->setFileMode(QFileDialog::AnyFile);
+        m_dialog->setAcceptMode(QFileDialog::AcceptSave);
     } break;
     }
 }
