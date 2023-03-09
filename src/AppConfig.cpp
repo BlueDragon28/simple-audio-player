@@ -1,6 +1,7 @@
 #include "AppConfig.h"
 #include <QSettings>
 #include <algorithm>
+#include <qfileinfo.h>
 #include <qsettings.h>
 #include <qvariant.h>
 
@@ -19,6 +20,10 @@
 #define MUSIC_COLLECTION_MAKE_CONFIG_NAME(name) QString(MUSIC_COLLECTION_CONFIG_NAME) + '/' + name
 #define MUSIC_COLLECTION_PATH_LIST "dirList"
 
+#define PLAYLIST_CONFIG_NAME "playlist"
+#define PLAYLIST_MAKE_CONFIG_NAME(name) QString(PLAYLIST_CONFIG_NAME) + '/' + name
+#define PLAYLIST_LAST_OPENED_PLAYLIST_PATH "jsonPath"
+
 AppConfig::WindowSettings AppConfig::mainWindowSettings = {
     WINDOW_DEFAULT_POS, // X
     WINDOW_DEFAULT_POS, // Y
@@ -32,6 +37,8 @@ AppConfig::MusicCollectionList AppConfig::m_musicCollectionPathList = {
     QStringList(),
     false
 };
+
+QString AppConfig::m_lastOpenedPlaylist = QString();
 
 QSettings AppConfig::openSettings()
 {
@@ -49,6 +56,7 @@ void AppConfig::loadConfig()
 
     loadWindowStatus(settings);
     loadMusicCollectionPathList(settings);
+    loadLastOpenedPlaylistPath(settings);
 }
 
 void AppConfig::saveConfig()
@@ -58,6 +66,7 @@ void AppConfig::saveConfig()
 
     saveWindowStatus(settings);
     saveMusicCollectionPathList(settings);
+    saveLastOpenedPlaylistPath(settings);
 }
 
 QMap<QString, QVariant> AppConfig::getMainWindowSettings()
@@ -165,6 +174,16 @@ void AppConfig::setMusicCollectionPathList(const QStringList& pathList)
     m_musicCollectionPathList.exists = true;
 }
 
+QString AppConfig::getLastOpenedPlaylistPath()
+{
+    return m_lastOpenedPlaylist;
+}
+
+void AppConfig::setLastOpenedPlaylistPath(const QString& path)
+{
+    m_lastOpenedPlaylist = path.trimmed();
+}
+
 void AppConfig::saveWindowStatus(QSettings& settings)
 {
     if (settings.isWritable())
@@ -249,4 +268,38 @@ void AppConfig::loadMusicCollectionPathList(QSettings& settings)
             }
         }
     }
+}
+
+void AppConfig::saveLastOpenedPlaylistPath(QSettings& settings)
+{
+    if(!settings.isWritable()) {
+        return;
+    }
+
+    if (m_lastOpenedPlaylist.isEmpty())
+    {
+        settings.remove(PLAYLIST_MAKE_CONFIG_NAME(PLAYLIST_LAST_OPENED_PLAYLIST_PATH));
+    }
+
+    settings.setValue(PLAYLIST_MAKE_CONFIG_NAME(PLAYLIST_LAST_OPENED_PLAYLIST_PATH), m_lastOpenedPlaylist);
+}
+
+void AppConfig::loadLastOpenedPlaylistPath(QSettings& settings)
+{
+    QVariant vPlaylistPath = 
+        settings.value(PLAYLIST_MAKE_CONFIG_NAME(PLAYLIST_LAST_OPENED_PLAYLIST_PATH));
+
+    if (!vPlaylistPath.isValid() || !vPlaylistPath.canConvert<QString>() || !vPlaylistPath.convert(QMetaType::fromType<QString>()))
+    {
+        return;
+    }
+
+    const QString playlistJSONPath = vPlaylistPath.toString();
+
+    if (!QFileInfo::exists(playlistJSONPath))
+    {
+        return;
+    }
+
+    m_lastOpenedPlaylist = playlistJSONPath;
 }

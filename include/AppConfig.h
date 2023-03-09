@@ -50,6 +50,16 @@ public:
     */
     static void setMusicCollectionPathList(const QStringList& pathList);
 
+    /*
+    Get the last opened playlist file path.
+    */
+    static QString getLastOpenedPlaylistPath();
+
+    /*
+    Set the last opened playlist file path.
+    */
+    static void setLastOpenedPlaylistPath(const QString& path);
+
 private:
     static QSettings openSettings();
 
@@ -73,6 +83,16 @@ private:
     */
     static void loadMusicCollectionPathList(QSettings& settings);
 
+    /*
+    Save the last opened playlist path into registry/config directory.
+    */
+    static void saveLastOpenedPlaylistPath(QSettings& settings);
+
+    /*
+    Load the last opened playlist path from registry/config directory.
+    */
+    static void loadLastOpenedPlaylistPath(QSettings& settings);
+
     struct WindowSettings
     {
         int x;
@@ -90,6 +110,8 @@ private:
         bool exists;
     };
     static MusicCollectionList m_musicCollectionPathList;
+
+    static QString m_lastOpenedPlaylist;
 };
 
 #endif // SIMPLE_AUDIO_PLAYER_APPCONFIG_H_

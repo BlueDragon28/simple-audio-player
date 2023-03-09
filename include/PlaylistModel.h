@@ -64,6 +64,11 @@ public slots:
     */
     void loadFromJSON(const QString& jsonPath);
 
+    /*
+    Retrieve the last opened playlist from the config and open it.
+    */
+    void retrieveLastOpenedFile();
+
 signals:
     void playlistTitleChanged();
     void filePathChanged();

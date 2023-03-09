@@ -1,5 +1,6 @@
 #include "PlaylistModel.h"
 #include "SelectionModel.h"
+#include "AppConfig.h"
 #include "TrackTag.h"
 #include <qabstractitemmodel.h>
 #include <qfileinfo.h>
@@ -145,6 +146,7 @@ void PlaylistModel::setFilePath(const QString& filePath)
     }
 
     m_filePath = filePath;
+    AppConfig::setLastOpenedPlaylistPath(m_filePath);
     emit filePathChanged();
 }
 
@@ -298,6 +300,18 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
     setFilePath(jsonPath);
     setIsFromFile(true);
     setIsModified(false);
+}
+
+void PlaylistModel::retrieveLastOpenedFile()
+{
+    const QString playlistJSONPath = AppConfig::getLastOpenedPlaylistPath();
+
+    if (playlistJSONPath.isEmpty())
+    {
+        return;
+    }
+
+    loadFromJSON(playlistJSONPath);
 }
 
 QByteArray PlaylistModel::readFromFile(const QString& filePath, bool* result) const

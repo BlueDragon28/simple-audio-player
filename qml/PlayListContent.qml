@@ -70,6 +70,10 @@ Item {
 
             model: PlaylistModel {
                 id: playlistContentModel
+
+                Component.onCompleted: function() {
+                    this.retrieveLastOpenedFile();
+                }
             }
         }
     }
