@@ -60,7 +60,11 @@ Item {
             return;
         }
 
-        openDialog.open()
+        openDialog.open();
+    }
+
+    function newPlaylist() {
+        playListContent.newPlaylist();
     }
     
     Rectangle {
@@ -87,7 +91,12 @@ Item {
                 spacing: 4
 
                 Button {
-                    id: someButton
+                    text: "New"
+                    height: parent.height
+                    onClicked: root.newPlaylist()
+                }
+
+                Button {
                     width: height
                     height: parent.height
                     icon.source: "qrc:///images/diskette.png"

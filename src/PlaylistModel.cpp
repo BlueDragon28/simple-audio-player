@@ -302,6 +302,18 @@ void PlaylistModel::loadFromJSON(const QString& jsonPath)
     setIsModified(false);
 }
 
+void PlaylistModel::newPlaylist()
+{
+    beginRemoveRows(QModelIndex(), 0, rowCount()-1);
+    clear();
+    endRemoveRows();
+
+    setPlaylistTitle(QString());
+    setFilePath(QString());
+    setIsFromFile(false);
+    setIsModified(false);
+}
+
 void PlaylistModel::retrieveLastOpenedFile()
 {
     const QString playlistJSONPath = AppConfig::getLastOpenedPlaylistPath();

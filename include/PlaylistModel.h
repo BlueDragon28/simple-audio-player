@@ -65,6 +65,11 @@ public slots:
     void loadFromJSON(const QString& jsonPath);
 
     /*
+    Create a new empty playlist.
+    */
+    void newPlaylist();
+
+    /*
     Retrieve the last opened playlist from the config and open it.
     */
     void retrieveLastOpenedFile();

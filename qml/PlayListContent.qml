@@ -34,6 +34,10 @@ Item {
         playlistContentModel.loadFromJSON(filePath);
     }
 
+    function newPlaylist() {
+        playlistContentModel.newPlaylist();
+    }
+
     PlayListContextMenu {
         id: contextMenu
 
