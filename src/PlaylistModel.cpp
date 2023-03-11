@@ -12,9 +12,11 @@
 #include <qsavefile.h>
 #include <qvariant.h>
 
+#define NEW_PLAYLIST_TITLE "Unknown Playlist"
+
 PlaylistModel::PlaylistModel(QObject* parent) :
     SelectionModel(parent),
-    m_playlistTitle("Unknown Playlist"),
+    m_playlistTitle(NEW_PLAYLIST_TITLE),
     m_isFromFile(false),
     m_isModified(false)
 {}
@@ -129,7 +131,9 @@ void PlaylistModel::setPlaylistTitle(const QString& title)
         return;
     }
 
-    m_playlistTitle = title;
+    const QString trimmedTitle = title.trimmed();
+
+    m_playlistTitle = !trimmedTitle.isEmpty() ? trimmedTitle : NEW_PLAYLIST_TITLE;
     emit playlistTitleChanged();
 }
 
