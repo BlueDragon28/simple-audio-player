@@ -43,5 +43,6 @@
         <file>images/rand.png</file>
         <file>images/diskette.png</file>
         <file>images/folder.png</file>
+        <file>images/new-document.png</file>
     </qresource>
 </RCC>

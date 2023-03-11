@@ -97,8 +97,10 @@ Item {
                 spacing: 4
 
                 Button {
-                    text: "New"
+                    width: height
                     height: parent.height
+                    icon.source: "qrc:///images/new-document.png"
+                    icon.width: topBar.height
                     onClicked: root.newPlaylist()
                 }
 
@@ -111,7 +113,6 @@ Item {
                 }
 
                 Button {
-                    text: "Open"
                     width: height
                     height: parent.height
                     icon.source: "qrc:///images/folder.png"
