@@ -17,6 +17,8 @@ Item {
     function engageNextAction() {
         if (checkSaveAction === "OPEN") {
             openPlaylist();
+        } else if (checkSaveAction === "NEW") {
+            newPlaylist();
         }
 
         checkSaveAction = "";
@@ -64,6 +66,10 @@ Item {
     }
 
     function newPlaylist() {
+        if (!isSaved("NEW") && !bypassCheckSave) {
+            return;
+        }
+
         playListContent.newPlaylist();
     }
     
@@ -154,15 +160,32 @@ Item {
     MessageDialog {
         id: documentModifiedDialog
         text: "The playlist has beed modified.\nDo you want to save it?"
-        buttons: MessageDialog.Save | MessageDialog.Cancel
-        onAccepted: function() {
-            root.savePlaylist()
-            dialogIsOpen = false;
-        }
-        onRejected: function() {
-            bypassCheckSave = true;
-            root.engageNextAction();
-            dialogIsOpen = false;
+        buttons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
+        /*onRejected: function() {*/
+        /*}*/
+        /*onDiscarded: function() {*/
+        /*}*/
+        onButtonClicked: function(button, role) {
+            switch (role) {
+            case MessageDialog.AcceptRole:
+            {
+                root.savePlaylist()
+                dialogIsOpen = false;
+            } break;
+            case MessageDialog.RejectRole:
+            {
+                root.checkSaveAction = ""
+                root.bypassCheckSave = false;
+                dialogIsOpen = false;
+            } break;
+            case MessageDialog.DestructiveRole:
+            {
+                bypassCheckSave = true;
+                root.engageNextAction();
+                dialogIsOpen = false;
+                close();
+            } break;
+            }
         }
 
         property bool dialogIsOpen: false
