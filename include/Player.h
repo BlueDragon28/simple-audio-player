@@ -21,6 +21,8 @@ public:
     Player();
     ~Player();
 
+    static Player* getInstance();
+
     /*
     Get stream size in frames or in seconds.
     */
@@ -70,6 +72,11 @@ public:
     Currently played audio file path.
     */
     QString currentStream() const;
+
+    /*
+    Get the available current SAL player instance.
+    */
+    SAL::AudioPlayer* getPlayer() const;
 
 public slots:
     /*
@@ -174,6 +181,8 @@ private:
 
     // Currently played audio file.
     QString m_currentStream;
+
+    static Player* m_instance;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYER_H_

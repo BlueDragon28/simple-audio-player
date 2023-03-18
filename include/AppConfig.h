@@ -8,6 +8,7 @@
 #include <qqmlintegration.h>
 #include <qsettings.h>
 #include <qtmetamacros.h>
+#include <simple-audio-library/Common.h>
 
 /*
 Including all the configurations of the application.
@@ -59,6 +60,9 @@ public:
     Set the last opened playlist file path.
     */
     static void setLastOpenedPlaylistPath(const QString& path);
+
+    static void setBackendAudioSetting(SAL::BackendAudio backend);
+    static SAL::BackendAudio getBackendAudioSetting();
 
 private:
     static QSettings openSettings();
@@ -112,6 +116,16 @@ private:
     static MusicCollectionList m_musicCollectionPathList;
 
     static QString m_lastOpenedPlaylist;
+
+    /*
+    Stream settings.
+    */
+    struct BackendAudioSetting 
+    {
+        SAL::BackendAudio backend;
+        bool exists;
+    };
+    static BackendAudioSetting m_backendAudioOption;
 };
 
 #endif // SIMPLE_AUDIO_PLAYER_APPCONFIG_H_

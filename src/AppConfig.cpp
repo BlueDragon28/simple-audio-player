@@ -1,4 +1,5 @@
 #include "AppConfig.h"
+#include "simple-audio-library/Common.h"
 #include <QSettings>
 #include <algorithm>
 #include <qfileinfo.h>
@@ -39,6 +40,11 @@ AppConfig::MusicCollectionList AppConfig::m_musicCollectionPathList = {
 };
 
 QString AppConfig::m_lastOpenedPlaylist = QString();
+
+AppConfig::BackendAudioSetting AppConfig::m_backendAudioOption = {
+    SAL::BackendAudio::SYSTEM_DEFAULT,
+    false
+};
 
 QSettings AppConfig::openSettings()
 {
@@ -182,6 +188,23 @@ QString AppConfig::getLastOpenedPlaylistPath()
 void AppConfig::setLastOpenedPlaylistPath(const QString& path)
 {
     m_lastOpenedPlaylist = path.trimmed();
+}
+
+void AppConfig::setBackendAudioSetting(SAL::BackendAudio backend)
+{
+    m_backendAudioOption = {
+        backend,
+        true
+    };
+
+    qDebug() << (int)backend;
+}
+
+SAL::BackendAudio AppConfig::getBackendAudioSetting()
+{
+    if (!m_backendAudioOption.exists) return SAL::BackendAudio::SYSTEM_DEFAULT;
+
+    return m_backendAudioOption.backend;
 }
 
 void AppConfig::saveWindowStatus(QSettings& settings)

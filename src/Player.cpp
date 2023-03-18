@@ -1,8 +1,10 @@
 #include "Player.h"
+#include "simple-audio-library/AudioPlayer.h"
+#include "simple-audio-library/Player.h"
 #include <QDebug>
 #include <QStandardPaths>
 
-//Player* Player::staticInstance = nullptr;
+Player* Player::m_instance = nullptr;
 
 Player::Player() :
     QObject(nullptr),
@@ -26,12 +28,16 @@ Player::Player() :
         SAL::DebugLog::instance()->setFilePath((strList.at(0) + "/simple-audio-player.log").toStdString());
 #endif
     }
+
+    Player::m_instance = this;
 }
 
 Player::~Player()
 {
     // Destroy the simple-audio-library instance.
     SAL::AudioPlayer::deinit();
+
+    Player::m_instance = nullptr;
 }
 
 /*
@@ -263,4 +269,14 @@ void Player::setCurrentStream(const QString& filePath)
         m_currentStream = filePath;
         emit currentStreamChanged();
     }
+}
+
+Player* Player::getInstance()
+{
+    return m_instance;
+}
+
+SAL::AudioPlayer* Player::getPlayer() const
+{
+    return m_player;
 }

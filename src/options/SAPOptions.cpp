@@ -1,7 +1,10 @@
 #include "options/SAPOptions.h"
 #include "LicenseDialog.h"
+#include "Player.h"
 #include "options/AboutDialog.h"
 #include "AppConfig.h"
+#include "simple-audio-library/AudioPlayer.h"
+#include "simple-audio-library/Common.h"
 #include <QtWidgets/qdialog.h>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QTabWidget>
@@ -10,6 +13,8 @@
 #include <QtWidgets/QFileDialog>
 #include <QStandardPaths>
 #include <qboxlayout.h>
+#include <qcombobox.h>
+#include <qlabel.h>
 #include <qlistwidget.h>
 #include <qpushbutton.h>
 
@@ -21,7 +26,8 @@
 
 OptionsDialog::OptionsDialog() :
     QDialog(nullptr),
-    m_folderList(nullptr)
+    m_folderList(nullptr),
+    m_backendAudio(nullptr)
 {
     buildInterface();
     connect(this, &OptionsDialog::finished, this, [this](){this->deleteLater();});
@@ -75,6 +81,7 @@ void OptionsDialog::createMainView(QVBoxLayout* layout)
         // Creating the QTabWidget
         QTabWidget* tab = new QTabWidget(this);
         tab->addTab(createMusicTab(), "Music Collection"); // Music tab
+        tab->addTab(createStreamTab(), "Stream");
         
         layout->addWidget(tab);
     }
@@ -83,6 +90,7 @@ void OptionsDialog::createMainView(QVBoxLayout* layout)
 void OptionsDialog::applyChange()
 {
     saveCollectionList();
+    applyStreamOptions();
 
     accept();
 }
@@ -202,6 +210,129 @@ void OptionsDialog::saveCollectionList()
     
     // Send the list to AppConfig.
     AppConfig::setMusicCollectionPathList(collectionsList);
+}
+
+QWidget* OptionsDialog::createStreamTab()
+{
+    QWidget* tab = new QWidget();
+    QVBoxLayout* vLayout = new QVBoxLayout(tab);
+
+    createBackendAudioOption(vLayout, tab);
+    getDefaultStreamOptions();
+
+    return tab;
+}
+
+void OptionsDialog::createBackendAudioOption(QBoxLayout* layout, QWidget* parent)
+{
+    QHBoxLayout* hLayout = new QHBoxLayout();
+    QLabel* textLabel = new QLabel("Backend Audio", parent);
+    
+    QComboBox* backendSelection = new QComboBox(parent);
+    setAvailableBackend(backendSelection);
+    
+    hLayout->addWidget(textLabel, 1);
+    hLayout->addWidget(backendSelection, 0);
+    layout->addLayout(hLayout);
+
+    m_backendAudio = backendSelection;
+}
+
+void OptionsDialog::setAvailableBackend(QComboBox* backendSelection)
+{
+    const Player* player = Player::getInstance();
+
+    if (!player) return;
+
+    const SAL::AudioPlayer* salPlayer = player->getPlayer();
+    std::vector<SAL::BackendAudio> availableBackendsAudio = salPlayer->availableBackendAudio();
+
+    backendSelection->addItem(u8"System Default");
+
+    for (const SAL::BackendAudio backend : availableBackendsAudio)
+    {
+        const std::string backendName = SAL::AudioPlayer::getAudioBackendName(backend);
+        backendSelection->addItem(QString::fromStdString(backendName));
+    }
+}
+
+void OptionsDialog::getDefaultStreamOptions()
+{
+    SAL::BackendAudio selectedBackend = AppConfig::getBackendAudioSetting();
+
+    if (selectedBackend == SAL::BackendAudio::SYSTEM_DEFAULT) 
+    {
+        m_backendAudio->setCurrentIndex(0);
+        return;
+    }
+
+    QString backendName = getBackendStringNameFromEnum(selectedBackend);
+
+    const int selectionCount = m_backendAudio->count();
+    
+    for (int i = 0; i < selectionCount; i++)
+    {
+        const QString name = m_backendAudio->itemText(i);
+
+        if (name.compare(backendName) == 0) 
+        {
+            m_backendAudio->setCurrentIndex(i);
+            break;
+        }
+    }
+}
+
+void OptionsDialog::applyStreamOptions()
+{
+    const QString backendName = m_backendAudio->currentText();
+    const SAL::BackendAudio backend = getBackendEnumFromString(backendName);
+    AppConfig::setBackendAudioSetting(backend);
+}
+
+QString OptionsDialog::getBackendStringNameFromEnum(SAL::BackendAudio backend) const 
+{
+    const std::string backendName = SAL::AudioPlayer::getAudioBackendName(backend);
+    return QString::fromStdString(backendName);
+}
+
+SAL::BackendAudio OptionsDialog::getBackendEnumFromString(const QString& name)
+{
+    if (name.compare(u8"Direct Sound") == 0)
+    {
+        return SAL::BackendAudio::DIRECT_SOUND;
+    } 
+    else if (name.compare(u8"MME") == 0)
+    {
+        return SAL::BackendAudio::MME;
+    }
+    else if (name.compare(u8"ASIO") == 0)
+    {
+        return SAL::BackendAudio::ASIO;
+    }
+    else if (name.compare(u8"WASAPI") == 0)
+    {
+        return SAL::BackendAudio::WASAPI;
+    }
+    else if (name.compare(u8"WDMKS") == 0)
+    {
+        return SAL::BackendAudio::WDMKS;
+    }
+    else if (name.compare(u8"OSS") == 0)
+    {
+        return SAL::BackendAudio::OSS;
+    }
+    else if (name.compare(u8"ALSA") == 0)
+    {
+        return SAL::BackendAudio::ALSA;
+    }
+    else if (name.compare(u8"JACK") == 0)
+    {
+        return SAL::BackendAudio::JACK;
+    }
+    else
+    {
+        return SAL::BackendAudio::SYSTEM_DEFAULT;
+    }
 }
 
 /*

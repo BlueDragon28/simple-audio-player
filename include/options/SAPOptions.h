@@ -1,8 +1,10 @@
 #ifndef SIMPLEAUDIOPLAYER_SAPOPTIONS_H_
 #define SIMPLEAUDIOPLAYER_SAPOPTIONS_H_
 
+#include "simple-audio-library/Common.h"
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QBoxLayout>
+#include <QtWidgets/QComboBox>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
 
@@ -49,6 +51,19 @@ private:
     void saveCollectionList();
 
     QListWidget* m_folderList;
+
+    /*
+    Stream options.
+    */
+    QWidget* createStreamTab();
+    void createBackendAudioOption(QBoxLayout* layout, QWidget* parent);
+    void setAvailableBackend(QComboBox* backendSelection);
+    void getDefaultStreamOptions();
+    void applyStreamOptions();
+    QString getBackendStringNameFromEnum(SAL::BackendAudio backend) const;
+    SAL::BackendAudio getBackendEnumFromString(const QString& name);
+
+    QComboBox* m_backendAudio;
 };
 
 /*
