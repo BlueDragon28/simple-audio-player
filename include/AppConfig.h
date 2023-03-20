@@ -97,6 +97,9 @@ private:
     */
     static void loadLastOpenedPlaylistPath(QSettings& settings);
 
+    static void saveStreamOptions(QSettings& settings);
+    static void loadStreamOptions(QSettings& settings);
+
     struct WindowSettings
     {
         int x;

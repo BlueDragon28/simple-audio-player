@@ -25,6 +25,10 @@
 #define PLAYLIST_MAKE_CONFIG_NAME(name) QString(PLAYLIST_CONFIG_NAME) + '/' + name
 #define PLAYLIST_LAST_OPENED_PLAYLIST_PATH "jsonPath"
 
+#define STREAMOPTION_CONFIG_NAME "stream"
+#define STREAMOPTION_MAKE_CONFIG_NAME(name) QString(STREAMOPTION_CONFIG_NAME) + '/' + name
+#define STREAMOPTION_BACKEND_AUDIO "backend"
+
 AppConfig::WindowSettings AppConfig::mainWindowSettings = {
     WINDOW_DEFAULT_POS, // X
     WINDOW_DEFAULT_POS, // Y
@@ -63,6 +67,7 @@ void AppConfig::loadConfig()
     loadWindowStatus(settings);
     loadMusicCollectionPathList(settings);
     loadLastOpenedPlaylistPath(settings);
+    loadStreamOptions(settings);
 }
 
 void AppConfig::saveConfig()
@@ -73,6 +78,7 @@ void AppConfig::saveConfig()
     saveWindowStatus(settings);
     saveMusicCollectionPathList(settings);
     saveLastOpenedPlaylistPath(settings);
+    saveStreamOptions(settings);
 }
 
 QMap<QString, QVariant> AppConfig::getMainWindowSettings()
@@ -196,8 +202,6 @@ void AppConfig::setBackendAudioSetting(SAL::BackendAudio backend)
         backend,
         true
     };
-
-    qDebug() << (int)backend;
 }
 
 SAL::BackendAudio AppConfig::getBackendAudioSetting()
@@ -325,4 +329,42 @@ void AppConfig::loadLastOpenedPlaylistPath(QSettings& settings)
     }
 
     m_lastOpenedPlaylist = playlistJSONPath;
+}
+
+void AppConfig::saveStreamOptions(QSettings& settings)
+{
+    if (!settings.isWritable()) return;
+
+    /*
+    =================================================
+    ================ BACKEND AUDIO ==================
+    =================================================
+    */
+    if (m_backendAudioOption.exists) {
+        settings.setValue(
+            STREAMOPTION_MAKE_CONFIG_NAME(STREAMOPTION_BACKEND_AUDIO),
+            (int)m_backendAudioOption.backend
+        );
+    }
+}
+
+void AppConfig::loadStreamOptions(QSettings& settings)
+{
+    /*
+    =================================================
+    ================ BACKEND AUDIO ==================
+    =================================================
+    */
+    QVariant vBackendAudio = settings.value(
+            STREAMOPTION_MAKE_CONFIG_NAME(STREAMOPTION_BACKEND_AUDIO)
+    );
+    if (vBackendAudio.isValid() && 
+        vBackendAudio.canConvert<int>() && 
+        vBackendAudio.convert(QMetaType::fromType<int>()))
+    {
+        m_backendAudioOption = {
+            (SAL::BackendAudio)qvariant_cast<int>(vBackendAudio),
+            true
+        };
+    }
 }
