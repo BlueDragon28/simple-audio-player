@@ -1,5 +1,6 @@
 #include "AppConfig.h"
-#include "simple-audio-library/Common.h"
+#include "Player.h"
+#include <simple-audio-library/Common.h>
 #include <QSettings>
 #include <algorithm>
 #include <qfileinfo.h>
@@ -202,6 +203,8 @@ void AppConfig::setBackendAudioSetting(SAL::BackendAudio backend)
         backend,
         true
     };
+
+    Player::getInstance()->getPlayer()->setBackendAudio(backend);
 }
 
 SAL::BackendAudio AppConfig::getBackendAudioSetting()

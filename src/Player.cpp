@@ -1,6 +1,6 @@
 #include "Player.h"
-#include "simple-audio-library/AudioPlayer.h"
-#include "simple-audio-library/Player.h"
+#include "AppConfig.h"
+#include <simple-audio-library/AudioPlayer.h>
 #include <QDebug>
 #include <QStandardPaths>
 
@@ -19,6 +19,9 @@ Player::Player() :
     m_player->callback().addStreamPlayingCallback(std::bind(&Player::salStreamPlaying, this));
     m_player->callback().addStreamStoppingCallback(std::bind(&Player::salStreamStopping, this));
     m_player->callback().addIsReadyChangedCallback(std::bind(&Player::salIsReadyChanged, this, std::placeholders::_1));
+
+    // Apply backend audio.
+    m_player->setBackendAudio(AppConfig::getBackendAudioSetting());
 
     // Create the debug log file.
     QStringList strList = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
