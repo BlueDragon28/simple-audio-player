@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(simple-audio-player VERSION 0.1 LANGUAGES CXX)
+project(simple-audio-player VERSION 0.2 LANGUAGES CXX)
 
 # Set C++ standard to C++ 17
 set(CMAKE_CXX_STANDARD 17)
