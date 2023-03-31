@@ -312,7 +312,7 @@ TrackTag::AudioFileType TrackTag::getFileTypeFromHeader(const QString& filePath)
 
             // Check if it's a ID3 file.
             headerIndentification[3] = 0;
-            if (strcmp(headerIndentification, "ID3") != 0)
+            if (strcmp(headerIndentification, "ID3") == 0)
             {
                 return AudioFileType::ID3;
             }
