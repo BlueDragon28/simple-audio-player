@@ -64,10 +64,15 @@ elseif(WIN32)
 
                         # Find PortAudio
                         if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/include/portaudio.h") AND
-                            (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib"))
+			    ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib") OR
+			     (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")))
                                 # Include directory of PortAudio
                                 include_directories(${CMAKE_SOURCE_DIR}/dependencies/portaudio/include)
-                                set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
+				if (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
+				    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
+				else()
+				    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")
+				endif()
 
                                 message(STATUS "PortAudio found")
                         else()
