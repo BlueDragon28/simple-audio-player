@@ -223,4 +223,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     "${SAP_SMTC_LIB}")
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-qt_add_qml_module(${PROJECT_NAME} URI "SimpleAudioPlayer" VERSION 1.0)
+qt_add_qml_module(${PROJECT_NAME} URI "SimpleAudioPlayer" VERSION 1.0 RESOURCE_PREFIX ":/")
