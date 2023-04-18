@@ -79,6 +79,8 @@ Item {
                             fillMode: Image.PreserveAspectFit
                             width: parent.width - 20
                             height: width
+                            mipmap: true
+                            smooth: true
                             x: 10
                             y: 10
                         }

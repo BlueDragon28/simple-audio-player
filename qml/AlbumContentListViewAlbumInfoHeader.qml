@@ -74,6 +74,8 @@ Item {
                 height: parent.height - (parent.padding * 2)
                 width: height
                 asynchronous: true
+                mipmap: true
+                smooth: true
             }
 
             // Container for the album name.

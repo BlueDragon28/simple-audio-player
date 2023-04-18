@@ -27,6 +27,8 @@ Item {
                 source: "image://coverArt/empty"
                 asynchronous: true // Loading the cover image in another thread.
                 fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
                 Layout.fillWidth: parent
                 Layout.preferredWidth: parent.width
                 Layout.preferredHeight: Layout.preferredWidth * (sourceSize.height / sourceSize.width)
