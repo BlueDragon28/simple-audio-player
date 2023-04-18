@@ -10,7 +10,7 @@ Rectangle {
     height: contentHeight+9
 
     // When the row is selected, fill the rectangle with lightsteelblue color.
-    color: isItemSelected ? "lightsteelblue" : "transparent"
+    color: isItemSelected ? palette.highlight : "transparent"
 
     // Does the row is selected.
     property bool isItemSelected: false
