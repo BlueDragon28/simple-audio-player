@@ -52,7 +52,7 @@ Item {
 
                 // Rectangle displaying the current selection.
                 highlight: Rectangle {
-                    color: "lightsteelblue"
+                    color: palette.highlight
                 }
                 highlightMoveDuration: 0
             }
