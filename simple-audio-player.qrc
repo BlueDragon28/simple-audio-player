@@ -26,6 +26,7 @@
         <file>qml/PlayListContextMenu.qml</file>
         <file>qml/PlayListContentHeader.qml</file>
         <file>qml/SystemDialog.qml</file>
+        <file>qml/spotify/SpotifyMainView.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>

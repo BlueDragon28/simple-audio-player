@@ -21,6 +21,7 @@ public:
         FILE_SYSTEM,
         ALBUMS,
         PLAYLIST,
+        SPOTIFY
     };
     Q_ENUM(SectionType);
 
