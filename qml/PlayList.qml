@@ -101,6 +101,7 @@ Item {
                     height: parent.height
                     icon.source: "qrc:///images/new-document.png"
                     icon.width: topBar.height
+                    icon.color: palette.buttonText
                     onClicked: root.newPlaylist()
                 }
 
@@ -109,6 +110,7 @@ Item {
                     height: parent.height
                     icon.source: "qrc:///images/diskette.png"
                     icon.width: topBar.height
+                    icon.color: palette.buttonText
                     onClicked: root.savePlaylist()
                 }
 
@@ -117,6 +119,7 @@ Item {
                     height: parent.height
                     icon.source: "qrc:///images/folder.png"
                     icon.width: topBar.height
+                    icon.color: palette.buttonText
                     onClicked: root.openPlaylist()
                 }
             }

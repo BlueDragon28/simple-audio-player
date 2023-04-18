@@ -42,6 +42,7 @@ Item {
                 Button {
                     id: goBack
                     icon.source: "qrc:///images/back.png"
+                    icon.color: palette.buttonText
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: height
 
