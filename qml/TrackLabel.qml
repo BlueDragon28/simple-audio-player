@@ -6,6 +6,7 @@ Item {
     id: root
     clip: true
     implicitHeight: trackLabel.height
+    property bool secondaryInfo: false
 
     // Get access to the label properties.
     property alias text: trackLabel.text
@@ -14,6 +15,7 @@ Item {
 
     Label {
         id: trackLabel
+        color: secondaryInfo ? palette.dark : palette.text
 
         // Every time the text of the label change, if the text go beyond the border, start the animation.
         onTextChanged: {

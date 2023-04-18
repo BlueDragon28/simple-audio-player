@@ -15,7 +15,7 @@ Item {
         id: rect
         width: parent.width
         height: horizontalLayout.height
-        color: "lightgray"
+        color: palette.alternateBase
 
         ColumnLayout {
             id: horizontalLayout
@@ -48,7 +48,8 @@ Item {
                 Layout.leftMargin: 8
                 Layout.rightMargin: 8
                 fontSize: 10
-                color: "#505050"
+                // color: "#505050"
+                secondaryInfo: true
             }
 
             TrackLabel {
@@ -58,7 +59,8 @@ Item {
                 Layout.rightMargin: 8
                 Layout.bottomMargin: 8
                 fontSize: 10
-                color: "#505050"
+                // color: "#505050"
+                secondaryInfo: true
             }
         }
     }
