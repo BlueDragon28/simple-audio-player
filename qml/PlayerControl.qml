@@ -27,7 +27,7 @@ Item {
 
             icon.source: "qrc:///images/previousSound.png"
             icon.width: Layout.preferredWidth - 4
-            icon.color: enabled ? "#444" : "lightgray"
+            icon.color: enabled ? palette.buttonText : palette.disabled.buttonText
             enabled: false
 
             onClicked: SAL.previous()
@@ -57,7 +57,7 @@ Item {
 
             icon.source: "qrc:///images/stop.png"
             icon.width: Layout.preferredWidth - 4
-            icon.color: enabled ? "#444" : "lightgray"
+            icon.color: enabled ? palette.buttonText : palette.disabled.buttonText
             enabled: false
 
             // Stop the stream.
@@ -75,7 +75,7 @@ Item {
 
             icon.source: "qrc:///images/rand.png"
             icon.width: Layout.preferredWidth - 4
-            icon.color: "#444"
+            icon.color: palette.buttonText
             checkable: true
             onClicked: SAL.setRandom(checked)
         }
@@ -91,7 +91,7 @@ Item {
 
             icon.source: "qrc:///images/nextSound.png"
             icon.width: Layout.preferredWidth - 4
-            icon.color: enabled ? "#444" : "lightgray"
+            icon.color: enabled ? palette.buttonText : palette.disabled.buttonText
             enabled: false
 
             onClicked: SAL.next()
