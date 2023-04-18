@@ -12,7 +12,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "white"
+        color: palette.base
 
         // Stack layout to change between album view and albumContent view.
         StackLayout {

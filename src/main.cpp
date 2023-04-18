@@ -16,6 +16,7 @@
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
+
     QQuickStyle::setStyle("Fusion");
 
     // Setting application icon

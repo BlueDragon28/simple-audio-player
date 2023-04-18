@@ -15,7 +15,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "white"
+        color: palette.base
 
         ColumnLayout {
             anchors.fill: parent

@@ -1,5 +1,6 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import QtQuick.Controls.Fusion 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
 import "qrc:///js/config.js" as AppConfig

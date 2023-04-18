@@ -9,6 +9,7 @@ This item display the tracks of an album.
 */
 Rectangle {
     id: root
+    color: palette.base
 
     property alias albumName: trackListModel.album
 

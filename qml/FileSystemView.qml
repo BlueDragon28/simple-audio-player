@@ -12,7 +12,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "white"
+        color: palette.base
 
         // This toolbar hold the button and the folder location to navigate inside the file system.
         ToolBar {
