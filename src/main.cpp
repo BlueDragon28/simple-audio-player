@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QQuickStyle>
 #include <qdebug.h>
 #include "Player.h"
 #include "CoverImageProvider.h"
@@ -15,6 +16,7 @@
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
+    QQuickStyle::setStyle("Fusion");
 
     // Setting application icon
     app.setWindowIcon(QIcon(":/images/musiqueIcon.svg"));
