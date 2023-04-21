@@ -8,6 +8,7 @@
 #include "AppConfig.h"
 #include "SystemMediaControl.h"
 #include "config.h"
+#include "network/NetworkManager.h"
 #ifdef WIN32
 #include "windows/ListenMediaKeys.h"
 #endif
@@ -27,6 +28,9 @@ int main(int argc, char** argv)
 
     // Initialize SystemMediaControl system.
     SystemMediaControl::init();
+
+    // Initialize Network Manager
+    NetworkManager::createAccessManager();
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());
@@ -53,6 +57,9 @@ int main(int argc, char** argv)
 #endif
 #endif
     }
+
+    // Destroy Network Manager
+    NetworkManager::destroyAccessManager();
 
     return result;
 }

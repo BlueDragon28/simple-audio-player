@@ -15,12 +15,18 @@ Item {
             }
 
             TextField {
+                id: clientID
                 verticalAlignment: Qt.AlignVCenter
                 selectByMouse: true
             }
 
             Button {
                 text: "Login"
+
+                onClicked: function() {
+                    SpotifyAPI.setClientID(clientID.text);
+                    SpotifyAPI.authenticate();
+                }
             }
         }
     }

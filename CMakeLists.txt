@@ -30,7 +30,7 @@ elseif (WIN32)
 endif()
 
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets Network HttpServer REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
@@ -174,7 +174,11 @@ set(HEADERS
     "include/SystemFileDialog.h"
 	"include/options/SAPOptions.h"
 	"include/options/AboutDialog.h"
-	"include/options/LicenseDialog.h")
+	"include/options/LicenseDialog.h"
+    "include/network/NetworkManager.h"
+    "include/spotify/SpotifyAPI.h"
+    "include/spotify/SpotifyAuthorizationPKCE.h"
+    "include/spotify/SpotifyHttpCodeListener.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -198,7 +202,11 @@ set(SOURCES
     "src/SystemFileDialog.cpp"
 	"src/options/SAPOptions.cpp"
 	"src/options/AboutDialog.cpp"
-	"src/options/LicenseDialog.cpp")
+	"src/options/LicenseDialog.cpp"
+    "src/network/NetworkManager.cpp"
+    "src/spotify/SpotifyAPI.cpp"
+    "src/spotify/SpotifyAuthorizationPKCE.cpp"
+    "src/spotify/SpotifyHttpCodeListener.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
@@ -206,7 +214,7 @@ set(RESOURCES "simple-audio-player.qrc")
 configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
 
 # Include the include directory
-include_directories(include/ include/options "${CMAKE_BINARY_DIR}/include")
+include_directories(include/ include/options include/network include/spotify "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
 qt_add_executable(${PROJECT_NAME} ${WIN32_EXECUTABLE} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
@@ -217,6 +225,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::QuickControls2
     Qt6::Sql
 	Qt6::Widgets
+    Qt6::Network
+    Qt6::HttpServer
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES}
