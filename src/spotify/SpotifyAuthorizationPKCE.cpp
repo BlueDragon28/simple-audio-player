@@ -148,7 +148,6 @@ void SpotifyAuthorizationPKCE::fetchToken()
 {
     QNetworkRequest request(m_accessTokenUrl);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    connect(m_accessManager, &QNetworkAccessManager::finished, this, &SpotifyAuthorizationPKCE::tokenReceivedHandler, Qt::UniqueConnection);
 
     QUrlQuery query;
     query.addQueryItem("grant_type", "authorization_code");
@@ -159,7 +158,10 @@ void SpotifyAuthorizationPKCE::fetchToken()
 
     QString body = query.query(QUrl::FullyEncoded);
     QByteArray bodyData = body.toUtf8();
-    m_accessManager->post(request, bodyData);
+    QNetworkReply* reply = m_accessManager->post(request, bodyData);
+    connect(reply, &QNetworkReply::finished, [this, reply] () {
+        tokenReceivedHandler(reply);
+    });
 }
 
 void SpotifyAuthorizationPKCE::tokenReceivedHandler(QNetworkReply* reply)
