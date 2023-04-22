@@ -164,6 +164,7 @@ void SpotifyAuthorizationPKCE::fetchToken()
 void SpotifyAuthorizationPKCE::tokenReceivedHandler(QNetworkReply* reply)
 {
     QByteArray responseData = reply->readAll();
+    reply->deleteLater();
 
     QJsonParseError error;
     QJsonDocument responseJSON = QJsonDocument::fromJson(responseData, &error);
@@ -236,4 +237,54 @@ bool SpotifyAuthorizationPKCE::isTokenValid() const
 void SpotifyAuthorizationPKCE::setClientID(const QString& clientID)
 {
     m_clientID = clientID;
+}
+
+void SpotifyAuthorizationPKCE::refreshToken()
+{
+    if (isTokenValid()) return;
+
+    QNetworkRequest refreshRequest(m_accessTokenUrl);
+    refreshRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QUrlQuery query;
+    query.addQueryItem("grant_type", "refresh_token");
+    query.addQueryItem("refresh_token", m_refreshToken);
+    query.addQueryItem("client_id", m_clientID);
+
+    const QByteArray body = query.toString(QUrl::FullyEncoded).toUtf8();
+    QNetworkReply* reply = m_accessManager->post(refreshRequest, body);
+    connect(reply, &QNetworkReply::finished, this, &SpotifyAuthorizationPKCE::refreshTokenReceivedHandler);
+}
+
+void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networkReply)
+{
+    const QByteArray responseData = networkReply->readAll();
+    networkReply->deleteLater();
+
+    QJsonParseError jsonError;
+    QJsonDocument JSONDocument = QJsonDocument::fromJson(responseData, &jsonError);
+
+    if (jsonError.error != QJsonParseError::NoError)
+    {
+        m_isAuthenticated = false;
+        return;
+    }
+
+    QJsonObject rootObject = JSONDocument.object();
+
+    if (!rootObject.contains("access_token"))
+    {
+        qDebug() << "Invalid refresh token!";
+        return;
+    }
+
+    m_accessToken = rootObject.value("access_token").toString();
+    m_tokenExpiration = rootObject.value("expires_in").toInt();
+
+    if (rootObject.contains("refresh_token"))
+    {
+        m_refreshToken = rootObject.value("refresh_token").toString();
+    }
+
+    emit refreshTokenReceived();
 }

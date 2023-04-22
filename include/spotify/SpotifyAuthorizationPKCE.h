@@ -27,11 +27,13 @@ public:
 
 public slots:
     void grant();
+    void refreshToken();
 
 signals:
     void openBrowser(const QUrl& url);
     void requestToken();
     void authenticated();
+    void refreshTokenReceived();
 
 private:
     void prepareAuthorization();
@@ -40,6 +42,7 @@ private:
     bool checkIfDataValidForAuthorization() const;
     void fetchToken();
     void tokenReceivedHandler(QNetworkReply* reply);
+    void refreshTokenReceivedHandler(QNetworkReply* reply);
 
     static QString generateRandomString(unsigned int size);
     static void openUrlInBrowser(const QUrl& url);
