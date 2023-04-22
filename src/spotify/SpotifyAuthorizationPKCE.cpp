@@ -255,7 +255,9 @@ void SpotifyAuthorizationPKCE::refreshToken()
 
     const QByteArray body = query.toString(QUrl::FullyEncoded).toUtf8();
     QNetworkReply* reply = m_accessManager->post(refreshRequest, body);
-    connect(reply, &QNetworkReply::finished, this, &SpotifyAuthorizationPKCE::refreshTokenReceivedHandler);
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        refreshTokenReceivedHandler(reply);
+    });
 }
 
 void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networkReply)
