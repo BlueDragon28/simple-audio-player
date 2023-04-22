@@ -189,6 +189,10 @@ void SpotifyAuthorizationPKCE::tokenReceivedHandler(QNetworkReply* reply)
     m_tokenExpiration = rootObject.value("expires_in").toInt();
     m_tokenRetrievalTime = std::chrono::system_clock::now();
 
+    qDebug() << "access_token: " << m_accessToken;
+    qDebug() << "refresh_token: " << m_refreshToken;
+    qDebug() << "token_expire: " << m_tokenExpiration;
+
     m_isAuthenticated = true;
     emit authenticated();
 }

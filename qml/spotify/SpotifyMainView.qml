@@ -6,21 +6,41 @@ import SimpleAudioPlayer 1.0
 Item {
     id: root
 
-    Item {
+    Rectangle {
         anchors.centerIn: parent
+        width: 300
+        height: 200
+        color: palette.alternateBase
+        radius: 10
 
-        Column {
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 15
+
             Label {
-                text: "Login to spotify"
+                Layout.fillWidth: true
+
+                text: "Login to Spotify"
+                font.pixelSize: 35
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Label {
+                text: "enter your developer id"
             }
 
             TextField {
+                Layout.fillWidth: true
+
                 id: clientID
                 verticalAlignment: Qt.AlignVCenter
                 selectByMouse: true
             }
 
             Button {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: 120
+
                 text: "Login"
 
                 onClicked: function() {
