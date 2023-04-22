@@ -16,6 +16,9 @@ public:
     SpotifyAPI();
     virtual ~SpotifyAPI();
 
+signals:
+    void error();
+
 public slots:
     void authenticate();
     void setClientID(const QString& clientID);

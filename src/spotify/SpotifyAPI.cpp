@@ -4,7 +4,9 @@
 SpotifyAPI::SpotifyAPI() : 
     QObject(),
     m_spotifyAuth(new SpotifyAuthorizationPKCE(this))
-{}
+{
+    connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
+}
 
 SpotifyAPI::~SpotifyAPI() 
 {}

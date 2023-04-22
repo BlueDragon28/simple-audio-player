@@ -1,6 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
+import QtQuick.Dialogs 6.3
 import SimpleAudioPlayer 1.0
 
 Item {
@@ -48,6 +49,19 @@ Item {
                     SpotifyAPI.authenticate();
                 }
             }
+        }
+    }
+
+    MessageDialog {
+        id: errorDialog
+        text: "Something went wrong while connecting to Spotify. Try again!"
+    }
+
+    Connections {
+        target: SpotifyAPI
+
+        function onError() {
+            errorDialog.open()
         }
     }
 }
