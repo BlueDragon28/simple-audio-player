@@ -68,8 +68,7 @@ void SpotifyAuthorizationPKCE::prepareAuthorization()
 
 void SpotifyAuthorizationPKCE::openBrowserAndWaitForResponse(const QUrl& url)
 {
-    QString encodedUrl = QString::fromLocal8Bit(url.toEncoded());
-    system((QString("xdg-open \"") + encodedUrl + "\"").toStdString().c_str());
+    openUrlInBrowser(url);
     m_httpCodeListener->listen(_listeningPort);
 }
 
@@ -205,6 +204,19 @@ QString SpotifyAuthorizationPKCE::generateRandomString(unsigned int size)
     }
 
     return randomNumber;
+}
+
+void SpotifyAuthorizationPKCE::openUrlInBrowser(const QUrl& url)
+{
+    QString openBrowserCommand = 
+#ifdef WIN32
+        "start";
+#else
+        "xdg-open";
+#endif 
+
+    QString encodedUrl = QString::fromLocal8Bit(url.toEncoded());
+    system((openBrowserCommand + " \"" + encodedUrl + "\"").toUtf8().constData());
 }
 
 bool SpotifyAuthorizationPKCE::isAuthenticated() const

@@ -42,6 +42,7 @@ private:
     void tokenReceivedHandler(QNetworkReply* reply);
 
     static QString generateRandomString(unsigned int size);
+    static void openUrlInBrowser(const QUrl& url);
 
     QNetworkAccessManager* m_accessManager;
     SpotifyHttpCodeListener* m_httpCodeListener;
