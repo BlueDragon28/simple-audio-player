@@ -34,6 +34,7 @@ signals:
     void requestToken();
     void authenticated();
     void refreshTokenReceived();
+    void errorThrown();
 
 private:
     void prepareAuthorization();

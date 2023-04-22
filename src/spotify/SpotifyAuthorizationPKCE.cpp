@@ -76,6 +76,7 @@ void SpotifyAuthorizationPKCE::receiveCodeHandler(const QString& code, const QSt
 {
     if (code.isEmpty() || state.isEmpty() || state.compare(m_state) != 0)
     {
+        emit errorThrown();
         return;
     }
 
@@ -177,6 +178,7 @@ void SpotifyAuthorizationPKCE::tokenReceivedHandler(QNetworkReply* reply)
     if (!rootObject.contains("access_token"))
     {
         qDebug() << "invalid response!";
+        emit errorThrown();
         return;
     }
 
@@ -275,6 +277,7 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (!rootObject.contains("access_token"))
     {
         qDebug() << "Invalid refresh token!";
+        emit errorThrown();
         return;
     }
 
