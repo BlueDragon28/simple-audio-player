@@ -91,53 +91,61 @@ void SpotifyAuthorizationPKCE::grant()
     prepareAuthorization();
 }
 
-bool SpotifyAuthorizationPKCE::checkIfDataValidForAuthorization() const
+bool SpotifyAuthorizationPKCE::checkIfDataValidForAuthorization()
 {
     if (m_clientID.isEmpty()) 
     {
         qDebug() << "client identifier cannot be empty!";
+        emit errorThrown();
         return false;
     }
 
     if (!m_authorizationUrl.isValid())
     {
         qDebug() << "authorization url must be a valid url!";
+        emit errorThrown();
         return false;
     }
 
     if (!m_redirectURL.isValid())
     {
         qDebug() << "redirect url must be a valid url!";
+        emit errorThrown();
         return false;
     }
 
     if (!m_accessTokenUrl.isValid())
     {
         qDebug() << "access token url must be a valid url!";
+        emit errorThrown();
         return false;
     }
 
     if (m_state.size() != 16)
     {
         qDebug() << "m_state must be 16 charaters!";
+        emit errorThrown();
         return false;
     }
 
     if (m_code.size() > 0)
     {
         qDebug() << "You already have the code!";
+        emit errorThrown();
         return false;
     }
 
     if (isAuthenticated()) 
     {
         qDebug() << "Already authenticated!";
+        emit errorThrown();
         return false;
     }
 
     if (isTokenValid())
     {
         qDebug() << "Your token is valid!";
+        emit errorThrown();
         return false;
     }
 
@@ -172,6 +180,7 @@ void SpotifyAuthorizationPKCE::tokenReceivedHandler(QNetworkReply* reply)
     QJsonParseError error;
     QJsonDocument responseJSON = QJsonDocument::fromJson(responseData, &error);
     if (error.error != error.NoError) {
+        emit errorThrown();
         return;
     }
 
@@ -277,6 +286,7 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (jsonError.error != QJsonParseError::NoError)
     {
         m_isAuthenticated = false;
+        emit errorThrown();
         return;
     }
 

@@ -40,7 +40,7 @@ private:
     void prepareAuthorization();
     void openBrowserAndWaitForResponse(const QUrl& url);
     void receiveCodeHandler(const QString& code, const QString& state);
-    bool checkIfDataValidForAuthorization() const;
+    bool checkIfDataValidForAuthorization();
     void fetchToken();
     void tokenReceivedHandler(QNetworkReply* reply);
     void refreshTokenReceivedHandler(QNetworkReply* reply);
