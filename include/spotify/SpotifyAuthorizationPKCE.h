@@ -22,6 +22,7 @@ public:
     virtual ~SpotifyAuthorizationPKCE();
 
     bool isAuthenticated() const;
+    bool isTokenValid() const;
     void setClientID(const QString& clientID);
 
 public slots:

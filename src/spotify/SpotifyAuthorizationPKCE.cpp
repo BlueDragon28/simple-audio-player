@@ -129,6 +129,18 @@ bool SpotifyAuthorizationPKCE::checkIfDataValidForAuthorization() const
         return false;
     }
 
+    if (isAuthenticated()) 
+    {
+        qDebug() << "Already authenticated!";
+        return false;
+    }
+
+    if (isTokenValid())
+    {
+        qDebug() << "Your token is valid!";
+        return false;
+    }
+
     return true;
 }
 
@@ -197,7 +209,12 @@ QString SpotifyAuthorizationPKCE::generateRandomString(unsigned int size)
 
 bool SpotifyAuthorizationPKCE::isAuthenticated() const
 {
-    if (!m_isAuthenticated) return false;
+    return m_isAuthenticated;
+}
+
+bool SpotifyAuthorizationPKCE::isTokenValid() const
+{
+    if (!isAuthenticated()) return false;
 
     auto now = std::chrono::system_clock::now();
     const auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_tokenRetrievalTime);
