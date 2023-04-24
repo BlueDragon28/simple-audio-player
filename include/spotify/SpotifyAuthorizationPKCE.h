@@ -3,6 +3,7 @@
 
 #include "spotify/SpotifyHttpCodeListener.h"
 #include <chrono>
+#include <cstdint>
 #include <ctime>
 #include <qnetworkaccessmanager.h>
 #include <qnetworkrequest.h>
@@ -27,14 +28,22 @@ public:
     void setClientID(const QString& clientID);
 
     QString getRefreshToken() const;
+    QString getAccessToken() const;
     QString getClientID() const;
+    int getTokenExpiration() const;
+    long getTokenRetrievevalTime() const;
 
     QNetworkReply* get(const QNetworkRequest& request);
 
 public slots:
     void grant();
     void refreshToken();
-    void restoreRefreshToken(const QString& refreshToken, const QString& clientID);
+    void restoreRefreshToken(
+        const QString& refreshToken, 
+        const QString& accessToken,
+        const QString& clientID,
+        int tokenExpiration,
+        long tokenRetrievalTime);
 
 signals:
     void openBrowser(const QUrl& url);

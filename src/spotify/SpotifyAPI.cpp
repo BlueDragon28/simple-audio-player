@@ -136,12 +136,21 @@ void SpotifyAPI::saveRefreshToken()
     if (!m_saveToken) return;
 
     const QString refreshToken = m_spotifyAuth->getRefreshToken();
+    const QString accessToken = m_spotifyAuth->getAccessToken();
     const QString clientID = m_spotifyAuth->getClientID();
+    const int tokenExpiration = m_spotifyAuth->getTokenExpiration();
+    const long tokenRetrievalTime = m_spotifyAuth->getTokenRetrievevalTime();
 
     // If the token string is empty, something went wrong.
-    if (refreshToken.isEmpty() || clientID.isEmpty()) return;
+    if (refreshToken.isEmpty() || clientID.isEmpty() || accessToken.isEmpty()) return;
 
-    m_tokenSaver->writeToken(QString("%1;%2").arg(refreshToken, clientID));
+    const QString serializedTokenData =
+        QString("%1;%2;%3;%4;%5")
+            .arg(refreshToken, accessToken, clientID)
+            .arg(tokenExpiration)
+            .arg(tokenRetrievalTime);
+
+    m_tokenSaver->writeToken(serializedTokenData);
 }
 
 void SpotifyAPI::restoreCredential()
@@ -152,11 +161,30 @@ void SpotifyAPI::restoreCredential()
 void SpotifyAPI::tokenRestoredHandler(const QString& token)
 {
     const QStringList tokensList = token.split(';', Qt::SkipEmptyParts);
+    qDebug() << tokensList;
 
-    if (tokensList.size() < 2) return;
+    if (tokensList.size() < 5) return;
 
     const QString refreshToken = tokensList.at(0);
-    const QString clientID = tokensList.at(1);
+    const QString accessToken = tokensList.at(1);
+    const QString clientID = tokensList.at(2);
+    
+    bool isToIntConvertionSucceeded = false;
+    const int tokenExpiration = tokensList.at(3).toInt(&isToIntConvertionSucceeded);
 
-    m_spotifyAuth->restoreRefreshToken(refreshToken, clientID);
+    if (!isToIntConvertionSucceeded) 
+    {
+        emit error();
+        return;
+    }
+
+    const long tokenRetrievalTime = tokensList.at(4).toInt(&isToIntConvertionSucceeded);
+
+    if (!isToIntConvertionSucceeded)
+    {
+        emit error();
+        return;
+    }
+
+    m_spotifyAuth->restoreRefreshToken(refreshToken, accessToken, clientID, tokenExpiration, tokenRetrievalTime);
 }

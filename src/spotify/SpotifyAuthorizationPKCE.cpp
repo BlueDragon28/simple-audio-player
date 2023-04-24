@@ -5,6 +5,7 @@
 #include <bits/chrono.h>
 #include <chrono>
 #include <cstdlib>
+#include <ctime>
 #include <qcryptographichash.h>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
@@ -277,9 +278,25 @@ QString SpotifyAuthorizationPKCE::getRefreshToken() const
     return m_refreshToken;
 }
 
+QString SpotifyAuthorizationPKCE::getAccessToken() const
+{
+    return m_accessToken;
+}
+
 QString SpotifyAuthorizationPKCE::getClientID() const
 {
     return m_clientID;
+}
+
+int SpotifyAuthorizationPKCE::getTokenExpiration() const
+{
+    return m_tokenExpiration;
+}
+
+long SpotifyAuthorizationPKCE::getTokenRetrievevalTime() const
+{
+    std::time_t time = std::chrono::system_clock::to_time_t(m_tokenRetrievalTime);
+    return time;
 }
 
 void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networkReply)
@@ -306,9 +323,6 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
         emit errorThrown();
         return;
     }
-
-    // If true, emit authenticated
-    const bool hasPreviousAccessToken = m_accessToken.size() == 0;
 
     m_accessToken = rootObject.value("access_token").toString();
     m_tokenExpiration = rootObject.value("expires_in").toInt();
@@ -364,12 +378,28 @@ QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& userRequest)
     return reply;
 }
 
-void SpotifyAuthorizationPKCE::restoreRefreshToken(const QString& refreshToken, const QString& clientID)
+void SpotifyAuthorizationPKCE::restoreRefreshToken(
+    const QString& refreshToken, 
+    const QString& accessToken,
+    const QString& clientID,
+    int tokenExpiration,
+    long tokenRetrievalTime)
 {
     if (refreshToken.isEmpty()) return;
 
+    m_accessToken = accessToken;
+    m_tokenExpiration = tokenExpiration;
+    m_tokenRetrievalTime = std::chrono::system_clock::from_time_t(tokenRetrievalTime);
     m_refreshToken = refreshToken;
     m_clientID = clientID;
     m_isAuthenticated = true;
-    this->refreshToken();
+
+    if (!isTokenValid())
+    {
+        this->refreshToken();
+    }
+    else 
+    {
+        emit refreshTokenReceived();
+    }
 }
