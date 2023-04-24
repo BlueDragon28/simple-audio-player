@@ -29,4 +29,9 @@ Rectangle {
             spotifySectionStackLayout.currentIndex = 1;
         }
     }
+
+    Component.onCompleted: function() {
+        // Try to restore credential if available
+        SpotifyAPI.restoreCredential();
+    }
 }

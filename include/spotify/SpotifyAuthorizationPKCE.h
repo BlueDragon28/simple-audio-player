@@ -26,11 +26,15 @@ public:
     bool isTokenValid() const;
     void setClientID(const QString& clientID);
 
+    QString getRefreshToken() const;
+    QString getClientID() const;
+
     QNetworkReply* get(const QNetworkRequest& request);
 
 public slots:
     void grant();
     void refreshToken();
+    void restoreRefreshToken(const QString& refreshToken, const QString& clientID);
 
 signals:
     void openBrowser(const QUrl& url);

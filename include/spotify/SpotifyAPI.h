@@ -2,6 +2,7 @@
 #define SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 
 #include "spotify/SpotifyAuthorizationPKCE.h"
+#include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
 #include <qobject.h>
 #include <qqmlintegration.h>
@@ -31,7 +32,8 @@ signals:
     void userInfoChanged(); // Disable warning
 
 public slots:
-    void authenticate();
+    void restoreCredential();
+    void authenticate(bool saveToken);
     void setClientID(const QString& clientID);
 
 private:
@@ -39,8 +41,16 @@ private:
     void updateProfile();
     void updateProfileHandler(QNetworkReply* reply);
 
+    // When authenticated, save the refresh token
+    void saveRefreshToken();
+    void tokenRestoredHandler(const QString& refreshToken);
+
+    bool m_saveToken;
+    bool m_firstTokenRefresh;
+
     SpotifyAuthorizationPKCE* m_spotifyAuth;
     SpotifyUserInfo* m_userInfo;
+    SpotifyTokenSaver* m_tokenSaver;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_

@@ -272,6 +272,16 @@ void SpotifyAuthorizationPKCE::refreshToken()
     });
 }
 
+QString SpotifyAuthorizationPKCE::getRefreshToken() const
+{
+    return m_refreshToken;
+}
+
+QString SpotifyAuthorizationPKCE::getClientID() const
+{
+    return m_clientID;
+}
+
 void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networkReply)
 {
     const QByteArray responseData = networkReply->readAll();
@@ -292,17 +302,23 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (!rootObject.contains("access_token"))
     {
         qDebug() << "Invalid refresh token!";
+        qDebug() << rootObject;
         emit errorThrown();
         return;
     }
 
+    // If true, emit authenticated
+    const bool hasPreviousAccessToken = m_accessToken.size() == 0;
+
     m_accessToken = rootObject.value("access_token").toString();
     m_tokenExpiration = rootObject.value("expires_in").toInt();
+    m_tokenRetrievalTime = std::chrono::system_clock::now();
 
     if (rootObject.contains("refresh_token"))
     {
         m_refreshToken = rootObject.value("refresh_token").toString();
-    }
+        qDebug() << "new refresh token: " << m_refreshToken;
+    } else {qDebug() << "refresh token unchanged!";}
 
     emit refreshTokenReceived();
 }
@@ -346,4 +362,14 @@ QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& userRequest)
 
     QNetworkReply* reply = m_accessManager->get(request);
     return reply;
+}
+
+void SpotifyAuthorizationPKCE::restoreRefreshToken(const QString& refreshToken, const QString& clientID)
+{
+    if (refreshToken.isEmpty()) return;
+
+    m_refreshToken = refreshToken;
+    m_clientID = clientID;
+    m_isAuthenticated = true;
+    this->refreshToken();
 }

@@ -1,29 +1,51 @@
 #include "spotify/SpotifyAPI.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
+#include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
 #include <qjsondocument.h>
 #include <qjsonobject.h>
+#include <qnamespace.h>
 #include <qnetworkaccessmanager.h>
 #include <qnetworkrequest.h>
 #include <qnetworkreply.h>
 
 SpotifyAPI::SpotifyAPI() : 
     QObject(),
+    m_saveToken(false),
+    m_firstTokenRefresh(true),
     m_spotifyAuth(new SpotifyAuthorizationPKCE(this)),
-    m_userInfo(new SpotifyUserInfo(this))
+    m_userInfo(new SpotifyUserInfo(this)),
+    m_tokenSaver(new SpotifyTokenSaver(this))
 {
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, this, &SpotifyAPI::authenticated);
+    connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, [this](){m_firstTokenRefresh = false;});
 
     // When authenticated, request user information
     connect(this, &SpotifyAPI::authenticated, this, &SpotifyAPI::updateProfile);
+
+    // When authenticated, save the refresh token
+    connect(this, &SpotifyAPI::authenticated, this, &SpotifyAPI::saveRefreshToken);
+    connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::refreshTokenReceived, this, &SpotifyAPI::saveRefreshToken);
+    connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::refreshTokenReceived, [this](){ 
+        if (m_firstTokenRefresh) {
+            emit authenticated(); 
+            m_firstTokenRefresh = false;
+        }
+    });
+
+    // Delete saved token on error
+    connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, m_tokenSaver, &SpotifyTokenSaver::deleteToken);
+
+    connect(m_tokenSaver, &SpotifyTokenSaver::tokenRestored, this, &SpotifyAPI::tokenRestoredHandler);
 }
 
 SpotifyAPI::~SpotifyAPI() 
 {}
 
-void SpotifyAPI::authenticate()
+void SpotifyAPI::authenticate(bool saveToken)
 {
+    m_saveToken = saveToken;
     m_spotifyAuth->grant();
 }
 
@@ -107,4 +129,34 @@ void SpotifyAPI::updateProfileHandler(QNetworkReply* reply)
     m_userInfo->setUsername(username);
     m_userInfo->setCountry(country);
     m_userInfo->setFollowers(followers);
+}
+
+void SpotifyAPI::saveRefreshToken()
+{
+    if (!m_saveToken) return;
+
+    const QString refreshToken = m_spotifyAuth->getRefreshToken();
+    const QString clientID = m_spotifyAuth->getClientID();
+
+    // If the token string is empty, something went wrong.
+    if (refreshToken.isEmpty() || clientID.isEmpty()) return;
+
+    m_tokenSaver->writeToken(QString("%1;%2").arg(refreshToken, clientID));
+}
+
+void SpotifyAPI::restoreCredential()
+{
+    m_tokenSaver->readToken();
+}
+
+void SpotifyAPI::tokenRestoredHandler(const QString& token)
+{
+    const QStringList tokensList = token.split(';', Qt::SkipEmptyParts);
+
+    if (tokensList.size() < 2) return;
+
+    const QString refreshToken = tokensList.at(0);
+    const QString clientID = tokensList.at(1);
+
+    m_spotifyAuth->restoreRefreshToken(refreshToken, clientID);
 }

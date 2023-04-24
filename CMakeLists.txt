@@ -31,6 +31,7 @@ endif()
 
 # Find Qt6
 find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets Network HttpServer REQUIRED)
+find_package(Qt6Keychain REQUIRED)
 
 if (UNIX)
 	# Find simple-audio-library
@@ -179,7 +180,8 @@ set(HEADERS
     "include/spotify/SpotifyAPI.h"
     "include/spotify/SpotifyAuthorizationPKCE.h"
     "include/spotify/SpotifyHttpCodeListener.h"
-    "include/spotify/SpotifyUserInfo.h")
+    "include/spotify/SpotifyUserInfo.h"
+    "include/spotify/SpotifyTokenSaver.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -208,7 +210,8 @@ set(SOURCES
     "src/spotify/SpotifyAPI.cpp"
     "src/spotify/SpotifyAuthorizationPKCE.cpp"
     "src/spotify/SpotifyHttpCodeListener.cpp"
-    "src/spotify/SpotifyUserInfo.cpp")
+    "src/spotify/SpotifyUserInfo.cpp"
+    "src/spotify/SpotifyTokenSaver.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
@@ -229,6 +232,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	Qt6::Widgets
     Qt6::Network
     Qt6::HttpServer
+    ${QTKEYCHAIN_LIBRARIES}
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES}

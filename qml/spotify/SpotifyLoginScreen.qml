@@ -46,7 +46,7 @@ Item {
 
                 onClicked: function() {
                     SpotifyAPI.setClientID(clientID.text);
-                    SpotifyAPI.authenticate();
+                    SpotifyAPI.authenticate(true);
                 }
             }
         }
