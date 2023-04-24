@@ -178,7 +178,8 @@ set(HEADERS
     "include/network/NetworkManager.h"
     "include/spotify/SpotifyAPI.h"
     "include/spotify/SpotifyAuthorizationPKCE.h"
-    "include/spotify/SpotifyHttpCodeListener.h")
+    "include/spotify/SpotifyHttpCodeListener.h"
+    "include/spotify/SpotifyUserInfo.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -206,7 +207,8 @@ set(SOURCES
     "src/network/NetworkManager.cpp"
     "src/spotify/SpotifyAPI.cpp"
     "src/spotify/SpotifyAuthorizationPKCE.cpp"
-    "src/spotify/SpotifyHttpCodeListener.cpp")
+    "src/spotify/SpotifyHttpCodeListener.cpp"
+    "src/spotify/SpotifyUserInfo.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 

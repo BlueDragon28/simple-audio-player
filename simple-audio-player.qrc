@@ -27,6 +27,8 @@
         <file>qml/PlayListContentHeader.qml</file>
         <file>qml/SystemDialog.qml</file>
         <file>qml/spotify/SpotifyMainView.qml</file>
+        <file>qml/spotify/SpotifyLoginScreen.qml</file>
+        <file>qml/spotify/SpotifyUserProfile.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>
@@ -45,5 +47,6 @@
         <file>images/diskette.png</file>
         <file>images/folder.png</file>
         <file>images/new-document.png</file>
+        <file>images/userProfile.svg</file>
     </qresource>
 </RCC>
