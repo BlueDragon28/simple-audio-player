@@ -11,7 +11,7 @@ Rectangle {
     StackLayout {
         id: spotifySectionStackLayout
         anchors.fill: parent
-        currentIndex: 1
+        currentIndex: 0
 
         SpotifyLoginScreen {
             id: spotifyLoginScreen
@@ -22,4 +22,11 @@ Rectangle {
         }
     }
     
+    Connections {
+        target: SpotifyAPI
+
+        function onAuthenticated() {
+            spotifySectionStackLayout.currentIndex = 1;
+        }
+    }
 }

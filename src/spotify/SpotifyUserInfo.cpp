@@ -47,7 +47,7 @@ void SpotifyUserInfo::setFollowers(int followers)
 {
     if (followers == m_followers) return ;
 
-    followers = followers >= 0 ? followers : 0;
+    m_followers = followers >= 0 ? followers : 0;
 
     emit followersChanged();
 }

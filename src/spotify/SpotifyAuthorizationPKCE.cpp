@@ -14,6 +14,7 @@
 #include <qurlquery.h>
 #include <qnetworkreply.h>
 #include <random>
+#include <thread>
 
 const uint16_t SpotifyAuthorizationPKCE::_listeningPort = 3000;
 
@@ -304,4 +305,45 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     }
 
     emit refreshTokenReceived();
+}
+
+void SpotifyAuthorizationPKCE::addAuthorizationHeader(QNetworkRequest* request) const 
+{
+    QByteArray authorization(u8"Authorization");
+    QByteArray bearer(u8"Bearer ");
+    bearer.append(m_accessToken.toUtf8());
+    request->setRawHeader(authorization, bearer);
+}
+
+bool SpotifyAuthorizationPKCE::refreshTokenIfNeeded()
+{
+    if (!isAuthenticated()) return false;
+
+    if (!isTokenValid())
+    {
+        refreshToken();
+
+        while (isAuthenticated() && !isTokenValid()) 
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+
+        if (!isAuthenticated())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& userRequest)
+{
+    if (!refreshTokenIfNeeded()) return nullptr;
+
+    QNetworkRequest request(userRequest); 
+    addAuthorizationHeader(&request);
+
+    QNetworkReply* reply = m_accessManager->get(request);
+    return reply;
 }

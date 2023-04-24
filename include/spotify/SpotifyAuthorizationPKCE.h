@@ -5,6 +5,7 @@
 #include <chrono>
 #include <ctime>
 #include <qnetworkaccessmanager.h>
+#include <qnetworkrequest.h>
 #include <qobject.h>
 #include <qmap.h>
 #include <qvariant.h>
@@ -25,6 +26,8 @@ public:
     bool isTokenValid() const;
     void setClientID(const QString& clientID);
 
+    QNetworkReply* get(const QNetworkRequest& request);
+
 public slots:
     void grant();
     void refreshToken();
@@ -44,6 +47,9 @@ private:
     void fetchToken();
     void tokenReceivedHandler(QNetworkReply* reply);
     void refreshTokenReceivedHandler(QNetworkReply* reply);
+
+    void addAuthorizationHeader(QNetworkRequest* request) const;
+    bool refreshTokenIfNeeded();
 
     static QString generateRandomString(unsigned int size);
     static void openUrlInBrowser(const QUrl& url);
