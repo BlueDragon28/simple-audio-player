@@ -35,3 +35,5 @@ Install the dependencies' library using your package manager, they are available
 The software is licensed under the **MIT** license. Check the [LICENSE](LICENSE) file.
 
 Some of the images are from <a href="https://www.flaticon.com/free-icons/search" title="search icons">Search icons created by Chanut - Flaticon</a>.
+
+[cpp-httplib](https://github.com/yhirose/cpp-httplib) is used to handle oauth2 redirect url request.
