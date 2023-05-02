@@ -30,8 +30,17 @@ elseif (WIN32)
 endif()
 
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets Network HttpServer REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets Network REQUIRED)
 find_package(Qt6Keychain REQUIRED)
+
+# Include the include directory
+include_directories(
+    include/ 
+    include/options 
+    include/network 
+    include/spotify 
+    "${CMAKE_SOURCE_DIR}/dependencies/httplib"
+    "${CMAKE_BINARY_DIR}/include")
 
 if (UNIX)
 	# Find simple-audio-library
@@ -231,7 +240,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Sql
 	Qt6::Widgets
     Qt6::Network
-    Qt6::HttpServer
     ${QTKEYCHAIN_LIBRARIES}
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
