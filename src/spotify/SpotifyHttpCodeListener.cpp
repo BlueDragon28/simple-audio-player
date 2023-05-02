@@ -8,35 +8,20 @@ SpotifyHttpCodeListener::SpotifyHttpCodeListener(QObject* parent) :
     QObject(parent),
     m_localServer(nullptr),
     m_handleRequest(true)
-{}
+{
+    connect(this, &SpotifyHttpCodeListener::stopServer, this, &SpotifyHttpCodeListener::stopServerHandler);
+}
 
 SpotifyHttpCodeListener::~SpotifyHttpCodeListener()
 {
-    if (m_localServer) 
-    {
-        m_localServer->stop();
-        if (m_serverThread.joinable())
-        {
-            m_serverThread.join();
-        }
-        delete m_localServer;
-    }
+    stopServerHandler();
 }
 
 bool SpotifyHttpCodeListener::listen(int port)
 {
     if (port == 0) return false;
 
-    if (m_localServer) 
-    {
-        m_localServer->stop();
-        if (m_serverThread.joinable())
-        {
-            m_serverThread.join();
-        }
-        delete m_localServer;
-        m_localServer = nullptr;
-    }
+    stopServerHandler();
 
     m_localServer = new httplib::Server();
 
@@ -58,29 +43,21 @@ bool SpotifyHttpCodeListener::listen(int port)
         const std::string code = req.get_param_value(u8"code");
         const std::string state = req.get_param_value(u8"state");
 
+        res.set_content("Return to the application", "text/plain");
 
         this->codeRouteRequest(
             QString::fromUtf8(code.c_str()), 
             QString::fromUtf8(state.c_str()));
 
-        res.set_content("Return to the application", "text/plain");
     });
 
     bool result = m_localServer->bind_to_port(u8"localhost", port);
 
     m_serverThread = std::thread([this]() {
-        qDebug() << "before listen call";
         m_localServer->listen_after_bind();
-        qDebug() << "after listen call";
     });
 
-    if (result) {
-        qDebug() << "local server bind to port: " << port;
-    } else {
-        qDebug() << "failed to bind to port: " << port;
-    }
-
-    return result;
+        return result;
 }
 
 void SpotifyHttpCodeListener::codeRouteRequest(const QString& code, const QString& state)
@@ -93,4 +70,25 @@ void SpotifyHttpCodeListener::codeRouteRequest(const QString& code, const QStrin
 
     m_handleRequest = false;
     emit codeReceived(code, state);
+}
+
+void SpotifyHttpCodeListener::stopServerHandler()
+{
+    if (!m_localServer) 
+    {
+        return;
+    }
+
+    if (m_localServer->is_running())
+    {
+        m_localServer->stop();
+    }
+
+    if (m_serverThread.joinable())
+    {
+        m_serverThread.join();
+    }
+
+    delete m_localServer;
+    m_localServer = nullptr;
 }

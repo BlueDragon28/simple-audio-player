@@ -19,9 +19,11 @@ public slots:
 signals:
     void codeReceived(const QString& code, const QString& state);
     void codeInvalid();
+    void stopServer();
 
 private:
     void codeRouteRequest(const QString& code, const QString& state);
+    void stopServerHandler();
 
     std::thread m_serverThread;
     httplib::Server* m_localServer;

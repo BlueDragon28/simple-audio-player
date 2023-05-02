@@ -331,8 +331,7 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (rootObject.contains("refresh_token"))
     {
         m_refreshToken = rootObject.value("refresh_token").toString();
-        qDebug() << "new refresh token: " << m_refreshToken;
-    } else {qDebug() << "refresh token unchanged!";}
+    }
 
     emit refreshTokenReceived();
 }
