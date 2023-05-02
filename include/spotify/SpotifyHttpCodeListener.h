@@ -1,7 +1,8 @@
 #ifndef SIMPLEAUDIOPLAYER_SPOTIFYHTTPCODELISTENER_H_
 #define SIMPLEAUDIOPLAYER_SPOTIFYHTTPCODELISTENER_H_
 
-#include <QtHttpServer/qhttpserver.h>
+#include "httplib.h"
+#include <thread>
 #include <qobject.h>
 
 class SpotifyHttpCodeListener : public QObject
@@ -14,7 +15,6 @@ public:
 
 public slots:
     bool listen(int port);
-    void stopListening();
 
 signals:
     void codeReceived(const QString& code, const QString& state);
@@ -23,7 +23,8 @@ signals:
 private:
     void codeRouteRequest(const QString& code, const QString& state);
 
-    QHttpServer* m_localServer;
+    std::thread m_serverThread;
+    httplib::Server* m_localServer;
     bool m_handleRequest;
 };
 

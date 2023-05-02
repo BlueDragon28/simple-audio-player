@@ -190,7 +190,8 @@ set(HEADERS
     "include/spotify/SpotifyAuthorizationPKCE.h"
     "include/spotify/SpotifyHttpCodeListener.h"
     "include/spotify/SpotifyUserInfo.h"
-    "include/spotify/SpotifyTokenSaver.h")
+    "include/spotify/SpotifyTokenSaver.h"
+    "dependencies/httplib/httplib.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -226,9 +227,6 @@ set(RESOURCES "simple-audio-player.qrc")
 
 # Configure the config.h.in file.
 configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
-
-# Include the include directory
-include_directories(include/ include/options include/network include/spotify "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
 qt_add_executable(${PROJECT_NAME} ${WIN32_EXECUTABLE} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})

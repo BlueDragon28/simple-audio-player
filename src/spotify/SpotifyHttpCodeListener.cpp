@@ -1,7 +1,8 @@
 #include "spotify/SpotifyHttpCodeListener.h"
-#include <QtHttpServer/qhttpserver.h>
-#include <QtHttpServer/qhttpserverrequest.h>
+#include "httplib.h"
+#include <qdebug.h>
 #include <qhostaddress.h>
+#include <thread>
 
 SpotifyHttpCodeListener::SpotifyHttpCodeListener(QObject* parent) :
     QObject(parent),
@@ -11,53 +12,75 @@ SpotifyHttpCodeListener::SpotifyHttpCodeListener(QObject* parent) :
 
 SpotifyHttpCodeListener::~SpotifyHttpCodeListener()
 {
+    if (m_localServer) 
+    {
+        m_localServer->stop();
+        if (m_serverThread.joinable())
+        {
+            m_serverThread.join();
+        }
+        delete m_localServer;
+    }
 }
 
 bool SpotifyHttpCodeListener::listen(int port)
 {
     if (port == 0) return false;
 
-    if (m_localServer)
+    if (m_localServer) 
     {
-        m_localServer->deleteLater();
+        m_localServer->stop();
+        if (m_serverThread.joinable())
+        {
+            m_serverThread.join();
+        }
+        delete m_localServer;
         m_localServer = nullptr;
     }
 
-    m_localServer = new QHttpServer(this);
-    m_localServer->route("/", [this](const QHttpServerRequest& request) 
+    m_localServer = new httplib::Server();
+
+    m_localServer->Get(u8"/", [this](const httplib::Request& req, httplib::Response& res) 
     {
         if (!m_handleRequest)
         {
-            return QString("Request already processed");
+            res.set_content("Request already processed!", "text/plain");
+            return;
         }
 
-        QUrlQuery query = request.query();
-
-        if (!query.hasQueryItem("code") || !query.hasQueryItem("state"))
+        if (!req.has_param(u8"code") || !req.has_param(u8"state"))
         {
             emit codeInvalid();
-            return QString("Oups: something went wrong!");
+            res.set_content("Oups: something went wrong!", "text/plain");
+            return;
         }
 
-        const QString& code = query.queryItemValue("code");
-        const QString& state = query.queryItemValue("state");
+        const std::string code = req.get_param_value(u8"code");
+        const std::string state = req.get_param_value(u8"state");
 
-        this->codeRouteRequest(code, state);
 
-        return QString("Return to the application.");
+        this->codeRouteRequest(
+            QString::fromUtf8(code.c_str()), 
+            QString::fromUtf8(state.c_str()));
+
+        res.set_content("Return to the application", "text/plain");
     });
 
-    int listeningPort = m_localServer->listen(QHostAddress::Any, port);
-    m_handleRequest = true;
+    bool result = m_localServer->bind_to_port(u8"localhost", port);
 
-    return listeningPort == port;
-}
+    m_serverThread = std::thread([this]() {
+        qDebug() << "before listen call";
+        m_localServer->listen_after_bind();
+        qDebug() << "after listen call";
+    });
 
-void SpotifyHttpCodeListener::stopListening()
-{
-    if (!m_localServer) return;
+    if (result) {
+        qDebug() << "local server bind to port: " << port;
+    } else {
+        qDebug() << "failed to bind to port: " << port;
+    }
 
-    m_localServer->deleteLater();
+    return result;
 }
 
 void SpotifyHttpCodeListener::codeRouteRequest(const QString& code, const QString& state)
