@@ -6,6 +6,9 @@ SpotifyPlaylistItem::SpotifyPlaylistItem(const QString& title, const QUrl& image
     m_imageUrl(imageUrl)
 {}
 
+SpotifyPlaylistItem::~SpotifyPlaylistItem()
+{}
+
 QString SpotifyPlaylistItem::title() const
 {
     return m_title;

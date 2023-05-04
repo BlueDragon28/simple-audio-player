@@ -54,6 +54,7 @@ private:
     void setTotalPages(int totalPages);
     void setNumberOnPage(int numberOnPage);
     void setPlaylists(const QList<QObject*>& playlists);
+    void destroyPlaylistsObjects();
 
     void setNext(const QString& nextUrl);
     void setPrevious(const QString& previousUrl);

@@ -89,8 +89,10 @@ void SpotifyPlaylist::setPlaylists(const QList<QObject*>& playlists)
 {
     if (playlists == m_playlists) return;
 
+    destroyPlaylistsObjects();
     m_playlists = playlists;
     emit playlistsChanged();
+
     QString str("[");
     for (const QObject* item : m_playlists)
     {
@@ -98,6 +100,14 @@ void SpotifyPlaylist::setPlaylists(const QList<QObject*>& playlists)
     }
     str += "]";
     qDebug() << str;
+}
+
+void SpotifyPlaylist::destroyPlaylistsObjects()
+{
+    for (QObject* object : m_playlists)
+    {
+        delete object;
+    }
 }
 
 QUrl SpotifyPlaylist::next() const

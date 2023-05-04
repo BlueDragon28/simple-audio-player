@@ -16,6 +16,7 @@ class SpotifyPlaylistItem : public QObject
 
 public:
     SpotifyPlaylistItem(const QString& title, const QUrl& url, QObject* parent = nullptr);
+    virtual ~SpotifyPlaylistItem();
 
     QString title() const;
     QUrl imageUrl() const;
