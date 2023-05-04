@@ -11,7 +11,6 @@
 class SpotifyPlaylist : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
 
     Q_PROPERTY(int total READ total NOTIFY totalChanged)
     Q_PROPERTY(int pageNumber READ pageNumber NOTIFY pageNumberChanged)
