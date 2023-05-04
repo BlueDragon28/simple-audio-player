@@ -1,6 +1,7 @@
 #ifndef SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 #define SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 
+#include "SpotifyPlaylist.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
 #include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
@@ -41,6 +42,9 @@ private:
     void updateProfile();
     void updateProfileHandler(QNetworkReply* reply);
 
+    // Get user playlists informations
+    void fetchUserPlaylists();
+
     // When authenticated, save the refresh token
     void saveRefreshToken();
     void tokenRestoredHandler(const QString& refreshToken);
@@ -51,6 +55,7 @@ private:
     SpotifyAuthorizationPKCE* m_spotifyAuth;
     SpotifyUserInfo* m_userInfo;
     SpotifyTokenSaver* m_tokenSaver;
+    SpotifyPlaylist* m_userPlaylist;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_

@@ -1,4 +1,5 @@
 #include "spotify/SpotifyAPI.h"
+#include "SpotifyPlaylist.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
 #include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
@@ -8,6 +9,7 @@
 #include <qnetworkaccessmanager.h>
 #include <qnetworkrequest.h>
 #include <qnetworkreply.h>
+#include <qurlquery.h>
 
 SpotifyAPI::SpotifyAPI() : 
     QObject(),
@@ -15,14 +17,17 @@ SpotifyAPI::SpotifyAPI() :
     m_firstTokenRefresh(true),
     m_spotifyAuth(new SpotifyAuthorizationPKCE(this)),
     m_userInfo(new SpotifyUserInfo(this)),
-    m_tokenSaver(new SpotifyTokenSaver(this))
+    m_tokenSaver(new SpotifyTokenSaver(this)),
+    m_userPlaylist(new SpotifyPlaylist(this))
 {
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
+    connect(m_userPlaylist, &SpotifyPlaylist::error, this, &SpotifyAPI::error);
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, this, &SpotifyAPI::authenticated);
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, [this](){m_firstTokenRefresh = false;});
 
-    // When authenticated, request user information
+    // When authenticated, request user information and get user playlist.
     connect(this, &SpotifyAPI::authenticated, this, &SpotifyAPI::updateProfile);
+    connect(this, &SpotifyAPI::authenticated, this, &SpotifyAPI::fetchUserPlaylists);
 
     // When authenticated, save the refresh token
     connect(this, &SpotifyAPI::authenticated, this, &SpotifyAPI::saveRefreshToken);
@@ -187,4 +192,16 @@ void SpotifyAPI::tokenRestoredHandler(const QString& token)
     }
 
     m_spotifyAuth->restoreRefreshToken(refreshToken, accessToken, clientID, tokenExpiration, tokenRetrievalTime);
+}
+
+void SpotifyAPI::fetchUserPlaylists()
+{
+    QUrlQuery query;
+    query.addQueryItem("offset", "0");
+    query.addQueryItem("limit", QString::number(SpotifyPlaylist::MAX_PER_PAGE));
+    QNetworkRequest request(SpotifyPlaylist::SPOTIFY_USER_PLAYLIST_ENDPOINT + "?" + query.toString(QUrl::FullyEncoded));
+    QNetworkReply* reply = m_spotifyAuth->get(request);
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        m_userPlaylist->handleFetchResponse(reply);
+    });
 }
