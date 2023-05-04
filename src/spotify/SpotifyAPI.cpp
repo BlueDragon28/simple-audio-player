@@ -64,6 +64,11 @@ SpotifyUserInfo* SpotifyAPI::userInfo()
     return m_userInfo;
 }
 
+SpotifyPlaylist* SpotifyAPI::userPlaylist()
+{
+    return m_userPlaylist;
+}
+
 void SpotifyAPI::updateProfile()
 {
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me"));

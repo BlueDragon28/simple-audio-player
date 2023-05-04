@@ -19,18 +19,21 @@ class SpotifyAPI : public QObject
     QML_SINGLETON
 
     Q_PROPERTY(SpotifyUserInfo* userInfo READ userInfo NOTIFY userInfoChanged)
+    Q_PROPERTY(SpotifyPlaylist* userPlaylist READ userPlaylist NOTIFY userPlaylistChanged)
 
 public:
     SpotifyAPI();
     virtual ~SpotifyAPI();
 
     SpotifyUserInfo* userInfo();
+    SpotifyPlaylist* userPlaylist();
 
 signals:
     void error();
     void authenticated();
 
     void userInfoChanged(); // Disable warning
+    void userPlaylistChanged(); // Disable warning
 
 public slots:
     void restoreCredential();
