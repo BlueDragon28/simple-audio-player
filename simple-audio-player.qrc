@@ -29,6 +29,8 @@
         <file>qml/spotify/SpotifyMainView.qml</file>
         <file>qml/spotify/SpotifyLoginScreen.qml</file>
         <file>qml/spotify/SpotifyUserProfile.qml</file>
+        <file>qml/spotify/SpotifyUserPlaylist.qml</file>
+        <file>qml/spotify/SpotifyPlaylistView.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>

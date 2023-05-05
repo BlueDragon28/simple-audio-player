@@ -9,6 +9,7 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 0
 
         Rectangle {
             Layout.fillWidth: true
@@ -62,8 +63,13 @@ Item {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            clip: true
 
             color: palette.base
+
+            SpotifyUserPlaylist {
+                anchors.fill: parent
+            }
         }
     }
 }

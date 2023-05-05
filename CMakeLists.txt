@@ -193,6 +193,7 @@ set(HEADERS
     "include/spotify/SpotifyTokenSaver.h"
     "include/spotify/SpotifyPlaylist.h"
     "include/spotify/SpotifyPlaylistItem.h"
+    "include/spotify/SpotifyUserPlaylistsListModel.h"
     "dependencies/httplib/httplib.h")
 
 set(SOURCES
@@ -225,7 +226,8 @@ set(SOURCES
     "src/spotify/SpotifyUserInfo.cpp"
     "src/spotify/SpotifyTokenSaver.cpp"
     "src/spotify/SpotifyPlaylist.cpp"
-    "src/spotify/SpotifyPlaylistItem.cpp")
+    "src/spotify/SpotifyPlaylistItem.cpp"
+    "src/spotify/SpotifyUserPlaylistsListModel.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
