@@ -58,6 +58,11 @@ Item {
                     Layout.fillWidth: true
                 }
             }
+
+            PreviousNextPlaylist {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+            }
         }
 
         Rectangle {

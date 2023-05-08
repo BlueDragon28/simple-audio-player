@@ -17,6 +17,8 @@ class SpotifyPlaylist : public QObject
     Q_PROPERTY(int totalPages READ totalPages NOTIFY totalPagesChanged)
     Q_PROPERTY(int numberOnPage READ numberOnPage NOTIFY numberOnPageChanged)
     Q_PROPERTY(QList<QObject*>* playlists READ playlists NOTIFY playlistsChanged)
+    Q_PROPERTY(bool hasNext READ hasNext NOTIFY hasNextChanged)
+    Q_PROPERTY(bool hasPrevious READ hasPrevious NOTIFY hasPreviousChanged)
 
 public:
     static const int MAX_PER_PAGE;
@@ -33,7 +35,9 @@ public:
     QList<QObject*>* playlists();
 
     QUrl next() const;
+    bool hasNext() const;
     QUrl previous() const;
+    bool hasPrevious() const;
 
 public slots:
     void handleFetchResponse(QNetworkReply* reply);
@@ -46,6 +50,8 @@ signals:
     void numberOnPageChanged();
     void playlistsChanged();
     void playlistLoaded();
+    void hasNextChanged();
+    void hasPreviousChanged();
 
 private:
     void setTotal(int total);
@@ -57,6 +63,8 @@ private:
 
     void setNext(const QString& nextUrl);
     void setPrevious(const QString& previousUrl);
+    void setHasNext(const QUrl& url);
+    void setHasPrevious(const QUrl& url);
 
     SpotifyPlaylistItem* parsePlaylistJSONItem(const QJsonValue& jItem);
     QUrl parseImagesUrls(const QJsonValue& imagesArrayValue);
@@ -69,6 +77,8 @@ private:
 
     QUrl m_next;
     QUrl m_previous;
+    bool m_hasNext;
+    bool m_hasPrevious;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SPOTIFYPLAYLIST_H_

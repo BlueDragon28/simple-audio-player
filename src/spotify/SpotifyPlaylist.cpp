@@ -9,7 +9,7 @@
 #include <qnetworkreply.h>
 #include <qobject.h>
 
-const int SpotifyPlaylist::MAX_PER_PAGE = 50;
+const int SpotifyPlaylist::MAX_PER_PAGE = 10;
 const QString SpotifyPlaylist::SPOTIFY_USER_PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 const int SpotifyPlaylist::LIMIT_IMAGE_HEIGHT = 300;
 
@@ -18,7 +18,9 @@ SpotifyPlaylist::SpotifyPlaylist(QObject* parent) :
     m_total(0),
     m_pageNumber(0),
     m_totalPages(0),
-    m_numberOnPage(0)
+    m_numberOnPage(0),
+    m_hasNext(false),
+    m_hasPrevious(false)
 {}
 
 SpotifyPlaylist::~SpotifyPlaylist()
@@ -40,7 +42,7 @@ void SpotifyPlaylist::setTotal(int total)
 
 int SpotifyPlaylist::pageNumber() const
 {
-    return m_total;
+    return m_pageNumber;
 }
 
 void SpotifyPlaylist::setPageNumber(int pageNumber)
@@ -118,7 +120,22 @@ QUrl SpotifyPlaylist::next() const
 void SpotifyPlaylist::setNext(const QString& nextUrl)
 {
     m_next = QUrl(nextUrl);
+    setHasNext(m_next);
     qDebug() << "playlist next url: " << nextUrl;
+}
+
+bool SpotifyPlaylist::hasNext() const
+{
+    return m_hasNext;
+}
+
+void SpotifyPlaylist::setHasNext(const QUrl& url)
+{
+    const bool hasNext = url.isValid();
+    if (hasNext == m_hasNext) return;
+
+    m_hasNext = hasNext;
+    emit hasNextChanged();
 }
 
 QUrl SpotifyPlaylist::previous() const
@@ -129,7 +146,21 @@ QUrl SpotifyPlaylist::previous() const
 void SpotifyPlaylist::setPrevious(const QString& previousUrl)
 {
     m_previous = QUrl(previousUrl);
+    setHasPrevious(m_previous);
     qDebug() << "playlist previous url: " << previousUrl;
+}
+
+bool SpotifyPlaylist::hasPrevious() const
+{
+    return m_hasPrevious;
+}
+
+void SpotifyPlaylist::setHasPrevious(const QUrl& url)
+{
+    const bool hasPrevious = url.isValid();
+    if (hasPrevious == m_hasPrevious) return;
+    m_hasPrevious = hasPrevious;
+    emit hasPreviousChanged();
 }
 
 void SpotifyPlaylist::handleFetchResponse(QNetworkReply* reply)
@@ -194,6 +225,22 @@ void SpotifyPlaylist::handleFetchResponse(QNetworkReply* reply)
         return;
     }
 
+    if (!rootObject.contains("offset"))
+    {
+        emit error();
+        qDebug() << "fetchUserPlaylists: no offset found";
+        return;
+    }
+
+    const int offset = rootObject.value("offset").toInt(-1);
+
+    if (offset == -1)
+    {
+        emit error();
+        qDebug() << "fetchUserPlaylists: invalid offset";
+        return;
+    }
+
     if (!rootObject.contains("next"))
     {
         emit error();
@@ -242,13 +289,15 @@ void SpotifyPlaylist::handleFetchResponse(QNetworkReply* reply)
     }
 
     const int maxPageNumber = 
-        std::ceil((double)total / (double)limit);
+        std::max(1, (int)std::ceil((double)total / (double)limit));
+    const int currentPageNumber =
+        std::max(1, (int)std::ceil((double)offset / (double)limit));
 
     setTotal(total);
     setNext(nextUrl.toString(QUrl::FullyEncoded));
     setPrevious(previousUrl.toString(QUrl::FullyEncoded));
     setPlaylists(playlistsItems);
-    setPageNumber(1);
+    setPageNumber(currentPageNumber);
     setTotalPages(maxPageNumber);
     emit playlistLoaded();
 }
