@@ -41,6 +41,8 @@ public:
 
 public slots:
     void handleFetchResponse(QNetworkReply* reply);
+    void fetchNext();
+    void fetchPrevious();
 
 signals:
     void error();
@@ -52,6 +54,8 @@ signals:
     void playlistLoaded();
     void hasNextChanged();
     void hasPreviousChanged();
+    void fetchNextPage(const QUrl& url);
+    void fetchPreviousPage(const QUrl& previous);
 
 private:
     void setTotal(int total);

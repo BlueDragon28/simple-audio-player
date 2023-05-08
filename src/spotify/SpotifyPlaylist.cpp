@@ -291,7 +291,7 @@ void SpotifyPlaylist::handleFetchResponse(QNetworkReply* reply)
     const int maxPageNumber = 
         std::max(1, (int)std::ceil((double)total / (double)limit));
     const int currentPageNumber =
-        std::max(1, (int)std::ceil((double)offset / (double)limit));
+        std::max(1, (int)std::ceil((double)(offset+playlistsItems.size()) / (double)limit));
 
     setTotal(total);
     setNext(nextUrl.toString(QUrl::FullyEncoded));
@@ -393,4 +393,18 @@ QUrl SpotifyPlaylist::parseImagesUrls(const QJsonValue& imagesArrayValue)
     }
 
     return imageUrl;
+}
+
+void SpotifyPlaylist::fetchNext()
+{
+    if (!m_hasNext || !m_next.isValid()) return;
+
+    emit fetchNextPage(m_next);
+}
+
+void SpotifyPlaylist::fetchPrevious()
+{
+    if (!m_hasPrevious || !m_previous.isValid()) return;
+
+    emit fetchPreviousPage(m_previous);
 }

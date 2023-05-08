@@ -43,6 +43,10 @@ SpotifyAPI::SpotifyAPI() :
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, m_tokenSaver, &SpotifyTokenSaver::deleteToken);
 
     connect(m_tokenSaver, &SpotifyTokenSaver::tokenRestored, this, &SpotifyAPI::tokenRestoredHandler);
+
+    // Handle fetch previous and next playlists pages.
+    connect(m_userPlaylist, &SpotifyPlaylist::fetchNextPage, this, &SpotifyAPI::fetchPrevNextPlaylistsPage);
+    connect(m_userPlaylist, &SpotifyPlaylist::fetchPreviousPage, this, &SpotifyAPI::fetchPrevNextPlaylistsPage);
 }
 
 SpotifyAPI::~SpotifyAPI() 
@@ -207,6 +211,17 @@ void SpotifyAPI::fetchUserPlaylists()
     QNetworkRequest request(SpotifyPlaylist::SPOTIFY_USER_PLAYLIST_ENDPOINT + "?" + query.toString(QUrl::FullyEncoded));
     QNetworkReply* reply = m_spotifyAuth->get(request);
     connect(reply, &QNetworkReply::finished, [this, reply]() {
+        m_userPlaylist->handleFetchResponse(reply);
+    });
+}
+
+void SpotifyAPI::fetchPrevNextPlaylistsPage(const QUrl& url)
+{
+    if (!url.isValid()) return;
+
+    QNetworkRequest request(url);
+    QNetworkReply* reply = m_spotifyAuth->get(request);
+    connect(reply, &QNetworkReply::finished, [this, reply](){
         m_userPlaylist->handleFetchResponse(reply);
     });
 }

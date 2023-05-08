@@ -18,6 +18,10 @@ Item {
                 flat: true
                 enabled: SpotifyAPI.userPlaylist.hasPrevious
                 text: "previous"
+
+                onClicked: {
+                    SpotifyAPI.userPlaylist.fetchPrevious();
+                }
             }
 
             Label {
@@ -29,6 +33,10 @@ Item {
                 flat: true
                 enabled: SpotifyAPI.userPlaylist.hasNext
                 text: "next"
+
+                onClicked: {
+                    SpotifyAPI.userPlaylist.fetchNext();
+                }
             }
         }
     }

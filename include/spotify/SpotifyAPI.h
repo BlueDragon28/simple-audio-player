@@ -47,6 +47,7 @@ private:
 
     // Get user playlists informations
     void fetchUserPlaylists();
+    void fetchPrevNextPlaylistsPage(const QUrl& url);
 
     // When authenticated, save the refresh token
     void saveRefreshToken();
