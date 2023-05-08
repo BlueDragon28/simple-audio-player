@@ -9,7 +9,7 @@
 #include <qnetworkreply.h>
 #include <qobject.h>
 
-const int SpotifyPlaylist::MAX_PER_PAGE = 10;
+const int SpotifyPlaylist::MAX_PER_PAGE = 50;
 const QString SpotifyPlaylist::SPOTIFY_USER_PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 const int SpotifyPlaylist::LIMIT_IMAGE_HEIGHT = 300;
 
