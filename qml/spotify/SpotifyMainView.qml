@@ -8,6 +8,13 @@ Rectangle {
     id: root
     color: palette.base
 
+    states: [
+        State {
+            name: "userProfile"
+            PropertyChanges { target: spotifySectionStackLayout; currentIndex: 1; }
+        }
+    ]
+
     StackLayout {
         id: spotifySectionStackLayout
         anchors.fill: parent
@@ -26,7 +33,7 @@ Rectangle {
         target: SpotifyAPI
 
         function onAuthenticated() {
-            spotifySectionStackLayout.currentIndex = 1;
+            root.state = "userProfile";
         }
     }
 
