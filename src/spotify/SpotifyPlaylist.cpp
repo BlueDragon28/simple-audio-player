@@ -311,6 +311,13 @@ SpotifyPlaylistItem* SpotifyPlaylist::parsePlaylistJSONItem(const QJsonValue& it
 
     const QJsonObject object = itemValue.toObject();
 
+    if (!object.contains("href"))
+    {
+        return nullptr;
+    }
+
+    const QUrl href = object.value("href").toString();
+
     if (!object.contains("name"))
     {
         return nullptr;
@@ -326,7 +333,7 @@ SpotifyPlaylistItem* SpotifyPlaylist::parsePlaylistJSONItem(const QJsonValue& it
     const QJsonValue imagesArrayValue = object.value("images");
     const QUrl imageUrl = parseImagesUrls(imagesArrayValue);
 
-    return new SpotifyPlaylistItem(name, imageUrl, this);
+    return new SpotifyPlaylistItem(name, imageUrl, href, this);
 }
 
 QUrl SpotifyPlaylist::parseImagesUrls(const QJsonValue& imagesArrayValue)

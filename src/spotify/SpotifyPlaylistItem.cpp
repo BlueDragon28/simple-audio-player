@@ -1,9 +1,10 @@
 #include "spotify/SpotifyPlaylistItem.h"
 
-SpotifyPlaylistItem::SpotifyPlaylistItem(const QString& title, const QUrl& imageUrl, QObject* parent) :
+SpotifyPlaylistItem::SpotifyPlaylistItem(const QString& title, const QUrl& imageUrl, const QUrl& href, QObject* parent) :
     QObject(parent),
     m_title(title),
-    m_imageUrl(imageUrl)
+    m_imageUrl(imageUrl),
+    m_href(href)
 {}
 
 SpotifyPlaylistItem::~SpotifyPlaylistItem()
@@ -19,15 +20,22 @@ QUrl SpotifyPlaylistItem::imageUrl() const
     return m_imageUrl;
 }
 
+QUrl SpotifyPlaylistItem::href() const
+{
+    return m_href;
+}
+
 bool SpotifyPlaylistItem::operator==(const SpotifyPlaylistItem& other) const
 {
-    return other.m_title.compare(m_title) == 0 && other.m_imageUrl == m_imageUrl;
+    return other.m_title.compare(m_title) == 0 && 
+        other.m_imageUrl == m_imageUrl &&
+        other.m_href == m_href;
 }
 
 SpotifyPlaylistItem::operator QString() const
 {
-    return QString("{\"title\":\"%1\",\"imageUrl\":\"%2\"}")
-        .arg(m_title, m_imageUrl.toString());
+    return QString("{\"title\":\"%1\",\"imageUrl\":\"%2\",\"href\":\"%3\"}")
+        .arg(m_title, m_imageUrl.toString(), m_href.toString());
 }
 
 void SpotifyPlaylistItem::setTitle(const QString& title)
@@ -44,4 +52,12 @@ void SpotifyPlaylistItem::setImageUrl(const QUrl& imageUrl)
 
     m_imageUrl = imageUrl;
     emit imageUrlChanged();
+}
+
+void SpotifyPlaylistItem::setHRef(const QUrl& href)
+{
+    if (href == m_href) return;
+
+    m_href = href;
+    emit hrefChanged();
 }
