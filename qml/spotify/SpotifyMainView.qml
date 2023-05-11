@@ -12,6 +12,10 @@ Rectangle {
         State {
             name: "userProfile"
             PropertyChanges { target: spotifySectionStackLayout; currentIndex: 1; }
+        },
+        State {
+            name: "playlistDetails"
+            PropertyChanges { target: spotifySectionStackLayout; currentIndex: 2; }
         }
     ]
 
@@ -26,6 +30,10 @@ Rectangle {
 
         SpotifyUserProfile {
             id: spotifyUserProfile
+        }
+
+        SpotifyPlaylistDetails {
+            id: playlistDetail
         }
     }
     
