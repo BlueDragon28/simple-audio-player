@@ -19,7 +19,7 @@ int SpotifyUserPlaylistsListModel::rowCount(const QModelIndex& parent) const
 
 QVariant SpotifyUserPlaylistsListModel::data(const QModelIndex& index, int role) const
 {
-    if (role != TITLE && role != IMAGE_URL) return QVariant();
+    if (role != TITLE && role != IMAGE_URL && role != HREF) return QVariant();
 
     const int i = index.row();
     QVariant vItem = m_items.at(i);
@@ -33,9 +33,13 @@ QVariant SpotifyUserPlaylistsListModel::data(const QModelIndex& index, int role)
     {
         return item.title;
     } 
-    else if  (role == IMAGE_URL)
+    else if (role == IMAGE_URL)
     {
         return item.imageUrl;
+    }
+    else if (role == HREF)
+    {
+        return item.href;
     }
 
     return QVariant();
@@ -46,6 +50,7 @@ QHash<int, QByteArray> SpotifyUserPlaylistsListModel::roleNames() const
     QHash<int, QByteArray> roles;
     roles[TITLE] = "title";
     roles[IMAGE_URL] = "imageUrl";
+    roles[HREF] = "href";
     return roles;
 }
 
@@ -90,7 +95,8 @@ void SpotifyUserPlaylistsListModel::retrievePlaylists()
 
         PlaylistItem playlistItem = {
             playlist->title(),
-            playlist->imageUrl()
+            playlist->imageUrl(),
+            playlist->href()
         };
         m_items.append(QVariant::fromValue(playlistItem));
     }
@@ -99,4 +105,18 @@ void SpotifyUserPlaylistsListModel::retrievePlaylists()
 
     beginInsertRows(QModelIndex(), 0, m_items.size()-1);
     endInsertRows();
+}
+
+QVariantMap SpotifyUserPlaylistsListModel::get(int i) const
+{
+    QModelIndex index = this->index(i, 0);
+    QHash<int, QByteArray> roles = roleNames();
+    QVariantMap map;
+    for (QHash<int, QByteArray>::const_iterator cit = roles.cbegin();
+        cit != roles.cend();
+        cit++)
+    {
+        map[cit.value()] = index.data(cit.key());
+    }
+    return map;
 }

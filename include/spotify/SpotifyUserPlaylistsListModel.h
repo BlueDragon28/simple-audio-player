@@ -19,7 +19,8 @@ public:
     enum PlaylistRole 
     {
         TITLE = Qt::UserRole+1,
-        IMAGE_URL
+        IMAGE_URL,
+        HREF
     };
 
     SpotifyUserPlaylistsListModel(QObject* parent = nullptr);
@@ -32,6 +33,7 @@ public:
     SpotifyPlaylist* playlistsAPI() const;
 
 public slots:
+    QVariantMap get(int i) const;
     void setPlaylistsAPI(SpotifyPlaylist* playlistsAPI);
 
 signals:
@@ -42,6 +44,7 @@ protected:
     {
         QString title;
         QUrl imageUrl;
+        QUrl href;
     };
 
 private:
