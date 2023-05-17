@@ -7,12 +7,18 @@ import SimpleAudioPlayer 1.0
 Item {
     id: root
 
+    signal back()
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
         SpotifyPlaylistDetailsToolbar {
             Layout.fillWidth: true
+
+            onBack: {
+                root.back();
+            }
         }
 
         SpotifyPlaylistDetailsHeader {
@@ -29,6 +35,31 @@ Item {
             // SpotifyPlaylistDetailsTracks {
             //     anchors.fill: parent
             // }
+        }
+    }
+
+    SpotifyPlaylistListModel {
+        id: playlistListModel
+
+        onNameChanged: {
+            console.log("playlist name:", name);
+        }
+
+        onImageHrefChanged: {
+            console.log("image href:", imageHRef);
+        }
+
+        onIdChanged: {
+            console.log("id:", id);
+        }
+    }
+
+    Connections {
+        target: SpotifyAPI
+
+        function onReceivedPlaylistDetails(parsedPlaylist) {
+            console.log("haha, first step successfull");
+            playlistListModel.setPlaylist(parsedPlaylist);
         }
     }
 }

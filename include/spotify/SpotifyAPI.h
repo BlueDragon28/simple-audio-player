@@ -2,6 +2,7 @@
 #define SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 
 #include "SpotifyPlaylist.h"
+#include "SpotifyReceivedPlaylistElement.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
 #include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
@@ -35,10 +36,14 @@ signals:
     void userInfoChanged(); // Disable warning
     void userPlaylistChanged(); // Disable warning
 
+    void receivedPlaylistDetails(SpotifyReceivedPlaylistElement* playlist);
+
 public slots:
     void restoreCredential();
     void authenticate(bool saveToken);
     void setClientID(const QString& clientID);
+
+    void displayPlaylistDetails(const QUrl& playlistHRef);
 
 private:
     // Get information about the user (username, country...)
@@ -52,6 +57,9 @@ private:
     // When authenticated, save the refresh token
     void saveRefreshToken();
     void tokenRestoredHandler(const QString& refreshToken);
+
+    // Get playlist details
+    void handlePlaylistDetails(QNetworkReply* reply);
 
     bool m_saveToken;
     bool m_firstTokenRefresh;

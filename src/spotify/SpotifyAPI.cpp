@@ -1,5 +1,6 @@
 #include "spotify/SpotifyAPI.h"
 #include "SpotifyPlaylist.h"
+#include "SpotifyReceivedPlaylistElement.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
 #include "spotify/SpotifyTokenSaver.h"
 #include "spotify/SpotifyUserInfo.h"
@@ -224,4 +225,35 @@ void SpotifyAPI::fetchPrevNextPlaylistsPage(const QUrl& url)
     connect(reply, &QNetworkReply::finished, [this, reply](){
         m_userPlaylist->handleFetchResponse(reply);
     });
+}
+
+void SpotifyAPI::displayPlaylistDetails(const QUrl& playlistHRef)
+{
+    if (!playlistHRef.isValid()) return;
+
+    QNetworkRequest request(playlistHRef);
+    QNetworkReply* reply = m_spotifyAuth->get(request);
+    connect(reply, &QNetworkReply::finished, [reply, this]() {
+        this->handlePlaylistDetails(reply);
+    });
+}
+
+void SpotifyAPI::handlePlaylistDetails(QNetworkReply* reply)
+{
+    const QByteArray responseData = reply->readAll();
+    reply->deleteLater();
+
+    SpotifyReceivedPlaylistElement* parsedPlaylist =
+        new SpotifyReceivedPlaylistElement(responseData);
+    
+    if (parsedPlaylist->failed())
+    {
+        delete parsedPlaylist;
+        qDebug() << "parse playlist failed";
+        return;
+    }
+
+    qDebug() << "parse playlist successfull";
+
+    emit receivedPlaylistDetails(parsedPlaylist);
 }

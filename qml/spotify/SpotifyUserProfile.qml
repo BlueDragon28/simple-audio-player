@@ -7,6 +7,8 @@ import SimpleAudioPlayer 1.0
 Item {
     id: root
 
+    signal viewPlaylist()
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -74,6 +76,10 @@ Item {
 
             SpotifyUserPlaylist {
                 anchors.fill: parent
+
+                onViewPlaylist: {
+                    root.viewPlaylist();
+                }
             }
         }
     }

@@ -39,6 +39,8 @@ public:
     QUrl previous() const;
     bool hasPrevious() const;
 
+    static QUrl parseImagesUrls(const QJsonValue& imagesArrayValue);
+
 public slots:
     void handleFetchResponse(QNetworkReply* reply);
     void fetchNext();
@@ -71,7 +73,6 @@ private:
     void setHasPrevious(const QUrl& url);
 
     SpotifyPlaylistItem* parsePlaylistJSONItem(const QJsonValue& jItem);
-    QUrl parseImagesUrls(const QJsonValue& imagesArrayValue);
 
     int m_total;
     int m_pageNumber;

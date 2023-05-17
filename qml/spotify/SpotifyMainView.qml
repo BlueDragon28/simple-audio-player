@@ -30,10 +30,18 @@ Rectangle {
 
         SpotifyUserProfile {
             id: spotifyUserProfile
+
+            onViewPlaylist: {
+                root.state = "playlistDetails";
+            }
         }
 
         SpotifyPlaylistDetails {
             id: playlistDetail
+            
+            onBack: {
+                root.state = "userProfile";
+            }
         }
     }
     

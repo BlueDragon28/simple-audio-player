@@ -8,6 +8,8 @@ Item {
     id: root
 
     property alias model: playlistsView.model
+    
+    signal viewPlaylist(int index)
 
     GridView {
         id: playlistsView
@@ -65,7 +67,11 @@ Item {
                 anchors.fill: parent
 
                 onClicked: {
-                    playlistsView.currentIndex = index
+                    playlistsView.currentIndex = index;
+                }
+
+                onDoubleClicked: {
+                    root.viewPlaylist(playlistsView.currentIndex);
                 }
             }
         }
