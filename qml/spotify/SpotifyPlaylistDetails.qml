@@ -22,6 +22,7 @@ Item {
         }
 
         SpotifyPlaylistDetailsHeader {
+            id: playlistHeader
             Layout.fillWidth: true
             Layout.preferredHeight: 158
         }
@@ -42,15 +43,11 @@ Item {
         id: playlistListModel
 
         onNameChanged: {
-            console.log("playlist name:", name);
+            playlistHeader.name = name;
         }
 
         onImageHrefChanged: {
-            console.log("image href:", imageHRef);
-        }
-
-        onIdChanged: {
-            console.log("id:", id);
+            playlistHeader.href = imageHref;
         }
     }
 
@@ -58,7 +55,6 @@ Item {
         target: SpotifyAPI
 
         function onReceivedPlaylistDetails(parsedPlaylist) {
-            console.log("haha, first step successfull");
             playlistListModel.setPlaylist(parsedPlaylist);
         }
     }

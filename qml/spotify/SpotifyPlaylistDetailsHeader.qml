@@ -8,6 +8,11 @@ Rectangle {
     id: root
     color: palette.alternateBase
 
+    property url href
+    property string name
+    property string authors
+    property string duration
+
     RowLayout {
         anchors.fill: parent
         anchors.margins: 15
@@ -19,7 +24,9 @@ Rectangle {
             Layout.preferredHeight: 128
             sourceSize.width: Layout.preferredWidth
             sourceSize.height: Layout.preferredHeight
-            source: "qrc:///images/musiqueIcon.png"
+            source: href.toString().length > 0 ? 
+                href :
+                "qrc:///images/musiqueIcon.png"
             smooth: true
             mipmap: true
         }
@@ -34,12 +41,12 @@ Rectangle {
 
             Label {
                 id: playlistName
-                text: "playlistName"
+                text: name.length > 0 ? name : "Unknown Playlist"
                 font.pointSize: 30
             }
 
             Label {
-                text: "Author: abc..., Duration: 2s"
+                text: `Author: ${authors}, Duration: ${duration}`
                 font.pointSize: 8
             }
         }
