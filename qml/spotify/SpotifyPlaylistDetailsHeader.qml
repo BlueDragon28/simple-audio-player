@@ -13,6 +13,15 @@ Rectangle {
     property string authors
     property string duration
 
+    function concartAuthorsAndDuration(authors, duration) {
+        const displayedAuthors = 
+            authors?.length > 0 ? authors : "...";
+        const displayedDuration =
+            duration?.length > 0 ? duration : "0ms";
+
+        return `Authors: ${displayedAuthors}, Duration: ${displayedDuration}`;
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.margins: 15
@@ -46,7 +55,7 @@ Rectangle {
             }
 
             Label {
-                text: `Author: ${authors}, Duration: ${duration}`
+                text: concartAuthorsAndDuration(authors, duration)
                 font.pointSize: 8
             }
         }
