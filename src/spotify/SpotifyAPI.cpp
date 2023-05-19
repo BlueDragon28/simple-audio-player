@@ -253,7 +253,5 @@ void SpotifyAPI::handlePlaylistDetails(QNetworkReply* reply)
         return;
     }
 
-    qDebug() << "parse playlist successfull";
-
     emit receivedPlaylistDetails(parsedPlaylist);
 }

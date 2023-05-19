@@ -44,6 +44,8 @@ void SpotifyPlaylistListModel::setPlaylist(SpotifyReceivedPlaylistElement* playl
     emit nameChanged();
     emit imageHrefChanged();
     emit idChanged();
+    
+    getAuthorsAndDuration();
 }
 
 QString SpotifyPlaylistListModel::name() const
@@ -65,4 +67,101 @@ QString SpotifyPlaylistListModel::id() const
     if (!m_playlist) return QString();
 
     return m_playlist->id();
+}
+
+QString SpotifyPlaylistListModel::authors() const
+{
+    return m_authors;
+}
+
+QString SpotifyPlaylistListModel::duration() const
+{
+    return m_duration;
+}
+
+void SpotifyPlaylistListModel::setAuthors(const QString& authors)
+{
+    if (authors == m_authors) return;
+
+    m_authors = authors;
+    emit authorsChanged();
+}
+
+void SpotifyPlaylistListModel::setDuration(const QString& duration)
+{
+    if (duration == m_duration) return;
+
+    m_duration = duration;
+    emit durationChanged();
+}
+
+void SpotifyPlaylistListModel::getAuthorsAndDuration()
+{
+    if (!m_playlist || !m_playlist->tracksCount())
+    {
+        setAuthors("");
+        setDuration("");
+        return;
+    }
+
+    setAuthors(m_playlist->track(0).artists);
+
+    uint64_t totalDuration = 0;
+    for (int i = 0; i < m_playlist->tracksCount(); i++)
+    {
+        totalDuration+= m_playlist->track(i).durationMS;
+    }
+
+    setDuration(parseDuration(totalDuration));
+}
+
+QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
+{
+    QString totalDuration;
+    int count = 0;
+
+    static const uint64_t dayInMS = 86400000;
+    static const uint64_t hourInMS = 3600000;
+    static const uint64_t minuteInMS = 60000;
+    static const uint64_t secondInMS = 1000;
+
+    if (duration >= dayInMS)
+    {
+        totalDuration += QString::number(duration/dayInMS) + "day";
+        count++;
+    }
+
+    if (duration >= hourInMS && count < 2)
+    {
+        totalDuration += 
+            (count > 0 ? " " : "") +
+            QString::number(duration/hourInMS) + "h";
+        count++;
+    }
+
+    if (duration >= minuteInMS && count < 2)
+    {
+        totalDuration += 
+            (count > 0 ? " " : "") +
+            QString::number(duration/minuteInMS) + "m";
+        count++;
+    }
+
+    if (duration >= secondInMS && count < 2)
+    {
+        totalDuration +=
+            (count > 0 ? " " : "") +
+            QString::number(duration/secondInMS) + "s";
+        count++;
+    }
+
+    if (count < 2)
+    {
+        totalDuration +=
+            (count > 0 ? " " : "") +
+            QString::number(duration) + "ms";
+        count++;
+    }
+
+    return totalDuration;
 }

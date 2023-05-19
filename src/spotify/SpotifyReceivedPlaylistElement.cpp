@@ -62,9 +62,6 @@ void SpotifyReceivedPlaylistElement::parseResponse(const QByteArray& response)
         return;
     }
 
-    qDebug() << "Received playlist data:";
-    qDebug() << jsonDocument;
-
     parsePlaylist(jsonDocument.object());
 }
 
@@ -155,7 +152,7 @@ QList<SpotifyReceivedPlaylistElement::Track> SpotifyReceivedPlaylistElement::par
         bool result = false;
         Track track = parseTrack(trackValue.toObject(), &result);
 
-        if (!result) continue;
+        if (result) continue;
 
         playlistTracks.append(track);
     }
@@ -172,6 +169,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (trackObject.isEmpty() || !trackObject.contains("is_local"))
     {
+        qDebug() << "isLocal not valid";
         return callError();
     }
 
@@ -179,6 +177,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (isLocalFile || !trackObject.contains("track"))
     {
+        qDebug() << "trackIsInvalid";
         return callError();
     }
 
@@ -186,20 +185,15 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (trackJSonValue.isNull() || !trackJSonValue.isObject())
     {
+        qDebug() << "invalid track object";
         return callError();
     }
 
     const QJsonObject trackInfoObject = trackJSonValue.toObject();
 
-    if (!trackInfoObject.contains("is_playable"))
+    if (!trackInfoObject.contains("id"))
     {
-        return callError();
-    }
-
-    const bool isPlayable = trackInfoObject.value("is_playable").toBool(false);
-
-    if (!isPlayable || !trackInfoObject.contains("id"))
-    {
+        qDebug() << "no id";
         return callError();
     }
 
@@ -207,6 +201,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (id.isEmpty() || !trackInfoObject.contains("name"))
     {
+        qDebug() << "no name";
         return callError();
     }
 
@@ -214,13 +209,15 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (name.isEmpty() || !trackInfoObject.contains("href"))
     {
+        qDebug() << "no href";
         return callError();
     }
 
     const QString href = trackInfoObject.value("href").toString();
 
-    if (href.isEmpty() || trackInfoObject.contains("duration_ms"))
+    if (href.isEmpty() || !trackInfoObject.contains("duration_ms"))
     {
+        qDebug() << "no duration";
         return callError();
     }
 
@@ -230,6 +227,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
         !trackInfoObject.contains("artists") ||
         !trackInfoObject.value("artists").isArray())
     {
+        qDebug() << "no artists";
         return callError();
     }
 
@@ -240,6 +238,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
         !trackInfoObject.contains("album") ||
         !trackInfoObject.value("album").isObject())
     {
+        qDebug() << "no album";
         return callError();
     }
 
@@ -248,6 +247,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     if (getAlbumFailed)
     {
+        qDebug() << "failed to get album";
         return callError();
     }
 
@@ -298,7 +298,7 @@ QString SpotifyReceivedPlaylistElement::retrieveArtistsName(const QJsonArray& ar
             return callError();
         }
 
-        artistsName += ", " + artistName;
+        artistsName += (artistsName.size() > 0 ? ", " : "") + artistName;
     }
 
     if (artistsName.isEmpty())
