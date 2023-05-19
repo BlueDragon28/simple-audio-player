@@ -38,7 +38,7 @@ public:
 private:
     void parsePlaylist(const QJsonObject& rootPlaylist);
     QUrl getImageHRef(const QJsonValue& jsonImagesArray);
-    QList<Track> parseTracks(const QJsonArray& tracksJSonArray);
+    QList<Track> parseTracks(const QJsonObject& tracksJSonArray);
     Track parseTrack(const QJsonObject& trackObject, bool* error = nullptr);
     QString retrieveArtistsName(const QJsonArray& artistsArray, bool* error = nullptr);
     QString retrieveAlbumName(const QJsonObject& albumObject, bool* error = nullptr);

@@ -58,76 +58,60 @@ void SpotifyReceivedPlaylistElement::parseResponse(const QByteArray& response)
     if (!jsonDocument.isObject()) 
     {
         m_failed = true;
+        qDebug() << "playlist json data is not an object";
         return;
     }
 
-    parsePlaylist(jsonDocument.object());
-
     qDebug() << "Received playlist data:";
     qDebug() << jsonDocument;
+
+    parsePlaylist(jsonDocument.object());
 }
 
 void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlaylist)
 {
-    if (rootPlaylist.isEmpty())
+    if (rootPlaylist.isEmpty() ||
+        rootPlaylist.contains("error") ||
+        !rootPlaylist.contains("name"))
     {
         m_failed = true;
-        return;
-    }
-
-    if (!rootPlaylist.contains("name"))
-    {
-        m_failed = true;
+        qDebug() << "root object empty or name key does not exist!";
         return;
     }
 
     const QString name = rootPlaylist.value("name").toString();
 
-    if (name.isEmpty())
+    if (name.isEmpty() || !rootPlaylist.contains("id"))
     {
         m_failed = true;
-        return;
-    }
-
-    if (!rootPlaylist.contains("id"))
-    {
-        m_failed = true;
+        qDebug() << "name is invalid or id does not exist";
         return;
     }
 
     const QString id = rootPlaylist.value("id").toString();
 
-    if (id.isEmpty())
+    if (id.isEmpty() || !rootPlaylist.contains("images"))
     {
         m_failed = true;
-        return;
-    }
-
-    if (!rootPlaylist.contains("images"))
-    {
-        m_failed = true;
+        qDebug() << "id is invalid or images does not exist";
         return;
     }
 
     const QUrl imageHRef = getImageHRef(rootPlaylist.value("images").toArray());
 
-    if (!imageHRef.isValid())
+    if (!imageHRef.isValid() || !rootPlaylist.contains("tracks"))
     {
         m_failed = true;
+        qDebug() << "image is invalid or tracks does not exist";
         return;
     }
 
-    if (!rootPlaylist.contains("tracks"))
-    {
-        m_failed = true;
-        return;
-    }
-
-    const QList<Track> tracksArray = parseTracks(rootPlaylist.value("tracks").toArray());
+    const QList<Track> tracksArray = parseTracks(rootPlaylist.value("tracks").toObject());
 
     if (tracksArray.isEmpty())
     {
         m_failed = true;
+        qDebug() << "tracks is empty";
         return;
     }
 
@@ -135,6 +119,7 @@ void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlayli
     m_imageHref = imageHRef;
     m_id = id;
     m_tracks = tracksArray;
+    m_failed = false;
 }
 
 QUrl SpotifyReceivedPlaylistElement::getImageHRef(const QJsonValue& jsonImagesArray)
@@ -142,16 +127,25 @@ QUrl SpotifyReceivedPlaylistElement::getImageHRef(const QJsonValue& jsonImagesAr
     return SpotifyPlaylist::parseImagesUrls(jsonImagesArray);
 }
 
-QList<SpotifyReceivedPlaylistElement::Track> SpotifyReceivedPlaylistElement::parseTracks(const QJsonArray& tracksJsonArray)
+QList<SpotifyReceivedPlaylistElement::Track> SpotifyReceivedPlaylistElement::parseTracks(const QJsonObject& tracksJsonObject)
 {
-    if (tracksJsonArray.isEmpty())
+    if (tracksJsonObject.isEmpty() || !tracksJsonObject.contains("items"))
     {
+        qDebug() << "tracks json object is empty or items does not exists";
+        return {};
+    }
+
+    const QJsonArray itemsJsonArray = tracksJsonObject.value("items").toArray();
+
+    if (itemsJsonArray.isEmpty())
+    {
+        qDebug() << "tracks items json array is empty";
         return {};
     }
 
     QList<Track> playlistTracks;
 
-    for (const QJsonValue& trackValue : tracksJsonArray)
+    for (const QJsonValue& trackValue : itemsJsonArray)
     {
         if (!trackValue.isObject())
         {
