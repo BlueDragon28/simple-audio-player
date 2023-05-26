@@ -128,6 +128,7 @@ QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
     if (duration >= dayInMS)
     {
         totalDuration += QString::number(duration/dayInMS) + "day";
+        duration %= dayInMS;
         count++;
     }
 
@@ -136,6 +137,7 @@ QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
         totalDuration += 
             (count > 0 ? " " : "") +
             QString::number(duration/hourInMS) + "h";
+        duration %= hourInMS;
         count++;
     }
 
@@ -144,6 +146,7 @@ QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
         totalDuration += 
             (count > 0 ? " " : "") +
             QString::number(duration/minuteInMS) + "m";
+        duration %= minuteInMS;
         count++;
     }
 
@@ -152,6 +155,7 @@ QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
         totalDuration +=
             (count > 0 ? " " : "") +
             QString::number(duration/secondInMS) + "s";
+        duration %= secondInMS;
         count++;
     }
 
