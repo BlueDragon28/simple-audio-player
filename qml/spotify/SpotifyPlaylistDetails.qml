@@ -24,7 +24,7 @@ Item {
         SpotifyPlaylistDetailsHeader {
             id: playlistHeader
             Layout.fillWidth: true
-            Layout.preferredHeight: 158
+            Layout.preferredHeight: 220
         }
 
         Rectangle {

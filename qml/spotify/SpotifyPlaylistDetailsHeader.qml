@@ -29,8 +29,8 @@ Rectangle {
 
         Image {
             id: playlistCover
-            Layout.preferredWidth: 128
-            Layout.preferredHeight: 128
+            Layout.preferredWidth: parent.height
+            Layout.preferredHeight: parent.height
             sourceSize.width: Layout.preferredWidth
             sourceSize.height: Layout.preferredHeight
             source: href.toString().length > 0 ? 
