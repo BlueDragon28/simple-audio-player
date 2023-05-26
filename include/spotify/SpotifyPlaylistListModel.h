@@ -21,7 +21,8 @@ class SpotifyPlaylistListModel : public SelectionModel
 public:
     enum TrackRole 
     {
-        NAME = MAX_ROLE,
+        TRACK_NUMBER = MAX_ROLE,
+        NAME,
         ARTISTS,
         ALBUM
     };
@@ -54,6 +55,7 @@ private:
     void setAuthors(const QString& authors);
     void setDuration(const QString& duration);
     void getAuthorsAndDuration();
+    void parsePlaylistData();
     QString parseDuration(uint64_t duration) const;
 
     SpotifyReceivedPlaylistElement* m_playlist;

@@ -13,15 +13,45 @@ SpotifyPlaylistListModel::~SpotifyPlaylistListModel()
 
 QVariant SpotifyPlaylistListModel::data(const QModelIndex& index, int role) const
 {
+    if ((role != TRACK_NUMBER && role != NAME &&
+        role != ARTISTS && role != ALBUM) ||
+        !item(index.row()).canConvert<SpotifyReceivedPlaylistElement::Track>() ||
+        !item(index.row()).convert(
+            QMetaType::fromType<SpotifyReceivedPlaylistElement::Track>()))
+    {
+        return SelectionModel::data(index, role);
+    }
+
+    const SpotifyReceivedPlaylistElement::Track track = 
+        qvariant_cast<SpotifyReceivedPlaylistElement::Track>(item(index.row()));
+
+    if (role == TRACK_NUMBER)
+    {
+        return QString::number(index.row()+1);
+    }
+    else if (role == NAME)
+    {
+        return track.name;
+    }
+    else if (role == ARTISTS)
+    {
+        return track.artists;
+    }
+    else if (role == ALBUM)
+    {
+        return track.album;
+    }
+
     return SelectionModel::data(index, role);
 }
 
 QHash<int, QByteArray> SpotifyPlaylistListModel::roleNames() const
 {
     QHash<int, QByteArray> roles = SelectionModel::roleNames();
+    roles[TRACK_NUMBER] = "trackIndex";
     roles[NAME] = "name";
     roles[ARTISTS] = "artists";
-    roles[ALBUM] = "albums";
+    roles[ALBUM] = "album";
     return roles;
 }
 
@@ -46,6 +76,7 @@ void SpotifyPlaylistListModel::setPlaylist(SpotifyReceivedPlaylistElement* playl
     emit idChanged();
     
     getAuthorsAndDuration();
+    parsePlaylistData();
 }
 
 QString SpotifyPlaylistListModel::name() const
@@ -168,4 +199,29 @@ QString SpotifyPlaylistListModel::parseDuration(uint64_t duration) const
     }
 
     return totalDuration;
+}
+
+void SpotifyPlaylistListModel::parsePlaylistData() 
+{
+    if (rowCount() > 0) 
+    {
+        beginRemoveRows(QModelIndex(), 0, rowCount()-1);
+        clear();
+        endRemoveRows();
+    }
+
+    if (!m_playlist) return;
+
+    beginInsertRows(QModelIndex(), 0, m_playlist->tracksCount()-1);
+
+    QVariantList tracksData;
+
+    for (int i = 0; i < m_playlist->tracksCount(); i++)
+    {
+        tracksData.append(QVariant::fromValue(m_playlist->track(i)));
+    }
+
+    setItemList(tracksData);
+
+    endInsertRows();
 }
