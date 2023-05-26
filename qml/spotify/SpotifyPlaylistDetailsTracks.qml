@@ -4,6 +4,8 @@ import QtQuick.Layouts 6.2
 import QtQuick.Dialogs 6.3
 import SimpleAudioPlayer 1.0
 
+import "../"
+
 Item {
     id: root
 
@@ -11,15 +13,62 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 0
 
         SpotifyPlaylistTracksHeader {
             id: tracksHeader
             Layout.fillWidth: true
         }
 
-        Item {
+        ListView {
+            id: tracksListView
             Layout.fillWidth: true
             Layout.fillHeight: true
+            clip: true
+            spacing: 0
+            boundsBehavior: Flickable.StopAtBounds
+
+            model: tracksModel
+            delegate: trackListDelegate
+        }
+    }
+
+    Component {
+        id: trackListDelegate
+
+        TrackListRowBaseItem {
+            width: tracksListView.width
+            contentHeight: trackName.height
+            isItemSelected: isSelected
+            isPlaying: false
+
+            Label {
+                id: trackNumber 
+                width: tracksHeader.trackNumberWidth
+                clip: true
+                text: trackIndex
+            }
+
+            Label {
+                id: trackName
+                width: tracksHeader.trackNameWidth
+                clip: true
+                text: name
+            }
+
+            Label {
+                id: trackArtists
+                width: tracksHeader.trackArtistsWidth
+                clip: true
+                text: artists
+            }
+
+            Label {
+                id: trackAlbum
+                width: tracksHeader.trackAlbumWidth
+                clip: true
+                text: album
+            }
         }
     }
 }

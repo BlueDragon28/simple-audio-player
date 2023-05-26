@@ -35,29 +35,31 @@ Item {
 
             SpotifyPlaylistDetailsTracks {
                 anchors.fill: parent
+                
+                tracksModel: SpotifyPlaylistListModel {
+                    id: playlistListModel
+
+                    onNameChanged: {
+                        playlistHeader.name = name;
+                    }
+
+                    onImageHrefChanged: {
+                        playlistHeader.href = imageHref;
+                    }
+
+                    onAuthorsChanged: {
+                        playlistHeader.authors = authors;
+                    }
+
+                    onDurationChanged: {
+                        playlistHeader.duration = duration;
+                    }
+                }
             }
         }
     }
 
-    SpotifyPlaylistListModel {
-        id: playlistListModel
-
-        onNameChanged: {
-            playlistHeader.name = name;
-        }
-
-        onImageHrefChanged: {
-            playlistHeader.href = imageHref;
-        }
-
-        onAuthorsChanged: {
-            playlistHeader.authors = authors;
-        }
-
-        onDurationChanged: {
-            playlistHeader.duration = duration;
-        }
-    }
+    
 
     Connections {
         target: SpotifyAPI

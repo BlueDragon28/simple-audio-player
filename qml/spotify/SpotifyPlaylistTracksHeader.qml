@@ -10,6 +10,11 @@ Item {
     height: 25
     implicitHeight: 25
 
+    property alias trackNumberWidth: trackNumber.width
+    property alias trackNameWidth: trackName.width
+    property alias trackArtistsWidth: trackArtists.width
+    property alias trackAlbumWidth: trackAlbum.width
+
     ToolBar {
         anchors.fill: parent
         horizontalPadding: 0
