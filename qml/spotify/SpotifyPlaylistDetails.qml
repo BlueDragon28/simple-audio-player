@@ -33,9 +33,9 @@ Item {
             clip: true
             color: palette.base
 
-            // SpotifyPlaylistDetailsTracks {
-            //     anchors.fill: parent
-            // }
+            SpotifyPlaylistDetailsTracks {
+                anchors.fill: parent
+            }
         }
     }
 

@@ -35,6 +35,8 @@
         <file>qml/spotify/SpotifyPlaylistDetails.qml</file>
         <file>qml/spotify/SpotifyPlaylistDetailsToolbar.qml</file>
         <file>qml/spotify/SpotifyPlaylistDetailsHeader.qml</file>
+        <file>qml/spotify/SpotifyPlaylistDetailsTracks.qml</file>
+        <file>qml/spotify/SpotifyPlaylistTracksHeader.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>
