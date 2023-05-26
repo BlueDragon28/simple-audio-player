@@ -52,12 +52,10 @@ Item {
 
         onAuthorsChanged: {
             playlistHeader.authors = authors;
-            console.log("authors:", playlistHeader.authors);
         }
 
         onDurationChanged: {
             playlistHeader.duration = duration;
-            console.log("duration:", playlistHeader.duration);
         }
     }
 
