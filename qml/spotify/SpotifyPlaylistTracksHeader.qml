@@ -57,7 +57,8 @@ Item {
                 id: trackArtists
 
                 SplitView.minimumWidth: 120
-                SplitView.maximumWidth: 300
+                SplitView.maximumWidth: 400
+                SplitView.preferredWidth: 300
 
                 Label {
                     anchors.fill: parent
@@ -72,7 +73,8 @@ Item {
                 id: trackAlbum
 
                 SplitView.minimumWidth: 120
-                SplitView.maximumWidth: 300
+                SplitView.maximumWidth: 400
+                SplitView.preferredWidth: 300
 
                 Label {
                     anchors.fill: parent
