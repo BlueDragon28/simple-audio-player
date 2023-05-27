@@ -7,6 +7,10 @@ import SimpleAudioPlayer 1.0
 Item {
     id: root
 
+    function clearField() {
+        clientID.text = "";
+    }
+
     Rectangle {
         anchors.centerIn: parent
         width: 300

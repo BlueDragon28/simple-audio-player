@@ -10,6 +10,10 @@ Rectangle {
 
     states: [
         State {
+            name: ""
+            PropertyChanges { target: spotifySectionStackLayout; currentIndex: 0; }
+        },
+        State {
             name: "userProfile"
             PropertyChanges { target: spotifySectionStackLayout; currentIndex: 1; }
         },
@@ -50,6 +54,11 @@ Rectangle {
 
         function onAuthenticated() {
             root.state = "userProfile";
+        }
+
+        function onLoggedout() {
+            root.state = "";
+            spotifyLoginScreen.clearField();
         }
     }
 
