@@ -13,6 +13,10 @@ Item {
         anchors.fill: parent
         spacing: 0
 
+        SpotifyUserProfileToolbar {
+            Layout.fillWidth: true
+        }
+
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 158
