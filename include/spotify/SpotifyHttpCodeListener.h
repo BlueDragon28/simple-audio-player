@@ -15,6 +15,7 @@ public:
 
 public slots:
     bool listen(int port);
+    void resetRequestHandler();
 
 signals:
     void codeReceived(const QString& code, const QString& state);

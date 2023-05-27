@@ -411,4 +411,5 @@ void SpotifyAuthorizationPKCE::logout()
     m_tokenExpiration = 0;
     m_tokenRetrievalTime = std::chrono::system_clock::time_point();
     m_isAuthenticated = false;
+    m_httpCodeListener->resetRequestHandler();
 }

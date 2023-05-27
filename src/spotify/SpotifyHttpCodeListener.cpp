@@ -91,3 +91,9 @@ void SpotifyHttpCodeListener::stopServerHandler()
     delete m_localServer;
     m_localServer = nullptr;
 }
+
+void SpotifyHttpCodeListener::resetRequestHandler()
+{
+    m_handleRequest = true;
+    stopServerHandler();
+}
