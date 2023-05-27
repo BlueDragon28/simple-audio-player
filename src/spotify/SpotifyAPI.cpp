@@ -148,7 +148,10 @@ void SpotifyAPI::updateProfileHandler(QNetworkReply* reply)
 
 void SpotifyAPI::saveRefreshToken()
 {
-    if (!m_saveToken) return;
+    if (!m_saveToken)
+    {
+        return m_tokenSaver->deleteToken();
+    }
 
     const QString refreshToken = m_spotifyAuth->getRefreshToken();
     const QString accessToken = m_spotifyAuth->getAccessToken();
@@ -199,6 +202,8 @@ void SpotifyAPI::tokenRestoredHandler(const QString& token)
         emit error();
         return;
     }
+
+    m_saveToken = true;
 
     m_spotifyAuth->restoreRefreshToken(refreshToken, accessToken, clientID, tokenExpiration, tokenRetrievalTime);
 }
