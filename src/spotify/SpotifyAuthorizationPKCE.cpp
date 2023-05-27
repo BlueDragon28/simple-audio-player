@@ -319,7 +319,6 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (!rootObject.contains("access_token"))
     {
         qDebug() << "Invalid refresh token!";
-        qDebug() << rootObject;
         emit errorThrown();
         return;
     }

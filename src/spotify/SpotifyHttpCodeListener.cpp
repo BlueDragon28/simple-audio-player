@@ -1,6 +1,5 @@
 #include "spotify/SpotifyHttpCodeListener.h"
 #include "httplib.h"
-#include <qdebug.h>
 #include <qhostaddress.h>
 #include <thread>
 

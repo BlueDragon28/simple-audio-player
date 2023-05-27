@@ -37,7 +37,6 @@ void SpotifyPlaylist::setTotal(int total)
 
     m_total = total;
     emit totalChanged();
-    qDebug() << "playlist total: " << total;
 }
 
 int SpotifyPlaylist::pageNumber() const
@@ -51,7 +50,6 @@ void SpotifyPlaylist::setPageNumber(int pageNumber)
 
     m_pageNumber = pageNumber;
     emit pageNumberChanged();
-    qDebug() << "playlist page number: " << pageNumber;
 }
 
 int SpotifyPlaylist::numberOnPage() const
@@ -65,7 +63,6 @@ void SpotifyPlaylist::setNumberOnPage(int numberOnPage)
 
     m_numberOnPage = numberOnPage;
     emit numberOnPageChanged();
-    qDebug() << "playlist number on page: " << numberOnPage;
 }
 
 int SpotifyPlaylist::totalPages() const
@@ -79,7 +76,6 @@ void SpotifyPlaylist::setTotalPages(int totalPages)
 
     m_totalPages = totalPages;
     emit totalPagesChanged();
-    qDebug() << "playlist total pages: " << totalPages;
 }
 
 QList<QObject*>* SpotifyPlaylist::playlists()
@@ -101,7 +97,6 @@ void SpotifyPlaylist::setPlaylists(const QList<QObject*>& playlists)
         str += *static_cast<const SpotifyPlaylistItem*>(item) + ",";
     }
     str += "]";
-    qDebug() << str;
 }
 
 void SpotifyPlaylist::destroyPlaylistsObjects()
@@ -121,7 +116,6 @@ void SpotifyPlaylist::setNext(const QString& nextUrl)
 {
     m_next = QUrl(nextUrl);
     setHasNext(m_next);
-    qDebug() << "playlist next url: " << nextUrl;
 }
 
 bool SpotifyPlaylist::hasNext() const
@@ -147,7 +141,6 @@ void SpotifyPlaylist::setPrevious(const QString& previousUrl)
 {
     m_previous = QUrl(previousUrl);
     setHasPrevious(m_previous);
-    qDebug() << "playlist previous url: " << previousUrl;
 }
 
 bool SpotifyPlaylist::hasPrevious() const
@@ -167,7 +160,6 @@ void SpotifyPlaylist::handleFetchResponse(QNetworkReply* reply)
 {
     const QByteArray data = reply->readAll();
     reply->deleteLater();
-    qDebug() << "user playlists list response: " << data;
 
     QJsonParseError parseError;
     const QJsonDocument jsonDocument = QJsonDocument::fromJson(data, &parseError);

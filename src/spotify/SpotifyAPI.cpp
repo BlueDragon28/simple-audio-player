@@ -176,7 +176,6 @@ void SpotifyAPI::restoreCredential()
 void SpotifyAPI::tokenRestoredHandler(const QString& token)
 {
     const QStringList tokensList = token.split(';', Qt::SkipEmptyParts);
-    qDebug() << tokensList;
 
     if (tokensList.size() < 5) return;
 
