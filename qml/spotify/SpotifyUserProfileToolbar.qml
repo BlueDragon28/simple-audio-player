@@ -14,6 +14,14 @@ ToolBar {
         anchors.topMargin: 4
         anchors.bottomMargin: 4
 
+        Button {
+            id: logout
+            text: "logout"
+            Layout.fillHeight: true
+
+            onClicked: SpotifyAPI.logout()
+        }
+
         Label {
             Layout.fillWidth: true
             Layout.fillHeight: true
