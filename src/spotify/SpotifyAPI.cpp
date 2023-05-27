@@ -259,3 +259,16 @@ void SpotifyAPI::handlePlaylistDetails(QNetworkReply* reply)
 
     emit receivedPlaylistDetails(parsedPlaylist);
 }
+
+void SpotifyAPI::logout()
+{
+    if (m_spotifyAuth->getAccessToken().isEmpty()) return;
+
+    m_spotifyAuth->logout();
+    m_userInfo->clearInfo();
+    m_userPlaylist->clearData();
+    m_saveToken = false;
+    m_firstTokenRefresh = true;
+    m_tokenSaver->deleteToken();
+    emit loggedout();
+}

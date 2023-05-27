@@ -401,3 +401,14 @@ void SpotifyAuthorizationPKCE::restoreRefreshToken(
         emit refreshTokenReceived();
     }
 }
+
+void SpotifyAuthorizationPKCE::logout()
+{
+    m_clientID.clear();
+    m_code.clear();
+    m_accessToken.clear();
+    m_refreshToken.clear();
+    m_tokenExpiration = 0;
+    m_tokenRetrievalTime = std::chrono::system_clock::time_point();
+    m_isAuthenticated = false;
+}

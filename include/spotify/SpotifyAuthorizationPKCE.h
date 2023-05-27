@@ -44,6 +44,7 @@ public slots:
         const QString& clientID,
         int tokenExpiration,
         long tokenRetrievalTime);
+    void logout();
 
 signals:
     void openBrowser(const QUrl& url);

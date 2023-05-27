@@ -32,6 +32,7 @@ public:
 signals:
     void error();
     void authenticated();
+    void loggedout();
 
     void userInfoChanged(); // Disable warning
     void userPlaylistChanged(); // Disable warning
@@ -44,6 +45,8 @@ public slots:
     void setClientID(const QString& clientID);
 
     void displayPlaylistDetails(const QUrl& playlistHRef);
+
+    void logout();
 
 private:
     // Get information about the user (username, country...)

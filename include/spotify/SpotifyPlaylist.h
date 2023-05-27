@@ -39,6 +39,8 @@ public:
     QUrl previous() const;
     bool hasPrevious() const;
 
+    void clearData();
+
     static QUrl parseImagesUrls(const QJsonValue& imagesArrayValue);
 
 public slots:

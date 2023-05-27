@@ -419,3 +419,16 @@ void SpotifyPlaylist::fetchPrevious()
 
     emit fetchPreviousPage(m_previous);
 }
+
+void SpotifyPlaylist::clearData()
+{
+    setTotal(0);
+    setPageNumber(0);
+    setTotalPages(0);
+    setNumberOnPage(0);
+    setPlaylists(QList<QObject*>());
+    setNext(QString());
+    setPrevious(QString());
+    setHasNext(QUrl());
+    setHasPrevious(QUrl());
+}

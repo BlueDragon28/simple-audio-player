@@ -26,6 +26,7 @@ public slots:
     void setUsername(const QString& username);
     void setCountry(const QString& country);
     void setFollowers(int followers);
+    void clearInfo();
 
 signals:
     void usernameChanged();

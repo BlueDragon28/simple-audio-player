@@ -51,3 +51,10 @@ void SpotifyUserInfo::setFollowers(int followers)
 
     emit followersChanged();
 }
+
+void SpotifyUserInfo::clearInfo()
+{
+    setUsername(QString());
+    setCountry(QString());
+    setFollowers(0);
+}
