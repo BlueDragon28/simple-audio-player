@@ -69,6 +69,32 @@ Item {
                 clip: true
                 text: album
             }
+
+            onClicked: function(mouse) {
+                if (mouse.button === Qt.LeftButton) {
+                    if (mouse.modifiers === Qt.ShiftModifier) {
+                        tracksModel.shiftSelectItem(index);
+                    } else if (mouse.modifiers == Qt.ControlModifier) {
+                        tracksModel.ctrlSelectItem(index);
+                    } else {
+                        tracksModel.selectAtIndex(index);
+                    }
+                } else if (mouse.button !== Qt.RightButton) {
+                    tracksModel.clearSelection();
+                }
+
+                tracksListView.focus = true;
+            }
+
+            onDoubleClicked: function(mouse) {
+                if (mouse.button === Qt.MiddleButton ||
+                        mouse.button === Qt.RightButton ||
+                        mouse.modifiers === Qt.ControlModifier) {
+                    return;
+                }
+
+                return;
+            }
         }
     }
 }
