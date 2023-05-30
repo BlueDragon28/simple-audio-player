@@ -28,7 +28,7 @@ SpotifyAuthorizationPKCE::SpotifyAuthorizationPKCE(QObject* parent) :
     m_authorizationUrl(QUrl::fromUserInput("https://accounts.spotify.com/authorize")),
     m_redirectURL(QUrl::fromUserInput(QString("localhost:") + QString::number(_listeningPort))),
     m_accessTokenUrl(QUrl::fromUserInput("https://accounts.spotify.com/api/token")),
-    m_scope("user-read-private user-read-email playlist-read-private user-modify-playback-state"),
+    m_scope("user-read-private user-read-email playlist-read-private user-modify-playback-state user-read-playback-state"),
     m_state(generateRandomString(16)),
 
     m_tokenExpiration(0),
