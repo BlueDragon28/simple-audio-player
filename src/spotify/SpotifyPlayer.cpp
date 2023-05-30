@@ -66,6 +66,7 @@ void SpotifyPlayer::handlePlayResponse(QNetworkReply* reply)
     if (!reply) return;
 
     const QByteArray response = reply->readAll();
+    reply->deleteLater();
 
     QJsonParseError error;
     QJsonDocument jsonDocument;
