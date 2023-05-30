@@ -28,7 +28,7 @@ SpotifyAuthorizationPKCE::SpotifyAuthorizationPKCE(QObject* parent) :
     m_authorizationUrl(QUrl::fromUserInput("https://accounts.spotify.com/authorize")),
     m_redirectURL(QUrl::fromUserInput(QString("localhost:") + QString::number(_listeningPort))),
     m_accessTokenUrl(QUrl::fromUserInput("https://accounts.spotify.com/api/token")),
-    m_scope("user-read-private user-read-email playlist-read-private"),
+    m_scope("user-read-private user-read-email playlist-read-private user-modify-playback-state"),
     m_state(generateRandomString(16)),
 
     m_tokenExpiration(0),
@@ -365,14 +365,52 @@ bool SpotifyAuthorizationPKCE::refreshTokenIfNeeded()
     return true;
 }
 
-QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& userRequest)
+QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& request)
+{
+    return fetchSpotify(HttpVerb::GET, request);
+}
+
+QNetworkReply* SpotifyAuthorizationPKCE::post(const QNetworkRequest& request, const QByteArray& bodyData)
+{
+    return fetchSpotify(HttpVerb::POST, request, bodyData);
+}
+
+QNetworkReply* SpotifyAuthorizationPKCE::put(const QNetworkRequest& request, const QByteArray& bodyData)
+{
+    return fetchSpotify(HttpVerb::PUT, request, bodyData);
+}
+
+QNetworkReply* SpotifyAuthorizationPKCE::deleteResource(const QNetworkRequest& request)
+{
+    return fetchSpotify(HttpVerb::DELETE, request);
+}
+
+QNetworkReply* SpotifyAuthorizationPKCE::fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& userRequest, const QByteArray& bodyData)
 {
     if (!refreshTokenIfNeeded()) return nullptr;
 
-    QNetworkRequest request(userRequest); 
+    QNetworkRequest request(userRequest);
     addAuthorizationHeader(&request);
 
-    QNetworkReply* reply = m_accessManager->get(request);
+    QNetworkReply* reply = nullptr;
+
+    if (httpVerb == HttpVerb::GET)
+    {
+        reply = m_accessManager->get(request);
+    }
+    else if (httpVerb == HttpVerb::POST)
+    {
+        reply = m_accessManager->post(request, bodyData);
+    }
+    else if (httpVerb == HttpVerb::PUT)
+    {
+        reply = m_accessManager->put(request, bodyData);
+    }
+    else if (httpVerb == HttpVerb::DELETE)
+    {
+        reply = m_accessManager->deleteResource(request);
+    }
+
     return reply;
 }
 

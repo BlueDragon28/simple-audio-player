@@ -34,6 +34,9 @@ public:
     long getTokenRetrievevalTime() const;
 
     QNetworkReply* get(const QNetworkRequest& request);
+    QNetworkReply* post(const QNetworkRequest& request, const QByteArray& bodyData);
+    QNetworkReply* put(const QNetworkRequest& request, const QByteArray& bodyData);
+    QNetworkReply* deleteResource(const QNetworkRequest& request);
 
 public slots:
     void grant();
@@ -54,6 +57,14 @@ signals:
     void errorThrown();
 
 private:
+    enum class HttpVerb
+    {
+        GET,
+        POST,
+        PUT,
+        DELETE
+    };
+
     void prepareAuthorization();
     void openBrowserAndWaitForResponse(const QUrl& url);
     void receiveCodeHandler(const QString& code, const QString& state);
@@ -64,6 +75,8 @@ private:
 
     void addAuthorizationHeader(QNetworkRequest* request) const;
     bool refreshTokenIfNeeded();
+
+    QNetworkReply* fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& request, const QByteArray& bodyData = QByteArray());
 
     static QString generateRandomString(unsigned int size);
     static void openUrlInBrowser(const QUrl& url);
