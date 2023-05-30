@@ -93,7 +93,11 @@ Item {
                     return;
                 }
 
-                return;
+                const params = {
+                    contex: tracksModel.uri,
+                    offset: index
+                };
+                SpotifyAPI.player.play(params);
             }
         }
     }
