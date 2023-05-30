@@ -196,6 +196,7 @@ set(HEADERS
     "include/spotify/SpotifyUserPlaylistsListModel.h"
     "include/spotify/SpotifyPlaylistListModel.h"
     "include/spotify/SpotifyReceivedPlaylistElement.h"
+    "include/spotify/SpotifyPlayer.h"
     "dependencies/httplib/httplib.h")
 
 set(SOURCES
@@ -231,7 +232,8 @@ set(SOURCES
     "src/spotify/SpotifyPlaylistItem.cpp"
     "src/spotify/SpotifyUserPlaylistsListModel.cpp"
     "src/spotify/SpotifyPlaylistListModel.cpp"
-    "src/spotify/SpotifyReceivedPlaylistElement.cpp")
+    "src/spotify/SpotifyReceivedPlaylistElement.cpp"
+    "src/spotify/SpotifyPlayer.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 

@@ -19,7 +19,8 @@ SpotifyAPI::SpotifyAPI() :
     m_spotifyAuth(new SpotifyAuthorizationPKCE(this)),
     m_userInfo(new SpotifyUserInfo(this)),
     m_tokenSaver(new SpotifyTokenSaver(this)),
-    m_userPlaylist(new SpotifyPlaylist(this))
+    m_userPlaylist(new SpotifyPlaylist(this)),
+    m_spotifyPlayer(new SpotifyPlayer(m_spotifyAuth, this))
 {
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
     connect(m_userPlaylist, &SpotifyPlaylist::error, this, &SpotifyAPI::error);
@@ -72,6 +73,11 @@ SpotifyUserInfo* SpotifyAPI::userInfo()
 SpotifyPlaylist* SpotifyAPI::userPlaylist()
 {
     return m_userPlaylist;
+}
+
+SpotifyPlayer* SpotifyAPI::spotifyPlayer()
+{
+    return m_spotifyPlayer;
 }
 
 void SpotifyAPI::updateProfile()

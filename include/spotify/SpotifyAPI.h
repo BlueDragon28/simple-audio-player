@@ -1,6 +1,7 @@
 #ifndef SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 #define SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
 
+#include "SpotifyPlayer.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
@@ -21,6 +22,7 @@ class SpotifyAPI : public QObject
 
     Q_PROPERTY(SpotifyUserInfo* userInfo READ userInfo NOTIFY userInfoChanged)
     Q_PROPERTY(SpotifyPlaylist* userPlaylist READ userPlaylist NOTIFY userPlaylistChanged)
+    Q_PROPERTY(SpotifyPlayer* player READ spotifyPlayer NOTIFY spotifyPlayerChanged)
 
 public:
     SpotifyAPI();
@@ -28,6 +30,7 @@ public:
 
     SpotifyUserInfo* userInfo();
     SpotifyPlaylist* userPlaylist();
+    SpotifyPlayer* spotifyPlayer();
 
 signals:
     void error();
@@ -36,6 +39,7 @@ signals:
 
     void userInfoChanged(); // Disable warning
     void userPlaylistChanged(); // Disable warning
+    void spotifyPlayerChanged(); // Disable warning
 
     void receivedPlaylistDetails(SpotifyReceivedPlaylistElement* playlist);
 
@@ -71,6 +75,7 @@ private:
     SpotifyUserInfo* m_userInfo;
     SpotifyTokenSaver* m_tokenSaver;
     SpotifyPlaylist* m_userPlaylist;
+    SpotifyPlayer* m_spotifyPlayer;
 };
 
 #endif // SIMPLEAUDIOPLAYER_SPOTIFYAPI_H_
