@@ -74,6 +74,7 @@ void SpotifyPlaylistListModel::setPlaylist(SpotifyReceivedPlaylistElement* playl
     emit nameChanged();
     emit imageHrefChanged();
     emit idChanged();
+    emit uriChanged();
     
     getAuthorsAndDuration();
     parsePlaylistData();
@@ -98,6 +99,13 @@ QString SpotifyPlaylistListModel::id() const
     if (!m_playlist) return QString();
 
     return m_playlist->id();
+}
+
+QString SpotifyPlaylistListModel::uri() const
+{
+    if (!m_playlist) return QString();
+
+    return m_playlist->uri();
 }
 
 QString SpotifyPlaylistListModel::authors() const

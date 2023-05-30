@@ -17,6 +17,7 @@ public:
         QString album;
         QString artists;
         QString id;
+        QString uri;
         QString name;
         QString href;
         int64_t durationMS;
@@ -32,6 +33,7 @@ public:
     QString name() const;
     QUrl imageHref() const;
     QString id() const;
+    QString uri() const;
     int tracksCount() const;
     Track track(int index) const;
 
@@ -47,6 +49,7 @@ private:
     QString m_name;
     QUrl m_imageHref;
     QString m_id;
+    QString m_uri;
     QList<Track> m_tracks;
 };
 

@@ -14,7 +14,8 @@ class SpotifyPlaylistListModel : public SelectionModel
 
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QUrl imageHref READ imageHref NOTIFY imageHrefChanged)
-    Q_PROPERTY(QString id READ id NOTIFY id)
+    Q_PROPERTY(QString id READ id NOTIFY idChanged)
+    Q_PROPERTY(QString uri READ uri NOTIFY uriChanged)
     Q_PROPERTY(QString authors READ authors NOTIFY authorsChanged)
     Q_PROPERTY(QString duration READ duration NOTIFY durationChanged)
 
@@ -37,6 +38,7 @@ public:
     QString name() const;
     QUrl imageHref() const;
     QString id() const;
+    QString uri() const;
     QString authors() const;
     QString duration() const;
 
@@ -47,6 +49,7 @@ signals:
     void nameChanged();
     void imageHrefChanged();
     void idChanged();
+    void uriChanged();
     void authorsChanged();
     void durationChanged();
     void playlistLoaded();

@@ -41,6 +41,11 @@ QString SpotifyReceivedPlaylistElement::id() const
     return m_id;
 }
 
+QString SpotifyReceivedPlaylistElement::uri() const
+{
+    return m_uri;
+}
+
 int SpotifyReceivedPlaylistElement::tracksCount() const
 {
     return m_tracks.size();
@@ -72,7 +77,7 @@ void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlayli
         !rootPlaylist.contains("name"))
     {
         m_failed = true;
-        qDebug() << "root object empty or name key does not exist!";
+        qDebug() << "root object empty or name key does not exists!";
         return;
     }
 
@@ -81,16 +86,25 @@ void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlayli
     if (name.isEmpty() || !rootPlaylist.contains("id"))
     {
         m_failed = true;
-        qDebug() << "name is invalid or id does not exist";
+        qDebug() << "name is invalid or id does not exists!";
         return;
     }
 
     const QString id = rootPlaylist.value("id").toString();
 
-    if (id.isEmpty() || !rootPlaylist.contains("images"))
+    if (id.isEmpty() || !rootPlaylist.contains("uri"))
     {
         m_failed = true;
-        qDebug() << "id is invalid or images does not exist";
+        qDebug() << "id is invalid or uri does not exists!";
+        return;
+    }
+
+    const QString uri = rootPlaylist.value("uri").toString();
+
+    if (uri.isEmpty() || !rootPlaylist.contains("images"))
+    {
+        m_failed = true;
+        qDebug() << "uri is invalid or images does not exists!";
         return;
     }
 
@@ -99,7 +113,7 @@ void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlayli
     if (!imageHRef.isValid() || !rootPlaylist.contains("tracks"))
     {
         m_failed = true;
-        qDebug() << "image is invalid or tracks does not exist";
+        qDebug() << "image is invalid or tracks does not exists!";
         return;
     }
 
@@ -115,6 +129,7 @@ void SpotifyReceivedPlaylistElement::parsePlaylist(const QJsonObject& rootPlayli
     m_name = name;
     m_imageHref = imageHRef;
     m_id = id;
+    m_uri = uri;
     m_tracks = tracksArray;
     m_failed = false;
 }
@@ -199,7 +214,15 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     const QString id = trackInfoObject.value("id").toString();
 
-    if (id.isEmpty() || !trackInfoObject.contains("name"))
+    if (id.isEmpty() || !trackInfoObject.contains("uri"))
+    {
+        qDebug() << "no uri";
+        return callError();
+    }
+
+    const QString uri = trackInfoObject.value("uri").toString();
+
+    if (uri.isEmpty() || !trackInfoObject.contains("name"))
     {
         qDebug() << "no name";
         return callError();
