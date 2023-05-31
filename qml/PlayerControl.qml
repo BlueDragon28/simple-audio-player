@@ -30,7 +30,7 @@ Item {
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
-            onClicked: SAL.previous()
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL ? SAL.previous() : console.log("oups")
         }
 
         // Play pause button.
@@ -43,7 +43,7 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             // Play or pause when the button is clicked.
-            onClicked: SAL.playPause()
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.playPause() : console.log("oups2")
         }
 
         // Stop button
@@ -61,7 +61,7 @@ Item {
             enabled: false
 
             // Stop the stream.
-            onClicked: SAL.stop()
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.stop() : console.log("oups3")
         }
 
         // Random button
@@ -77,7 +77,7 @@ Item {
             icon.width: Layout.preferredWidth - 4
             icon.color: "#444"
             checkable: true
-            onClicked: SAL.setRandom(checked)
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.setRandom(checked) : console.log("oups4")
         }
 
         // Next button
@@ -94,7 +94,7 @@ Item {
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
-            onClicked: SAL.next()
+            onClicked: PlaybackControlSystem.currentBackend == PlaybackControlSystem.StreamBackend.SAL ? SAL.next() : console.log("oups5")
         }
 
         // Label showing the position time of the stream.
@@ -121,7 +121,7 @@ Item {
 
             // When the slider is moved by the user, seek the new position in the stream.
             onMoved: {
-                Player.seek(value)
+                PlaybackControlSystem.seek(value)
             }
         }
 
@@ -142,56 +142,62 @@ Item {
 
     // Connect to the Player singleton object and listening to the signals.
     Connections {
-        target: Player
+        target: PlaybackControlSystem
 
-        function onIsReadyChanged(isReady) {
-            playBtn.enabled = isReady
-            streamSlider.enabled = isReady
+        function onIsReadyChanged() {
+            const isReady = PlaybackControlSystem.isReady;
+            playBtn.enabled = isReady;
+            streamSlider.enabled = isReady;
         }
 
-        function onStreamPlaying() {
-            playBtn.playing()
-            previousBtn.enabled = true
-            nextBtn.enabled = true
-            stopBtn.enabled = true
+        function onIsPlayingChanged() {
+            const isPlaying = PlaybackControlSystem.isPlaying;
+            if (isPlaying) {
+                playBtn.playing();
+            } else {
+                playBtn.stopping();
+            }
+            previousBtn.enabled = isPlaying
+            nextBtn.enabled = isPlaying
+            stopBtn.enabled = isPlaying
         }
 
-        function onStreamPaused() {
-            playBtn.stopping()
+        function onIsPausedChanged() {
+            if (PlaybackControlSystem.isPaused) {
+                playBtn.stopping()
+            } else {
+                playBtn.playing();
+            }
         }
 
-        function onStreamStopping() {
-            playBtn.stopping()
-            previousBtn.enabled = false
-            nextBtn.enabled = false
-            stopBtn.enabled = false
+        function onCurrentStreamChanged() {
+            const filePath = PlaybackControlSystem.currentStream;
+            const isValid = filePath.length > 0;
+
+            streamSlider.value = 0;
+            streamSlider.to = isValid ? PlaybackControlSystem.streamSize : 0;
+            position.text = "00:00";
+            duration.text = isValid ? SAL.parseTime(PlaybackControlSystem.streamSizeSeconds) : "00:00";
+
+            if (PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL) {
+                TrackTag.filePath = filePath;
+            }
         }
 
-        function onStartNewFile(filePath) {
-            streamSlider.to = Player.streamSize()
-            duration.text = SAL.parseTime(Player.streamSize(Player.SECONDS))
-            PlayingList.next(filePath)
-
-            // Update tag.
-            TrackTag.filePath = filePath
+        function onStreamPosChanged() {
+            streamSlider.value = PlaybackControlSystem.streamPos;
         }
 
-        function onEndFile(filePath) {
-            streamSlider.value = 0
-            streamSlider.to = 0
-            position.text = "00:00"
-            duration.text = "00:00"
-
-            // Reset tag.
-            TrackTag.filePath = ""
+        function onStreamPosSecondsChanged() {
+            position.text = SAL.parseTime(PlaybackControlSystem.streamPosSeconds);
         }
 
-        function onStreamPosChangeInFrames(streamPos) {
-            streamSlider.value = streamPos
+        function onStreamSizeChanged() {
+            streamSlider.to = PlaybackControlSystem.streamSize;
         }
 
-        function onStreamPosChangeInSeconds(streamPos) {
-            position.text = SAL.parseTime(streamPos)
+        function onStreamSizeSecondsChanged() {
+            duration.text = SAL.parseTime(PlaybackControlSystem.streamSizeSeconds);
         }
     }
 }
