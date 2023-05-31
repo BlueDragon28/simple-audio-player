@@ -79,6 +79,9 @@ ApplicationWindow {
         }
 
         visibility = status.maximized ? Window.Maximized : Window.Windowed;
+
+        PlaybackControlSystem.salPlayer = Player;
+        PlaybackControlSystem.spotifyAPI = SpotifyAPI;
     }
 
     // Called when the user try to close the window.
