@@ -333,6 +333,8 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     }
 
     emit refreshTokenReceived();
+
+    m_eventCallback.call();
 }
 
 void SpotifyAuthorizationPKCE::addAuthorizationHeader(QNetworkRequest* request) const 
@@ -343,26 +345,11 @@ void SpotifyAuthorizationPKCE::addAuthorizationHeader(QNetworkRequest* request) 
     request->setRawHeader(authorization, bearer);
 }
 
-bool SpotifyAuthorizationPKCE::refreshTokenIfNeeded()
+bool SpotifyAuthorizationPKCE::shouldTokenBeRefreshed()
 {
     if (!isAuthenticated()) return false;
 
-    if (!isTokenValid())
-    {
-        refreshToken();
-
-        while (isAuthenticated() && !isTokenValid()) 
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        }
-
-        if (!isAuthenticated())
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return !isTokenValid();
 }
 
 QNetworkReply* SpotifyAuthorizationPKCE::get(const QNetworkRequest& request)
@@ -387,7 +374,14 @@ QNetworkReply* SpotifyAuthorizationPKCE::deleteResource(const QNetworkRequest& r
 
 QNetworkReply* SpotifyAuthorizationPKCE::fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& userRequest, const QByteArray& bodyData)
 {
-    if (!refreshTokenIfNeeded()) return nullptr;
+    if (!shouldTokenBeRefreshed())
+    {
+        m_eventCallback.setCallback([this, httpVerb, userRequest, bodyData]() {
+            this->fetchSpotify(httpVerb, userRequest, bodyData);
+        });
+        refreshToken();
+        return nullptr;
+    }
 
     QNetworkRequest request(userRequest);
     addAuthorizationHeader(&request);

@@ -1,6 +1,7 @@
 #ifndef SIMPLEAUDIOPLAYER_SPOTIFYAUTHORIZATIONPKCE_H_
 #define SIMPLEAUDIOPLAYER_SPOTIFYAUTHORIZATIONPKCE_H_
 
+#include "EventCallback.h"
 #include "spotify/SpotifyHttpCodeListener.h"
 #include <chrono>
 #include <cstdint>
@@ -74,7 +75,7 @@ private:
     void refreshTokenReceivedHandler(QNetworkReply* reply);
 
     void addAuthorizationHeader(QNetworkRequest* request) const;
-    bool refreshTokenIfNeeded();
+    bool shouldTokenBeRefreshed();
 
     QNetworkReply* fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& request, const QByteArray& bodyData = QByteArray());
 
@@ -100,6 +101,9 @@ private:
     unsigned int m_tokenExpiration;
     std::chrono::system_clock::time_point m_tokenRetrievalTime;
     bool m_isAuthenticated;
+
+    // Store current method call to be called back after token has been refreshed
+    EventCallback m_eventCallback;
 
     static const uint16_t _listeningPort;
 };
