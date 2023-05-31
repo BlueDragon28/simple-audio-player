@@ -52,6 +52,8 @@ public slots:
 
     void logout();
 
+    bool isAuthenticated() const;
+
 private:
     // Get information about the user (username, country...)
     void updateProfile();

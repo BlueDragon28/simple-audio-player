@@ -278,3 +278,10 @@ void SpotifyAPI::logout()
     m_tokenSaver->deleteToken();
     emit loggedout();
 }
+
+bool SpotifyAPI::isAuthenticated() const 
+{
+    if (!m_spotifyAuth) return false;
+
+    return m_spotifyAuth->isAuthenticated();
+}
