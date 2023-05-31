@@ -374,7 +374,7 @@ QNetworkReply* SpotifyAuthorizationPKCE::deleteResource(const QNetworkRequest& r
 
 QNetworkReply* SpotifyAuthorizationPKCE::fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& userRequest, const QByteArray& bodyData)
 {
-    if (!shouldTokenBeRefreshed())
+    if (shouldTokenBeRefreshed())
     {
         m_eventCallback.setCallback([this, httpVerb, userRequest, bodyData]() {
             this->fetchSpotify(httpVerb, userRequest, bodyData);
