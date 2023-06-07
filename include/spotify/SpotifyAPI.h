@@ -24,7 +24,7 @@ class SpotifyAPI : public QObject
     Q_PROPERTY(SpotifyUserInfo* userInfo READ userInfo NOTIFY userInfoChanged)
     Q_PROPERTY(SpotifyPlaylist* userPlaylist READ userPlaylist NOTIFY userPlaylistChanged)
     Q_PROPERTY(SpotifyPlayer* player READ spotifyPlayer NOTIFY spotifyPlayerChanged)
-    Q_PROPERTY(PlaybackStatus* playbackStatus READ playbackStatus NOTIFY playbackStatusChanged)
+    Q_PROPERTY(SpotifyPlaybackStatus* playbackStatus READ playbackStatus NOTIFY playbackStatusChanged)
 
 public:
     SpotifyAPI();
