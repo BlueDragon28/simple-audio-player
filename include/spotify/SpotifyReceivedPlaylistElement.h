@@ -37,12 +37,13 @@ public:
     int tracksCount() const;
     Track track(int index) const;
 
-    static Track parseTrack(const QJsonObject& trackObject, bool* error = nullptr);
+    static Track parseInnerTrack(const QJsonObject& trackObject, bool* error = nullptr);
 
 private:
     void parsePlaylist(const QJsonObject& rootPlaylist);
     QUrl getImageHRef(const QJsonValue& jsonImagesArray);
     QList<Track> parseTracks(const QJsonObject& tracksJSonArray);
+    static Track parseTrack(const QJsonObject& trackObject, bool* error = nullptr);
     static QString retrieveArtistsName(const QJsonArray& artistsArray, bool* error = nullptr);
     static QString retrieveAlbumName(const QJsonObject& albumObject, bool* error = nullptr);
 

@@ -206,67 +206,94 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
 
     const QJsonObject trackInfoObject = trackJSonValue.toObject();
 
-    if (!trackInfoObject.contains("id"))
+    bool isError = false;
+    Track track = parseInnerTrack(trackInfoObject, &isError);
+
+    if (isError) 
+    {
+        return callError();
+    }
+
+    if (error) *error = false;
+    return track;
+}
+
+SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInnerTrack(const QJsonObject& trackObject, bool* isError)
+{
+    const auto callError = [isError] () -> Track {
+        if (isError) *isError = true;
+        return {};
+    };
+
+    if (!trackObject.contains("is_local")) 
+    {
+        qDebug() << "is_local do not exists";
+        return callError();
+    }
+
+    const bool isLocal = trackObject.value("is_local").toBool(true);
+
+    if (isLocal || !trackObject.contains("id"))
     {
         qDebug() << "no id";
         return callError();
     }
 
-    const QString id = trackInfoObject.value("id").toString();
+    const QString id = trackObject.value("id").toString();
 
-    if (id.isEmpty() || !trackInfoObject.contains("uri"))
+    if (id.isEmpty() || !trackObject.contains("uri"))
     {
         qDebug() << "no uri";
         return callError();
     }
 
-    const QString uri = trackInfoObject.value("uri").toString();
+    const QString uri = trackObject.value("uri").toString();
 
-    if (uri.isEmpty() || !trackInfoObject.contains("name"))
+    if (uri.isEmpty() || !trackObject.contains("name"))
     {
         qDebug() << "no name";
         return callError();
     }
 
-    const QString name = trackInfoObject.value("name").toString();
+    const QString name = trackObject.value("name").toString();
 
-    if (name.isEmpty() || !trackInfoObject.contains("href"))
+    if (name.isEmpty() || !trackObject.contains("href"))
     {
         qDebug() << "no href";
         return callError();
     }
 
-    const QString href = trackInfoObject.value("href").toString();
+    const QString href = trackObject.value("href").toString();
 
-    if (href.isEmpty() || !trackInfoObject.contains("duration_ms"))
+    if (href.isEmpty() || !trackObject.contains("duration_ms"))
     {
         qDebug() << "no duration";
         return callError();
     }
 
-    const int64_t durationMS = trackInfoObject.value("duration_ms").toInteger(-1);
+    const int64_t durationMS = trackObject.value("duration_ms").toInteger(-1);
 
     if (durationMS < 0 || 
-        !trackInfoObject.contains("artists") ||
-        !trackInfoObject.value("artists").isArray())
+            !trackObject.contains("artists") ||
+            !trackObject.value("artists").isArray())
     {
         qDebug() << "no artists";
         return callError();
     }
 
     bool getArtistsFailed;
-    const QString artistsName = retrieveArtistsName(trackInfoObject.value("artists").toArray(), &getArtistsFailed);
+    const QString artistsName = retrieveArtistsName(trackObject.value("artists").toArray(), &getArtistsFailed);
 
     if (getArtistsFailed || 
-        !trackInfoObject.contains("album") ||
-        !trackInfoObject.value("album").isObject())
+            !trackObject.contains("album") ||
+            !trackObject.value("album").isObject())
     {
         qDebug() << "no album";
         return callError();
     }
 
     bool getAlbumFailed;
-    const QString albumName = retrieveAlbumName(trackInfoObject.value("album").toObject(), &getArtistsFailed);
+    const QString albumName = retrieveAlbumName(trackObject.value("album").toObject(), &getArtistsFailed);
 
     if (getAlbumFailed)
     {
@@ -282,7 +309,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseTrack
     track.href = href;
     track.durationMS = durationMS;
 
-    if (error) *error = false;
+    if (isError) *isError = false;
     return track;
 }
 
