@@ -245,7 +245,7 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
     bool isError = false;
 
     const SpotifyReceivedPlaylistElement::Track track =
-        SpotifyReceivedPlaylistElement::parseTrack(itemObject, &isError);
+        SpotifyReceivedPlaylistElement::parseInnerTrack(itemObject, &isError);
 
     if (isError) return false;
 
