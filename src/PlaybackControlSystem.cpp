@@ -1,5 +1,6 @@
 #include "SpotifyAPI.h"
 #include <PlaybackControlSystem.h>
+#include <spotify/SpotifyPlaybackStatus.h>
 
 PlaybackControlSystem::PlaybackControlSystem() :
     QObject(),
@@ -103,6 +104,7 @@ void PlaybackControlSystem::setSpotifyAPI(SpotifyAPI* spotifyAPI)
 
     m_spotifyAPI = spotifyAPI;
     emit spotifyAPIChanged();
+    setSignalsOfSpotifyAPI();
 }
 
 void PlaybackControlSystem::setCurrentBackend(StreamBackend backend)
@@ -188,6 +190,29 @@ void PlaybackControlSystem::setSignalsOfSalPlayer()
     connect(m_salPlayer, &Player::streamStopping, this, &PlaybackControlSystem::handleStreamStopping);
     connect(m_salPlayer, &Player::currentStreamChanged, this, &PlaybackControlSystem::handleCurrentStreamChanged);
     connect(m_salPlayer, &Player::isReadyChanged, this, &PlaybackControlSystem::handleIsReadySignalChanged);
+}
+
+void PlaybackControlSystem::setSignalsOfSpotifyAPI()
+{
+    if (!m_spotifyAPI) return;
+
+    connect(m_spotifyAPI->spotifyPlayer(), &SpotifyPlayer::isPlaying, this, &PlaybackControlSystem::enableSpotifyBackend);
+}
+
+void PlaybackControlSystem::enableSpotifyBackend()
+{
+    qDebug() << "receiving call";
+    if (m_currentBackend == StreamBackend::SPOTIFY ||
+        !m_spotifyAPI) return;
+
+    if (m_salPlayer)
+    {
+        m_salPlayer->stop();
+    }
+    
+    setCurrentBackend(StreamBackend::SPOTIFY);
+    m_spotifyAPI->playbackStatus()->enablePlaybackWatching(true);
+    qDebug() << "finished processing";
 }
 
 bool PlaybackControlSystem::isSal() const

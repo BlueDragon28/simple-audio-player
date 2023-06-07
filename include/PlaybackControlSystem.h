@@ -101,6 +101,7 @@ private:
     void setCurrentStream(const QString& currentStream);
 
     void setSignalsOfSalPlayer();
+    void setSignalsOfSpotifyAPI();
     void handleStartNewFileSignal(const QString& filePath);
     void handleEndFileSignal(const QString& filePath);
     void handleStreamPosChangedInFrames(long long frames);
@@ -110,6 +111,8 @@ private:
     void handleStreamStopping();
     void handleCurrentStreamChanged();
     void handleIsReadySignalChanged(bool isReady);
+
+    void enableSpotifyBackend();
 
     bool isSal() const;
 
