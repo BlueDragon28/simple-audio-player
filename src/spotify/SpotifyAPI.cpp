@@ -1,4 +1,5 @@
 #include "spotify/SpotifyAPI.h"
+#include "SpotifyPlaybackStatus.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
 #include "spotify/SpotifyAuthorizationPKCE.h"
@@ -284,4 +285,9 @@ bool SpotifyAPI::isAuthenticated() const
     if (!m_spotifyAuth) return false;
 
     return m_spotifyAuth->isAuthenticated();
+}
+
+SpotifyPlaybackStatus* SpotifyAPI::playbackStatus()
+{
+    return m_playbackStatus;
 }
