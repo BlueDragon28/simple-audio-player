@@ -2,6 +2,7 @@
 #define SIMPLEAUDIOPLAYER_SPOTIFY_PLAYBACK_STATUS_H_
 
 #include "SpotifyAuthorizationPKCE.h"
+#include "SpotifyPlayer.h"
 #include <cstdint>
 #include <qobject.h>
 #include <qtimer.h>
@@ -24,7 +25,8 @@ class SpotifyPlaybackStatus : public QObject
     Q_PROPERTY(int64_t trackDurationMS READ trackDurationMS NOTIFY trackDurationMSChanged)
 
 public:
-    SpotifyPlaybackStatus(SpotifyAuthorizationPKCE* spotifyAuth, QObject* parent = nullptr);
+    SpotifyPlaybackStatus(SpotifyAuthorizationPKCE* spotifyAuth, 
+            SpotifyPlayer* player, QObject* parent = nullptr);
     virtual ~SpotifyPlaybackStatus();
 
     QString deviceID() const;
@@ -75,8 +77,11 @@ private:
     bool parsePlaybackStatus(const QJsonObject& rootObject);
     bool parseCurrentTrack(const QJsonObject& rootObject);
 
+    void playbackStartPlaying();
+
     QTimer* m_fetchStatusTimer;
     SpotifyAuthorizationPKCE* m_spotifyAuth;
+    SpotifyPlayer* m_spotifyPlayer;
 
     QString m_deviceID;
     bool m_isPlaying;

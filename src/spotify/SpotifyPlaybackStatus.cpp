@@ -1,5 +1,6 @@
 #include "spotify/SpotifyPlaybackStatus.h"
 #include "SpotifyAuthorizationPKCE.h"
+#include "SpotifyPlayer.h"
 #include "SpotifyReceivedPlaylistElement.h"
 #include <cstdint>
 #include <qjsondocument.h>
@@ -11,15 +12,20 @@ int SpotifyPlaybackStatus::_timerInterval = 5000;
 const QString SpotifyPlaybackStatus::_packbackStateEndpointUrl =
     "https://api.spotify.com/v1/me/player";
 
-SpotifyPlaybackStatus::SpotifyPlaybackStatus(SpotifyAuthorizationPKCE* spotifyAuth, QObject* parent) :
+SpotifyPlaybackStatus::SpotifyPlaybackStatus(
+        SpotifyAuthorizationPKCE* spotifyAuth, 
+        SpotifyPlayer* player, QObject* parent) :
+
     QObject(parent),
     m_fetchStatusTimer(new QTimer()),
     m_spotifyAuth(spotifyAuth),
+    m_spotifyPlayer(player),
     m_isPlaying(false),
     m_progressMS(0),
     m_trackDurationMS(0)
 {
     connect(m_fetchStatusTimer, &QTimer::timeout, this, &SpotifyPlaybackStatus::fetchStatus);
+    connect(m_spotifyPlayer, &SpotifyPlayer::isPlaying, this, &SpotifyPlaybackStatus::playbackStartPlaying);
 }
 
 SpotifyPlaybackStatus::~SpotifyPlaybackStatus()
@@ -258,4 +264,9 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
     setTrackDurationMS(track.durationMS);
 
     return true;
+}
+
+void SpotifyPlaybackStatus::playbackStartPlaying()
+{
+    setIsPlaying(true);
 }

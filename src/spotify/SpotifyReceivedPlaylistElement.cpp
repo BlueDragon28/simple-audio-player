@@ -305,6 +305,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInner
     track.album = albumName;
     track.artists = artistsName;
     track.id = id;
+    track.uri = uri;
     track.name = name;
     track.href = href;
     track.durationMS = durationMS;

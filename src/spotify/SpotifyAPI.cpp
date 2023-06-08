@@ -22,7 +22,7 @@ SpotifyAPI::SpotifyAPI() :
     m_tokenSaver(new SpotifyTokenSaver(this)),
     m_userPlaylist(new SpotifyPlaylist(this)),
     m_spotifyPlayer(new SpotifyPlayer(m_spotifyAuth, this)),
-    m_playbackStatus(new SpotifyPlaybackStatus(m_spotifyAuth, this))
+    m_playbackStatus(new SpotifyPlaybackStatus(m_spotifyAuth, m_spotifyPlayer, this))
 {
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
     connect(m_userPlaylist, &SpotifyPlaylist::error, this, &SpotifyAPI::error);
