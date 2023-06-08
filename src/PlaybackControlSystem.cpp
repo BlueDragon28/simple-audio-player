@@ -153,7 +153,7 @@ void PlaybackControlSystem::setStreamSizeSeconds(long long streamSizeSeconds)
 {
     if (streamSizeSeconds == m_streamSize) return;
     m_streamSizeSeconds = streamSizeSeconds;
-    emit streamSizeChanged();
+    emit streamSizeSecondsChanged();
 }
 
 void PlaybackControlSystem::setStreamPos(long long streamPos)
