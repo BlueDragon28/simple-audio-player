@@ -112,9 +112,14 @@ private:
     void handleCurrentStreamChanged();
     void handleIsReadySignalChanged(bool isReady);
 
-    void enableSpotifyBackend();
+    void handleSpotifyTrackURIChanged();
+    void handleSpotifyTrackDurationChange();
+    void handleSpotifyTrackProgressChange();
+
+    void handleSpotifyIsPlayingStatusChange();
 
     bool isSal() const;
+    bool isSpotify() const;
 
     Player* m_salPlayer;
     SpotifyAPI* m_spotifyAPI;

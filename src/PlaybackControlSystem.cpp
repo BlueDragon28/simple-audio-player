@@ -1,5 +1,6 @@
 #include "SpotifyAPI.h"
 #include <PlaybackControlSystem.h>
+#include <cstdint>
 #include <spotify/SpotifyPlaybackStatus.h>
 
 PlaybackControlSystem::PlaybackControlSystem() :
@@ -196,28 +197,39 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
 {
     if (!m_spotifyAPI) return;
 
-    connect(m_spotifyAPI->spotifyPlayer(), &SpotifyPlayer::isPlaying, this, &PlaybackControlSystem::enableSpotifyBackend);
+    SpotifyPlaybackStatus* playbackStatus = m_spotifyAPI->playbackStatus();
+    connect(playbackStatus, &SpotifyPlaybackStatus::isPlayingChanged, this, &PlaybackControlSystem::handleSpotifyIsPlayingStatusChange);
+    connect(playbackStatus, &SpotifyPlaybackStatus::trackUriChanged, this, &PlaybackControlSystem::handleSpotifyTrackURIChanged);
+    connect(playbackStatus, &SpotifyPlaybackStatus::trackDurationMSChanged, this, &PlaybackControlSystem::handleSpotifyTrackDurationChange);
+    connect(playbackStatus, &SpotifyPlaybackStatus::progressMSChanged, this, &PlaybackControlSystem::handleSpotifyTrackProgressChange);
 }
 
-void PlaybackControlSystem::enableSpotifyBackend()
+void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
 {
-    qDebug() << "receiving call";
-    if (m_currentBackend == StreamBackend::SPOTIFY ||
-        !m_spotifyAPI) return;
+    if (!m_spotifyAPI || !m_spotifyAPI->isAuthenticated()) return;
 
-    if (m_salPlayer)
+    if (m_currentBackend == StreamBackend::SAL)
     {
+        if (!m_salPlayer) return;
+
         m_salPlayer->stop();
+        setCurrentBackend(StreamBackend::SPOTIFY);
     }
-    
-    setCurrentBackend(StreamBackend::SPOTIFY);
+
+    const bool isPlaying = m_spotifyAPI->playbackStatus()->isPlaying();
+    setIsReady(true);
+    setIsPlaying(isPlaying);
     m_spotifyAPI->playbackStatus()->enablePlaybackWatching(true);
-    qDebug() << "finished processing";
 }
 
 bool PlaybackControlSystem::isSal() const
 {
     return m_salPlayer && m_currentBackend == StreamBackend::SAL;
+}
+
+bool PlaybackControlSystem::isSpotify() const
+{
+    return m_spotifyAPI && m_currentBackend == StreamBackend::SPOTIFY;
 }
 
 void PlaybackControlSystem::handleStartNewFileSignal(const QString& filePath)
@@ -278,6 +290,31 @@ void PlaybackControlSystem::handleIsReadySignalChanged(bool isReady)
 {
     if (!isSal()) return;
     setIsReady(isReady);
+}
+
+void PlaybackControlSystem::handleSpotifyTrackURIChanged()
+{
+    if (!isSpotify()) return;
+
+    setCurrentStream(m_spotifyAPI->playbackStatus()->trackUri());
+}
+
+void PlaybackControlSystem::handleSpotifyTrackDurationChange()
+{
+    if (!isSpotify()) return;
+
+    const int64_t durationMS = m_spotifyAPI->playbackStatus()->trackDurationMS();
+    setStreamSize(durationMS);
+    setStreamSizeSeconds(durationMS / 1000);
+}
+
+void PlaybackControlSystem::handleSpotifyTrackProgressChange()
+{
+    if (!isSpotify()) return;
+
+    const int64_t positionMS = m_spotifyAPI->playbackStatus()->progressMS();
+    setStreamPos(positionMS);
+    setStreamPosSeconds(positionMS / 1000);
 }
 
 bool PlaybackControlSystem::isReadable(const QString& filePath) const
