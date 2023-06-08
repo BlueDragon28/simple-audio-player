@@ -14,7 +14,7 @@ SpotifyPlaylistListModel::~SpotifyPlaylistListModel()
 QVariant SpotifyPlaylistListModel::data(const QModelIndex& index, int role) const
 {
     if ((role != TRACK_NUMBER && role != NAME &&
-        role != ARTISTS && role != ALBUM) ||
+        role != ARTISTS && role != ALBUM && role != URI) ||
         !item(index.row()).canConvert<SpotifyReceivedPlaylistElement::Track>() ||
         !item(index.row()).convert(
             QMetaType::fromType<SpotifyReceivedPlaylistElement::Track>()))
@@ -41,6 +41,10 @@ QVariant SpotifyPlaylistListModel::data(const QModelIndex& index, int role) cons
     {
         return track.album;
     }
+    else if (role == URI)
+    {
+        return track.uri;
+    }
 
     return SelectionModel::data(index, role);
 }
@@ -52,6 +56,7 @@ QHash<int, QByteArray> SpotifyPlaylistListModel::roleNames() const
     roles[NAME] = "name";
     roles[ARTISTS] = "artists";
     roles[ALBUM] = "album";
+    roles[URI] = "trackUri";
     return roles;
 }
 

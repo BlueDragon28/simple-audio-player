@@ -25,7 +25,8 @@ public:
         TRACK_NUMBER = MAX_ROLE,
         NAME,
         ARTISTS,
-        ALBUM
+        ALBUM,
+        URI
     };
     Q_ENUM(TrackRole)
 
