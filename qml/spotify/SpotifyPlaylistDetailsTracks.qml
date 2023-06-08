@@ -40,7 +40,7 @@ Item {
             width: tracksListView.width
             contentHeight: trackName.height
             isItemSelected: isSelected
-            isPlaying: false
+            isPlaying: trackUri === PlaybackControlSystem.currentStream
 
             Label {
                 id: trackNumber 
