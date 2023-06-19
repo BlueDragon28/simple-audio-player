@@ -198,8 +198,8 @@ void SpotifyPlaybackStatus::handleFetchStatusResponse(QNetworkReply* reply)
     }
 
     if (!parseDeviceInfo(rootObject.value("device"))) return;
-    if (!parsePlaybackStatus(rootObject)) return;
     if (!parseCurrentTrack(rootObject)) return;
+    if (!parsePlaybackStatus(rootObject)) return;
 }
 
 bool SpotifyPlaybackStatus::parseDeviceInfo(const QJsonValue& value) 
@@ -255,11 +255,11 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
 
     if (isError) return false;
 
-    setAlbumName(track.album);
-    setArtistsNames(track.artists);
     setTrackID(track.id);
     setTrackHref(track.href);
     setTrackUri(track.uri);
+    setAlbumName(track.album);
+    setArtistsNames(track.artists);
     setTrackName(track.name);
     setTrackDurationMS(track.durationMS);
 
