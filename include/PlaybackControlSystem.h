@@ -27,6 +27,10 @@ class PlaybackControlSystem : public QObject
     Q_PROPERTY(long long streamPosSeconds READ streamPosSeconds NOTIFY streamPosSecondsChanged)
     Q_PROPERTY(QStringList supportedFormats READ supportedFormats NOTIFY supportedFormatsChanged)
     Q_PROPERTY(QString currentStream READ currentStream NOTIFY currentStreamChanged)
+    Q_PROPERTY(QString trackName READ spotifyTrackName NOTIFY spotifyTrackNameChanged)
+    Q_PROPERTY(QString trackArtists READ spotifyTrackArtists NOTIFY spotifyTrackArtistsChanged)
+    Q_PROPERTY(QString trackAlbumName READ spotifyTrackAlbumName NOTIFY spotifyTrackAlbumNameChanged)
+    Q_PROPERTY(QString trackAblumCover READ spotifyAlbumCover NOTIFY spotifyAlbumCoverChanged)
 
 public:
     enum class StreamBackend
@@ -54,6 +58,11 @@ public:
     long long streamPosSeconds() const;
     QStringList supportedFormats() const;
     QString currentStream() const;
+
+    QString spotifyTrackName() const;
+    QString spotifyTrackArtists() const;
+    QString spotifyTrackAlbumName() const;
+    QString spotifyAlbumCover() const;
 
 public slots:
     void setSalPlayer(Player* player);
@@ -89,6 +98,11 @@ signals:
     void supportedFormatsChanged(); // remove warning
     void currentStreamChanged();
 
+    void spotifyTrackNameChanged();
+    void spotifyTrackArtistsChanged();
+    void spotifyTrackAlbumNameChanged();
+    void spotifyAlbumCoverChanged();
+
 private:
     void setIsRunning(bool isRunning);
     void setIsPlaying(bool isPlaying);
@@ -99,6 +113,11 @@ private:
     void setStreamPos(long long streamPos);
     void setStreamPosSeconds(long long streamPosSeconds);
     void setCurrentStream(const QString& currentStream);
+
+    void setSpotifyTrackName(const QString& trackName);
+    void setSpotifyTrackArtists(const QString& trackArtists);
+    void setSpotifyTrackAlbumName(const QString& trackAlbum);
+    void setSpotifyAlbumCover(const QString& albumCover);
 
     void setSignalsOfSalPlayer();
     void setSignalsOfSpotifyAPI();
@@ -115,6 +134,10 @@ private:
     void handleSpotifyTrackURIChanged();
     void handleSpotifyTrackDurationChange();
     void handleSpotifyTrackProgressChange();
+    void handleSpotifyTrackNameChange();
+    void handleSpotifyTrackAlbumChange();
+    void handleSpotifyTrackArtistsChange();
+    void handleSpotifyTrackAlbumCoverChange();
 
     void handleSpotifyIsPlayingStatusChange();
 
@@ -136,6 +159,11 @@ private:
     long long m_streamPosSeconds;
     long long m_streamPosUpdatingBuffer;
     QString m_currentStream;
+
+    QString m_spotifyTrackName;
+    QString m_spotifyTrackArtists;
+    QString m_spotifyTrackAlbumName;
+    QString m_spotifyTrackAlbumCover;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYBACK_CONTROL_SYSTEM_H_
