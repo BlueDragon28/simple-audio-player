@@ -163,7 +163,6 @@ Item {
         }
 
         function onTrackArtistsChanged() {
-            console.log("artists:", PlaybackControlSystem.trackArtists);
             if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
 
             if (PlaybackControlSystem.currentStream.length) {
@@ -174,13 +173,26 @@ Item {
         }
 
         function onTrackAlbumNameChanged() {
-            console.log("albumName:", PlaybackControlSystem.trackAlbumName);
             if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
 
             if (PlaybackControlSystem.currentStream.length) {
                 trackAlbum.text = PlaybackControlSystem.trackAlbumName;
             } else {
                 trackAlbum.text = "";
+            }
+        }
+
+        function onTrackAlbumCoverChanged() {
+            console.log("before");
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
+            console.log("after");
+
+            console.log("image url:", PlaybackControlSystem.trackAlbumCover);
+
+            if (PlaybackControlSystem.trackAlbumCover.length) {
+                albumCover.source = PlaybackControlSystem.trackAlbumCover;
+            } else {
+                albumCover.source = "image://coverArt/empty";
             }
         }
     }

@@ -30,7 +30,7 @@ class PlaybackControlSystem : public QObject
     Q_PROPERTY(QString trackName READ spotifyTrackName NOTIFY spotifyTrackNameChanged)
     Q_PROPERTY(QString trackArtists READ spotifyTrackArtists NOTIFY spotifyTrackArtistsChanged)
     Q_PROPERTY(QString trackAlbumName READ spotifyTrackAlbumName NOTIFY spotifyTrackAlbumNameChanged)
-    Q_PROPERTY(QString trackAblumCover READ spotifyAlbumCover NOTIFY spotifyAlbumCoverChanged)
+    Q_PROPERTY(QString trackAlbumCover READ spotifyAlbumCover NOTIFY spotifyAlbumCoverChanged)
 
 public:
     enum class StreamBackend

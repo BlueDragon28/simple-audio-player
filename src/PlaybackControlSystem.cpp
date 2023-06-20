@@ -257,6 +257,7 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
     connect(playbackStatus, &SpotifyPlaybackStatus::trackNameChanged, this, &PlaybackControlSystem::handleSpotifyTrackNameChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::artistsNamesChanged, this, &PlaybackControlSystem::handleSpotifyTrackArtistsChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::albumNameChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumChange);
+    connect(playbackStatus, &SpotifyPlaybackStatus::albumImageChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange);
 }
 
 void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
@@ -400,7 +401,8 @@ void PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange()
 {
     if (!isSpotify()) return;
 
-    //const QString& cover = m_spotifyAPI->playbackStatus();
+    const QUrl cover = m_spotifyAPI->playbackStatus()->albumImage();
+    setSpotifyAlbumCover(cover.toString());
 }
 
 bool PlaybackControlSystem::isReadable(const QString& filePath) const

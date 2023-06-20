@@ -1,6 +1,7 @@
 #include "spotify/SpotifyPlaybackStatus.h"
 #include "SpotifyAuthorizationPKCE.h"
 #include "SpotifyPlayer.h"
+#include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
 #include <cstdint>
 #include <qjsondocument.h>
@@ -81,6 +82,11 @@ QString SpotifyPlaybackStatus::trackName() const
     return m_trackName;
 }
 
+QUrl SpotifyPlaybackStatus::albumImage() const
+{
+    return m_albumImage;
+}
+
 int64_t SpotifyPlaybackStatus::trackDurationMS() const
 {
     return m_trackDurationMS;
@@ -152,6 +158,14 @@ void SpotifyPlaybackStatus::setTrackName(const QString& name)
     if (name == m_trackName) return;
     m_trackName = name;
     emit trackNameChanged();
+}
+
+void SpotifyPlaybackStatus::setAlbumImage(const QUrl& albumImage)
+{
+    if (albumImage == m_albumImage) return;
+
+    m_albumImage = albumImage;
+    emit albumImageChanged();
 }
 
 void SpotifyPlaybackStatus::setTrackDurationMS(int64_t durationMS)
@@ -253,6 +267,8 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
     const SpotifyReceivedPlaylistElement::Track track =
         SpotifyReceivedPlaylistElement::parseInnerTrack(itemObject, &isError);
 
+    const QUrl albumImage = getAlbumImage(rootObject);
+
     if (isError) return false;
 
     setTrackID(track.id);
@@ -261,9 +277,28 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
     setAlbumName(track.album);
     setArtistsNames(track.artists);
     setTrackName(track.name);
+    setAlbumImage(albumImage);
     setTrackDurationMS(track.durationMS);
 
     return true;
+}
+
+QUrl SpotifyPlaybackStatus::getAlbumImage(const QJsonObject& rootObject)
+{
+    if (!rootObject.contains("item")) return QUrl();
+
+    const QJsonObject& itemObject = rootObject.value("item").toObject();
+
+    if (!itemObject.contains("album")) return QUrl();
+
+    const QJsonObject& albumObject = itemObject.value("album").toObject();
+
+    if (!albumObject.contains("images")) return QUrl();
+
+    const QJsonValue& imagesValue = albumObject.value("images");
+
+    const QUrl imageUrl = SpotifyPlaylist::parseImagesUrls(imagesValue);
+    return imageUrl;
 }
 
 void SpotifyPlaybackStatus::playbackStartPlaying()

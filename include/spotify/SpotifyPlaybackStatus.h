@@ -22,6 +22,7 @@ class SpotifyPlaybackStatus : public QObject
     Q_PROPERTY(QString trackUri READ trackUri NOTIFY trackUriChanged)
     Q_PROPERTY(QString trackName READ trackName NOTIFY trackNameChanged)
     Q_PROPERTY(QString trackHref READ trackHref NOTIFY trackHrefChanged)
+    Q_PROPERTY(QUrl albumImage READ albumImage NOTIFY albumImageChanged)
     Q_PROPERTY(int64_t trackDurationMS READ trackDurationMS NOTIFY trackDurationMSChanged)
 
 public:
@@ -40,6 +41,7 @@ public:
     QString trackUri() const;
     QString trackName() const;
     QString trackHref() const;
+    QUrl albumImage() const;
     int64_t trackDurationMS() const;
 
 public slots:
@@ -56,6 +58,7 @@ signals:
     void trackUriChanged();
     void trackNameChanged();
     void trackHrefChanged();
+    void albumImageChanged();
     void trackDurationMSChanged();
 
 private:
@@ -68,6 +71,7 @@ private:
     void setTrackUri(const QString& trackUri);
     void setTrackName(const QString& trackName);
     void setTrackHref(const QString& trackHref);
+    void setAlbumImage(const QUrl& albumImage);
     void setTrackDurationMS(int64_t durationMS);
 
     void fetchStatus();
@@ -76,6 +80,7 @@ private:
     bool parseDeviceInfo(const QJsonValue& value);
     bool parsePlaybackStatus(const QJsonObject& rootObject);
     bool parseCurrentTrack(const QJsonObject& rootObject);
+    QUrl getAlbumImage(const QJsonObject& rootObject);
 
     void playbackStartPlaying();
 
@@ -93,6 +98,7 @@ private:
     QString m_trackUri;
     QString m_trackName;
     QString m_trackHref;
+    QUrl m_albumImage;
     int64_t m_trackDurationMS;
 
     static int _timerInterval;
