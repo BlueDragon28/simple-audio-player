@@ -144,6 +144,8 @@ private:
     bool isSal() const;
     bool isSpotify() const;
 
+    void reenableSAL();
+
     Player* m_salPlayer;
     SpotifyAPI* m_spotifyAPI;
 

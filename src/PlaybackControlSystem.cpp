@@ -278,6 +278,27 @@ void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
     m_spotifyAPI->playbackStatus()->enablePlaybackWatching(true);
 }
 
+void PlaybackControlSystem::reenableSAL()
+{
+    if (isSal()) return;
+
+    m_spotifyAPI->playbackStatus()->enablePlaybackWatching(false);
+    setIsReady(m_salPlayer->isReady());
+    setIsRunning(true);
+    setIsPlaying(false);
+    setIsPaused(false);
+    setStreamSize(0);
+    setStreamPos(0);
+    setStreamSizeSeconds(0);
+    setStreamPosSeconds(0);
+    setCurrentStream(QString());
+    setSpotifyTrackName(QString());
+    setSpotifyTrackArtists(QString());
+    setSpotifyTrackAlbumName(QString());
+    setSpotifyAlbumCover(QString());
+    setCurrentBackend(StreamBackend::SAL);
+}
+
 bool PlaybackControlSystem::isSal() const
 {
     return m_salPlayer && m_currentBackend == StreamBackend::SAL;
@@ -407,19 +428,18 @@ void PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange()
 
 bool PlaybackControlSystem::isReadable(const QString& filePath) const
 {
-    if (!isSal()) return false;
     return m_salPlayer->isReadable(filePath);
 }
 
 void PlaybackControlSystem::open(const QString& filePath)
 {
-    if (!isSal()) return;
+    reenableSAL();
     m_salPlayer->open(filePath);
 }
 
 void PlaybackControlSystem::open(const QStringList& filesPath, bool isShuffledChanged)
 {
-    if (!isSal()) return;
+    reenableSAL();
     m_salPlayer->open(filesPath, isShuffledChanged);
 }
 
@@ -470,3 +490,4 @@ void PlaybackControlSystem::previous()
         seek(0);
     }
 }
+

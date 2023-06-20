@@ -92,7 +92,6 @@ Item {
                 Display the name of the album.
                 If there is no album name, use "Unknown" instead.
             */
-
             if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
 
             let album = TrackTag.album
@@ -183,11 +182,7 @@ Item {
         }
 
         function onTrackAlbumCoverChanged() {
-            console.log("before");
             if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
-            console.log("after");
-
-            console.log("image url:", PlaybackControlSystem.trackAlbumCover);
 
             if (PlaybackControlSystem.trackAlbumCover.length) {
                 albumCover.source = PlaybackControlSystem.trackAlbumCover;

@@ -69,14 +69,14 @@ function randomize(playingList, firstToPlay) {
 // Open a new list.
 function open(filePath, firstElement = "", shuffleChanged = false) {
     if (typeof filePath === "string") {
-        if (SAP.Player.isReadable(filePath)) {
-            SAP.Player.open(filePath)
-            SAP.Player.play()
+        if (SAP.PlaybackControlSystem.isReadable(filePath)) {
+            SAP.PlaybackControlSystem.open(filePath)
+            SAP.PlaybackControlSystem.play()
         }
     } else if (filePath.length > 0) {
         let validFiles = []
         for (let i = 0; i < filePath.length; i++) {
-            if (SAP.Player.isReadable(filePath[i])) {
+            if (SAP.PlaybackControlSystem.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
             }
         }
@@ -91,8 +91,8 @@ function open(filePath, firstElement = "", shuffleChanged = false) {
         if (firstElement.length > 0) {
             SAP.PlayingList.next(firstElement) // Move the list to the selected item.
         }
-        SAP.Player.open(SAP.PlayingList.listFromIndex(), shuffleChanged)
-        SAP.Player.play()
+        SAP.PlaybackControlSystem.open(SAP.PlayingList.listFromIndex(), shuffleChanged)
+        SAP.PlaybackControlSystem.play()
     }
 }
 
