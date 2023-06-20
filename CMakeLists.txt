@@ -62,54 +62,54 @@ elseif(WIN32)
 				"${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/include/")
 
 
-                        # Find PortAudio
-                        if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/include/portaudio.h") AND
-			    ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib") OR
-			     (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")))
-                                # Include directory of PortAudio
-                                include_directories(${CMAKE_SOURCE_DIR}/dependencies/portaudio/include)
-				if (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
-				    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
-				else()
-				    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")
-				endif()
+            # Include only the dependencies only if SAL is compiled statically
+            if (NOT EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/bin/simple-audio-library.dll")
+                # Find PortAudio
+                if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/include/portaudio.h") AND
+                    ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib") OR
+                    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")))
+                    # Include directory of PortAudio
+                    include_directories(${CMAKE_SOURCE_DIR}/dependencies/portaudio/include)
+                    if (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
+                        set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio_x64.lib")
+                    else()
+                        set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/portaudio/lib/portaudio.lib")
+                    endif()
 
-                                message(STATUS "PortAudio found")
-                        else()
-                                message(FATAL_ERROR "Cannot find portaudio")
-                        endif()
+                    message(STATUS "PortAudio found")
+                else()
+                    message(FATAL_ERROR "Cannot find portaudio")
+                endif()
 
-                        # Include only the dependencies only if SAL is compiled statically
-                        if (NOT EXISTS "${CMAKE_SOURCE_DIR}/dependencies/simple-audio-library/bin/simple-audio-library.dll")
-                            # Find FLAC++
-                            if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/include/FLAC++/decoder.h") AND
-                                    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib"))
-                                    # Include directory of FLAC++ library
-                                    include_directories("${CMAKE_SOURCE_DIR}/dependencies/flac/include/")
-                                    # Set the FLAC++ library path
-                                    set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib")
+                # Find FLAC++
+                if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/include/FLAC++/decoder.h") AND
+                        (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib"))
+                        # Include directory of FLAC++ library
+                        include_directories("${CMAKE_SOURCE_DIR}/dependencies/flac/include/")
+                        # Set the FLAC++ library path
+                        set(SAL_LIBRARIES "${SAL_LIBRARIES}" "${CMAKE_SOURCE_DIR}/dependencies/flac/lib/FLAC++.lib")
 
-                                    message(STATUS "FLAC++ found")
-                            else ()
-                                    message(WARNING "Cannot find FLAC++ library")
-                            endif()
+                        message(STATUS "FLAC++ found")
+                else ()
+                        message(WARNING "Cannot find FLAC++ library")
+                endif()
 
-                            # Find LIBSNDFILE
-                            if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/include/sndfile.hh") AND
-                                (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/lib/sndfile.lib"))
-                                    # Get informations from libsndfile using cmake find_package
-                                    set(CMAKE_PREFIX_PATH
-                                            "${CMAKE_PREFIX_PATH}"
-                                            "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/cmake")
-                                    find_package(SndFile REQUIRED)
-                                    set(SAL_LIBRARIES "${SAL_LIBRARIES}"
-                                            ${SndFile_LIBRARIES})
+                # Find LIBSNDFILE
+                if ((EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/include/sndfile.hh") AND
+                    (EXISTS "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/lib/sndfile.lib"))
+                        # Get informations from libsndfile using cmake find_package
+                        set(CMAKE_PREFIX_PATH
+                                "${CMAKE_PREFIX_PATH}"
+                                "${CMAKE_SOURCE_DIR}/dependencies/libsndfile/cmake")
+                        find_package(SndFile REQUIRED)
+                        set(SAL_LIBRARIES "${SAL_LIBRARIES}"
+                                ${SndFile_LIBRARIES})
 
-                                    message(STATUS "libsndfile found")
-                            else()
-                                    message(WARNING "libsndfile not found")
-                            endif()
-                        endif()
+                        message(STATUS "libsndfile found")
+                else()
+                        message(WARNING "libsndfile not found")
+                endif()
+            endif()
 		endif()
 	endif()
 	
