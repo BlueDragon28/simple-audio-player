@@ -4,6 +4,7 @@
 #include "EventCallback.h"
 #include "SpotifyAuthorizationPKCE.h"
 #include <functional>
+#include <qjsondocument.h>
 #include <qobject.h>
 #include <qnetworkrequest.h>
 #include <qtmetamacros.h>
@@ -18,15 +19,25 @@ public:
 
 public slots:
     void play(const QVariantMap& playArguments);
+    void resume();
+    void pause();
 
 signals:
     void isPlaying();
+    void isResuming();
+    void isPausing();
 
 private:
     void handlePlayResponse(QNetworkReply* reply);
+    void handleResumeResponse(QNetworkReply* reply);
+    void handlePauseResponse(QNetworkReply* reply);
 
     void fetchAvailableDevices();
     void handleAvailableDeviceResponse(QNetworkReply* reply);
+
+    static bool _isResponseAnError(const QByteArray& data);
+    static bool _isError(const QJsonDocument& jsonDocument);
+    static QJsonDocument _parseJSon(const QByteArray& data, bool* isError = nullptr);
 
     EventCallback m_eventCallback;
 

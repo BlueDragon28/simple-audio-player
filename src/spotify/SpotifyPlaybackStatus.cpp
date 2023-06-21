@@ -9,7 +9,7 @@
 #include <qnetworkreply.h>
 #include <qurlquery.h>
 
-int SpotifyPlaybackStatus::_timerInterval = 5000;
+int SpotifyPlaybackStatus::_timerInterval = 2500;
 const QString SpotifyPlaybackStatus::_packbackStateEndpointUrl =
     "https://api.spotify.com/v1/me/player";
 
@@ -27,6 +27,8 @@ SpotifyPlaybackStatus::SpotifyPlaybackStatus(
 {
     connect(m_fetchStatusTimer, &QTimer::timeout, this, &SpotifyPlaybackStatus::fetchStatus);
     connect(m_spotifyPlayer, &SpotifyPlayer::isPlaying, this, &SpotifyPlaybackStatus::playbackStartPlaying);
+    connect(m_spotifyPlayer, &SpotifyPlayer::isResuming, this, &SpotifyPlaybackStatus::playbackStartResuming);
+    connect(m_spotifyPlayer, &SpotifyPlayer::isPausing, this, &SpotifyPlaybackStatus::playbackStartPausing);
 }
 
 SpotifyPlaybackStatus::~SpotifyPlaybackStatus()
@@ -304,4 +306,14 @@ QUrl SpotifyPlaybackStatus::getAlbumImage(const QJsonObject& rootObject)
 void SpotifyPlaybackStatus::playbackStartPlaying()
 {
     setIsPlaying(true);
+}
+
+void SpotifyPlaybackStatus::playbackStartResuming()
+{
+    setIsPlaying(true);
+}
+
+void SpotifyPlaybackStatus::playbackStartPausing()
+{
+    setIsPlaying(false);
 }

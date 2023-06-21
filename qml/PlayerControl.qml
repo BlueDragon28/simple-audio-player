@@ -43,7 +43,9 @@ Item {
             Layout.preferredWidth: Layout.preferredHeight
 
             // Play or pause when the button is clicked.
-            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.playPause() : console.log("oups2")
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? 
+                        SAL.playPause() : 
+                        PlaybackControlSystem.playPause()
         }
 
         // Stop button
@@ -94,7 +96,9 @@ Item {
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
-            onClicked: PlaybackControlSystem.currentBackend == PlaybackControlSystem.StreamBackend.SAL ? SAL.next() : console.log("oups5")
+            onClicked: PlaybackControlSystem.currentBackend == PlaybackControlSystem.StreamBackend.SAL ? 
+                        SAL.next() : 
+                        console.log("oups5")
         }
 
         // Label showing the position time of the stream.

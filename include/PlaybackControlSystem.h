@@ -74,6 +74,7 @@ public slots:
     void open(const QString& filePath);
     void open(const QStringList& filesPath, bool isShuffledChanged = false);
 
+    void playPause();
     void play();
     void pause();
     void stop();

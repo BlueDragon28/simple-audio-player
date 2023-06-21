@@ -443,11 +443,43 @@ void PlaybackControlSystem::open(const QStringList& filesPath, bool isShuffledCh
     m_salPlayer->open(filesPath, isShuffledChanged);
 }
 
+void PlaybackControlSystem::playPause()
+{
+    if (isSal())
+    {
+        if (!m_salPlayer->isReady()) return;
+
+        if (m_salPlayer->isPlaying())
+        {
+            m_salPlayer->pause();
+        }
+        else
+        {
+            m_salPlayer->play();
+        }
+    }
+    else 
+    {
+        if (m_spotifyAPI->playbackStatus()->isPlaying()) 
+        {
+            m_spotifyAPI->spotifyPlayer()->pause();
+        }
+        else 
+        {
+            m_spotifyAPI->spotifyPlayer()->resume();
+        }
+    }
+}
+
 void PlaybackControlSystem::play()
 {
     if (isSal())
     {
         m_salPlayer->play();
+    }
+    else 
+    {
+        m_spotifyAPI->spotifyPlayer()->resume();
     }
 }
 
@@ -456,6 +488,10 @@ void PlaybackControlSystem::pause()
     if (isSal())
     {
         m_salPlayer->pause();
+    }
+    else 
+    {
+        m_spotifyAPI->spotifyPlayer()->pause();
     }
 }
 

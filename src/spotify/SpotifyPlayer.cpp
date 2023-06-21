@@ -109,6 +109,58 @@ void SpotifyPlayer::handlePlayResponse(QNetworkReply* reply)
     emit isPlaying();
 }
 
+void SpotifyPlayer::resume()
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray(u8"{}"));
+
+    if (!reply) return;
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        this->handleResumeResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handleResumeResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    if (_isResponseAnError(data)) return;
+
+    emit isResuming();
+}
+
+void SpotifyPlayer::pause()
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/pause"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray(u8"{}"));
+
+    if (!reply) return;
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        this->handlePauseResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handlePauseResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    if (_isResponseAnError(data)) return;
+
+    emit isPausing();
+}
+
 void SpotifyPlayer::fetchAvailableDevices()
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated())
@@ -227,4 +279,53 @@ void SpotifyPlayer::handleAvailableDeviceResponse(QNetworkReply* reply)
     m_deviceID = deviceID;
 
     m_eventCallback.call();
+}
+
+QJsonDocument SpotifyPlayer::_parseJSon(const QByteArray& data, bool* isError)
+{
+    const auto returnError = [isError](bool error = true, const QJsonDocument& jsonDocument = QJsonDocument()) {
+        if (isError) *isError = error;
+        return jsonDocument;
+    };
+
+    if (data.isEmpty()) {
+        return returnError(false);
+    }
+
+    QJsonParseError jsonError;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(data, &jsonError);
+
+    if (jsonError.error != QJsonParseError::NoError)
+    {
+        return returnError();
+    }
+
+    return returnError(false, jsonDocument);
+}
+
+bool SpotifyPlayer::_isError(const QJsonDocument& jsonDocument)
+{
+    if (!jsonDocument.isEmpty() && !jsonDocument.isObject())
+    {
+        return true;
+    }
+
+    const QJsonObject rootObject = jsonDocument.object();
+
+    if (rootObject.contains("error"))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool SpotifyPlayer::_isResponseAnError(const QByteArray& data)
+{
+    bool isError = false;
+    const QJsonDocument jsonDocument = _parseJSon(data, &isError);
+
+    if (isError) return true;
+
+    return _isError(jsonDocument);
 }

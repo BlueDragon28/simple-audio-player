@@ -83,6 +83,8 @@ private:
     QUrl getAlbumImage(const QJsonObject& rootObject);
 
     void playbackStartPlaying();
+    void playbackStartResuming();
+    void playbackStartPausing();
 
     QTimer* m_fetchStatusTimer;
     SpotifyAuthorizationPKCE* m_spotifyAuth;
