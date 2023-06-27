@@ -21,7 +21,7 @@ class PlaybackControlSystem : public QObject
     Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
     Q_PROPERTY(bool isReady READ isReady NOTIFY isReadyChanged)
-    Q_PROPERTY(bool isShuffled READ isShuffled NOTIFY isShuffledChanged)
+    Q_PROPERTY(bool isShuffled READ isShuffled WRITE setIsShuffledFromQML NOTIFY isShuffledChanged)
     Q_PROPERTY(long long streamSize READ streamSize NOTIFY streamSizeChanged)
     Q_PROPERTY(long long streamSizeSeconds READ streamSizeSeconds NOTIFY streamSizeSecondsChanged)
     Q_PROPERTY(long long streamPos READ streamPos NOTIFY setStreamPos NOTIFY streamPosChanged)
@@ -113,6 +113,7 @@ private:
     void setIsPaused(bool isPaused);
     void setIsReady(bool isReady);
     void setIsShuffled(bool isShuffled);
+    void setIsShuffledFromQML(bool isShuffled);
     void setStreamSize(long long streamSize);
     void setStreamSizeSeconds(long long streamSizeSeconds);
     void setStreamPos(long long streamPos);

@@ -176,6 +176,13 @@ void PlaybackControlSystem::setIsShuffled(bool isShuffled)
     emit isShuffledChanged();
 }
 
+void PlaybackControlSystem::setIsShuffledFromQML(bool isShuffled)
+{
+    if (!isSpotify() || isShuffled == m_isShuffled) return;
+    setIsShuffled(isShuffled);
+    m_spotifyAPI->spotifyPlayer()->toggleShuffle(isShuffled);
+}
+
 void PlaybackControlSystem::setStreamSize(long long streamSize)
 {
     if (streamSize == m_streamSize) return;

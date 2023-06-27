@@ -5,6 +5,7 @@
 #include "SpotifyAuthorizationPKCE.h"
 #include <functional>
 #include <qjsondocument.h>
+#include <qnetworkreply.h>
 #include <qobject.h>
 #include <qnetworkrequest.h>
 #include <qtmetamacros.h>
@@ -21,6 +22,7 @@ public slots:
     void play(const QVariantMap& playArguments);
     void resume();
     void pause();
+    void toggleShuffle(bool shuffleState);
 
 signals:
     void isPlaying();
@@ -31,6 +33,7 @@ private:
     void handlePlayResponse(QNetworkReply* reply);
     void handleResumeResponse(QNetworkReply* reply);
     void handlePauseResponse(QNetworkReply* reply);
+    void handleToggleShuffleResponse(QNetworkReply* reply);
 
     void fetchAvailableDevices();
     void handleAvailableDeviceResponse(QNetworkReply* reply);

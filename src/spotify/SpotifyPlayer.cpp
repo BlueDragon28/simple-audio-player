@@ -8,6 +8,8 @@
 #include <qnetworkreply.h>
 #include <qurlquery.h>
 
+static const QString m_shuffleStateEndPoint("https://api.spotify.com/v1/me/player/shuffle");
+
 SpotifyPlayer::SpotifyPlayer(SpotifyAuthorizationPKCE* spotifyAccess, QObject* parent) :
     QObject(parent),
     m_spotifyAccess(spotifyAccess)
@@ -159,6 +161,28 @@ void SpotifyPlayer::handlePauseResponse(QNetworkReply* reply)
     if (_isResponseAnError(data)) return;
 
     emit isPausing();
+}
+
+void SpotifyPlayer::toggleShuffle(bool shuffleState)
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    const QString fullUrl = m_shuffleStateEndPoint + "?state=" +
+        (shuffleState ? "true" : "false");
+
+    QNetworkRequest request = QNetworkRequest(QUrl(fullUrl));
+    QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray());
+    connect(reply, &QNetworkReply::finished, [reply, this]() {
+        this->handleToggleShuffleResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handleToggleShuffleResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    if (_isResponseAnError(data)) return;
 }
 
 void SpotifyPlayer::fetchAvailableDevices()
