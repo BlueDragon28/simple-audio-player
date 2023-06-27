@@ -22,6 +22,7 @@ SpotifyPlaybackStatus::SpotifyPlaybackStatus(
     m_spotifyAuth(spotifyAuth),
     m_spotifyPlayer(player),
     m_isPlaying(false),
+    m_shuffleState(false),
     m_progressMS(0),
     m_trackDurationMS(0)
 {
@@ -42,6 +43,11 @@ QString SpotifyPlaybackStatus::deviceID() const
 bool SpotifyPlaybackStatus::isPlaying() const
 {
     return m_isPlaying;
+}
+
+bool SpotifyPlaybackStatus::shuffleState() const 
+{
+    return m_shuffleState;
 }
 
 int64_t SpotifyPlaybackStatus::progressMS() const
@@ -111,6 +117,13 @@ void SpotifyPlaybackStatus::setIsPlaying(bool isPlaying)
     if (isPlaying == m_isPlaying) return;
     m_isPlaying = isPlaying;
     emit isPlayingChanged();
+}
+
+void SpotifyPlaybackStatus::setShuffleState(bool shuffleState) 
+{
+    if (shuffleState == m_shuffleState) return;
+    m_shuffleState = shuffleState;
+    emit shuffleStateChanged();
 }
 
 void SpotifyPlaybackStatus::setProgressMS(int64_t progressMS)
@@ -240,12 +253,13 @@ bool SpotifyPlaybackStatus::parseDeviceInfo(const QJsonValue& value)
 bool SpotifyPlaybackStatus::parsePlaybackStatus(const QJsonObject& rootObject)
 {
     const QString repeatState = rootObject.value("repeat_state").toString();
-    const bool suffleState = rootObject.value("shuffle_state").toBool();
+    const bool shuffleState = rootObject.value("shuffle_state").toBool();
     const int64_t progressMS = rootObject.value("progress_ms").toInteger();
     const bool isPlaying = rootObject.value("is_playing").toBool();
 
     setProgressMS(progressMS);
     setIsPlaying(isPlaying);
+    setShuffleState(shuffleState);
     return true;
 }
 
