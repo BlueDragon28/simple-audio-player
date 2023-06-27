@@ -79,7 +79,12 @@ Item {
             icon.width: Layout.preferredWidth - 4
             icon.color: "#444"
             checkable: true
+            checked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.isRandom : PlaybackControlSystem.isShuffled
             onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.setRandom(checked) : console.log("oups4")
+
+            onCheckedChanged: function() {
+                console.log("Hello There", this.checked)
+            }
         }
 
         // Next button

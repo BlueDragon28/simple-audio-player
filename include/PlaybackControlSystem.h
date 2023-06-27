@@ -21,6 +21,7 @@ class PlaybackControlSystem : public QObject
     Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
     Q_PROPERTY(bool isReady READ isReady NOTIFY isReadyChanged)
+    Q_PROPERTY(bool isShuffled READ isShuffled NOTIFY isShuffledChanged)
     Q_PROPERTY(long long streamSize READ streamSize NOTIFY streamSizeChanged)
     Q_PROPERTY(long long streamSizeSeconds READ streamSizeSeconds NOTIFY streamSizeSecondsChanged)
     Q_PROPERTY(long long streamPos READ streamPos NOTIFY setStreamPos NOTIFY streamPosChanged)
@@ -52,6 +53,7 @@ public:
     bool isPlaying() const;
     bool isPaused() const;
     bool isReady() const;
+    bool isShuffled() const;
     long long streamSize() const;
     long long streamSizeSeconds() const;
     long long streamPos() const;
@@ -92,6 +94,7 @@ signals:
     void isPlayingChanged();
     void isPausedChanged();
     void isReadyChanged();
+    void isShuffledChanged();
     void streamSizeChanged();
     void streamSizeSecondsChanged();
     void streamPosChanged();
@@ -109,6 +112,7 @@ private:
     void setIsPlaying(bool isPlaying);
     void setIsPaused(bool isPaused);
     void setIsReady(bool isReady);
+    void setIsShuffled(bool isShuffled);
     void setStreamSize(long long streamSize);
     void setStreamSizeSeconds(long long streamSizeSeconds);
     void setStreamPos(long long streamPos);
@@ -139,6 +143,7 @@ private:
     void handleSpotifyTrackAlbumChange();
     void handleSpotifyTrackArtistsChange();
     void handleSpotifyTrackAlbumCoverChange();
+    void handleSpotifyShuffleStateChange();
 
     void handleSpotifyIsPlayingStatusChange();
 
@@ -156,6 +161,7 @@ private:
     bool m_isPlaying;
     bool m_isPaused;
     bool m_isReady;
+    bool m_isShuffled;
     long long m_streamSize;
     long long m_streamSizeSeconds;
     long long m_streamPos;

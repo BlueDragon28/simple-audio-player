@@ -14,6 +14,7 @@ PlaybackControlSystem::PlaybackControlSystem() :
     m_isPlaying(false),
     m_isPaused(false),
     m_isReady(false),
+    m_isShuffled(false),
     m_streamSize(0),
     m_streamSizeSeconds(0),
     m_streamPos(0),
@@ -57,6 +58,11 @@ bool PlaybackControlSystem::isPaused() const
 bool PlaybackControlSystem::isReady() const
 {
     return m_isReady;
+}
+
+bool PlaybackControlSystem::isShuffled() const
+{
+    return m_isShuffled;
 }
 
 long long PlaybackControlSystem::streamSize() const
@@ -163,6 +169,13 @@ void PlaybackControlSystem::setIsReady(bool isReady)
     emit isReadyChanged();
 }
 
+void PlaybackControlSystem::setIsShuffled(bool isShuffled) 
+{
+    if (isShuffled == m_isShuffled) return;
+    m_isShuffled = isShuffled;
+    emit isShuffledChanged();
+}
+
 void PlaybackControlSystem::setStreamSize(long long streamSize)
 {
     if (streamSize == m_streamSize) return;
@@ -258,6 +271,7 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
     connect(playbackStatus, &SpotifyPlaybackStatus::artistsNamesChanged, this, &PlaybackControlSystem::handleSpotifyTrackArtistsChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::albumNameChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::albumImageChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange);
+    connect(playbackStatus, &SpotifyPlaybackStatus::shuffleStateChanged, this, &PlaybackControlSystem::handleSpotifyShuffleStateChange);
 }
 
 void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
@@ -424,6 +438,14 @@ void PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange()
 
     const QUrl cover = m_spotifyAPI->playbackStatus()->albumImage();
     setSpotifyAlbumCover(cover.toString());
+}
+
+void PlaybackControlSystem::handleSpotifyShuffleStateChange()
+{
+    if (!isSpotify()) return;
+
+    const bool shuffleState = m_spotifyAPI->playbackStatus()->shuffleState();
+    setIsShuffled(shuffleState);
 }
 
 bool PlaybackControlSystem::isReadable(const QString& filePath) const
