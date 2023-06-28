@@ -90,6 +90,8 @@ private:
     void playbackStartResuming();
     void playbackStartPausing();
 
+    void resetInfos();
+
     QTimer* m_fetchStatusTimer;
     SpotifyAuthorizationPKCE* m_spotifyAuth;
     SpotifyPlayer* m_spotifyPlayer;

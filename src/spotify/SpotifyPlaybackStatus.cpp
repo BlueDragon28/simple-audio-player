@@ -109,6 +109,7 @@ void SpotifyPlaybackStatus::enablePlaybackWatching(bool enable)
     else 
     {
         m_fetchStatusTimer->stop();
+        resetInfos();
     }
 }
 
@@ -331,4 +332,18 @@ void SpotifyPlaybackStatus::playbackStartResuming()
 void SpotifyPlaybackStatus::playbackStartPausing()
 {
     setIsPlaying(false);
+}
+
+void SpotifyPlaybackStatus::resetInfos()
+{
+    setIsPlaying(false);
+    setProgressMS(0);
+    setAlbumName(QString());
+    setArtistsNames(QString());
+    setTrackID(QString());
+    setTrackUri(QString());
+    setTrackName(QString());
+    setTrackHref(QString());
+    setAlbumImage(QUrl());
+    setTrackDurationMS(0);
 }
