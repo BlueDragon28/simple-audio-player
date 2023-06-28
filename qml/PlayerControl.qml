@@ -63,7 +63,7 @@ Item {
             enabled: false
 
             // Stop the stream.
-            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.stop() : console.log("oups3")
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.StreamBackend.SAL ? SAL.stop() : PlaybackControlSystem.stop()
         }
 
         // Random button

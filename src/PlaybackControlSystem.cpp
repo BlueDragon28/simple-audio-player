@@ -1,4 +1,5 @@
 #include "SpotifyAPI.h"
+#include "SpotifyPlayer.h"
 #include <PlaybackControlSystem.h>
 #include <cstdint>
 #include <spotify/SpotifyPlaybackStatus.h>
@@ -269,6 +270,9 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
 {
     if (!m_spotifyAPI) return;
 
+    SpotifyPlayer* spotifyPlayer = m_spotifyAPI->spotifyPlayer();
+    connect(spotifyPlayer, &SpotifyPlayer::isPlaying, this, &PlaybackControlSystem::spotifyIsBeingUsed);
+
     SpotifyPlaybackStatus* playbackStatus = m_spotifyAPI->playbackStatus();
     connect(playbackStatus, &SpotifyPlaybackStatus::isPlayingChanged, this, &PlaybackControlSystem::handleSpotifyIsPlayingStatusChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::trackUriChanged, this, &PlaybackControlSystem::handleSpotifyTrackURIChanged);
@@ -283,6 +287,14 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
 
 void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
 {
+    if (!isSpotify()) return;
+
+    const bool isPlaying = m_spotifyAPI->playbackStatus()->isPlaying();
+    setIsPlaying(isPlaying);
+}
+
+void PlaybackControlSystem::spotifyIsBeingUsed()
+{
     if (!m_spotifyAPI || !m_spotifyAPI->isAuthenticated()) return;
 
     if (m_currentBackend == StreamBackend::SAL)
@@ -293,9 +305,8 @@ void PlaybackControlSystem::handleSpotifyIsPlayingStatusChange()
         setCurrentBackend(StreamBackend::SPOTIFY);
     }
 
-    const bool isPlaying = m_spotifyAPI->playbackStatus()->isPlaying();
     setIsReady(true);
-    setIsPlaying(isPlaying);
+    setIsPlaying(true);
     m_spotifyAPI->playbackStatus()->enablePlaybackWatching(true);
 }
 
@@ -529,6 +540,15 @@ void PlaybackControlSystem::stop()
     if (isSal())
     {
         m_salPlayer->stop();
+    }
+    else
+    {
+        if (m_spotifyAPI->playbackStatus()->isPlaying())
+        {
+            m_spotifyAPI->spotifyPlayer()->pause();
+        }
+
+        reenableSAL();
     }
 }
 

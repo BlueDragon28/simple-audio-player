@@ -147,6 +147,7 @@ private:
     void handleSpotifyShuffleStateChange();
 
     void handleSpotifyIsPlayingStatusChange();
+    void spotifyIsBeingUsed();
 
     bool isSal() const;
     bool isSpotify() const;

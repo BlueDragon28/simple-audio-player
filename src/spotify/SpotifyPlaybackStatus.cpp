@@ -319,6 +319,7 @@ QUrl SpotifyPlaybackStatus::getAlbumImage(const QJsonObject& rootObject)
 
 void SpotifyPlaybackStatus::playbackStartPlaying()
 {
+    enablePlaybackWatching(true);
     setIsPlaying(true);
 }
 
