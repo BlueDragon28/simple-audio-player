@@ -3,6 +3,8 @@
 #include "SpotifyPlayer.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
+#include <bits/chrono.h>
+#include <chrono>
 #include <cstdint>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
@@ -201,6 +203,7 @@ void SpotifyPlaybackStatus::setFetchProgressMS(int64_t progressMS)
 {
     m_fetchProgressMS = progressMS;
     m_isFetchProgressUpdated = true;
+    m_fetchProgressLastSet = std::chrono::system_clock::now();
 }
 
 void SpotifyPlaybackStatus::fetchStatus()
@@ -362,14 +365,21 @@ void SpotifyPlaybackStatus::resetInfos()
 
 void SpotifyPlaybackStatus::incrementProgress()
 {
+    const auto currentTime = std::chrono::system_clock::now();
+    const int64_t incrementSinceLastTime = 
+        std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - m_progressTimerLastCall).count();
+    m_progressTimerLastCall = std::chrono::system_clock::now();
+
     if (m_isFetchProgressUpdated)
     {
-        setProgressMS(m_fetchProgressMS);
+        const int64_t incrementSinceFetch = 
+            std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - m_fetchProgressLastSet).count();
+        setProgressMS(m_fetchProgressMS + incrementSinceFetch);
         m_isFetchProgressUpdated = false;
         return;
     }
 
-    setProgressMS(m_progressMS + _progressTimerInterval);
+    setProgressMS(m_progressMS + incrementSinceLastTime);
 }
 
 void SpotifyPlaybackStatus::startProgressTimer()
@@ -377,6 +387,7 @@ void SpotifyPlaybackStatus::startProgressTimer()
     if (m_isPlaying)
     {
         m_progressTimer->start(_progressTimerInterval);
+        m_progressTimerLastCall = std::chrono::system_clock::now();
     }
     else 
     {

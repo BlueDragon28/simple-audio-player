@@ -8,6 +8,7 @@
 #include <qtimer.h>
 #include <qtmetamacros.h>
 #include <sys/types.h>
+#include <chrono>
 
 class SpotifyPlaybackStatus : public QObject
 {
@@ -116,8 +117,10 @@ private:
 
     int64_t m_fetchProgressMS;
     bool m_isFetchProgressUpdated;
+    std::chrono::system_clock::time_point m_fetchProgressLastSet;
 
     QTimer* m_progressTimer;
+    std::chrono::system_clock::time_point m_progressTimerLastCall;
 
     static int _timerInterval;
     static int _progressTimerInterval;
