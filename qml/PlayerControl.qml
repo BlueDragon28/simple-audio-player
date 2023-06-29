@@ -3,6 +3,7 @@ import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
 import "qrc:///js/simple-audio-library.js" as SAL
+import "qrc:///js/previousTrack.js" as PreviousTrack
 
 // This is where the player control (play, pause, etc) and the volume control is placed.
 Item {
@@ -30,7 +31,9 @@ Item {
             icon.color: enabled ? "#444" : "lightgray"
             enabled: false
 
-            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL ? SAL.previous() : console.log("oups")
+            onClicked: PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL ? 
+                        SAL.previous() : 
+                        PreviousTrack.canGoToPrevious() ? PlaybackControlSystem.previous() : PlaybackControlSystem.seek(0)
         }
 
         // Play pause button.

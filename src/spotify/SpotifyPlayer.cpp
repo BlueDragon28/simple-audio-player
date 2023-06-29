@@ -11,6 +11,7 @@
 static const QString m_shuffleStateEndPoint("https://api.spotify.com/v1/me/player/shuffle");
 static const QString m_seekEndpoint("https://api.spotify.com/v1/me/player/seek");
 static const QString m_nextEndpoint("https://api.spotify.com/v1/me/player/next");
+static const QString m_previousEndpoint("https://api.spotify.com/v1/me/player/previous");
 
 SpotifyPlayer::SpotifyPlayer(SpotifyAuthorizationPKCE* spotifyAccess, QObject* parent) :
     QObject(parent),
@@ -230,6 +231,28 @@ void SpotifyPlayer::handleNextResponse(QNetworkReply* reply)
     if (_isResponseAnError(data))
     {
         qDebug() << "Failed to go to the next stream";
+    }
+}
+
+void SpotifyPlayer::previous()
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    const QNetworkRequest request = QNetworkRequest(QUrl(m_previousEndpoint));
+    QNetworkReply* reply = m_spotifyAccess->post(request, QByteArray());
+    connect(reply, &QNetworkReply::finished, [reply, this]() {
+        this->handlePreviousResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handlePreviousResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    if (_isResponseAnError(data)) 
+    {
+        qDebug() << "Failed to go to the previous stream";
     }
 }
 

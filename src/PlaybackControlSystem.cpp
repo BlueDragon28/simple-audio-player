@@ -582,5 +582,9 @@ void PlaybackControlSystem::previous()
     {
         seek(0);
     }
+    else 
+    {
+        m_spotifyAPI->spotifyPlayer()->previous();
+    }
 }
 
