@@ -19,7 +19,7 @@ SpotifyPlaybackStatus::SpotifyPlaybackStatus(
         SpotifyPlayer* player, QObject* parent) :
 
     QObject(parent),
-    m_fetchStatusTimer(new QTimer()),
+    m_fetchStatusTimer(new QTimer(this)),
     m_progressTimer(new QTimer(this)),
     m_spotifyAuth(spotifyAuth),
     m_spotifyPlayer(player),
