@@ -4,6 +4,7 @@ Wrapper to the SAL C++ module.
 
 .pragma library
 .import SimpleAudioPlayer 1.0 as SAP
+.import "previousTrack.js" as PreviousTrack
 
 // Pointer storing the original list when randomize it.
 let originalList = []
@@ -96,25 +97,13 @@ function open(filePath, firstElement = "", shuffleChanged = false) {
     }
 }
 
-// Time since the last time the previous function was called.
-let lastTime = -1
-
-// Retart the current track or if the user double click, go to the previous track.
 function previous() {
-    let currentTime = new Date().getTime()
-    /*
-    If the last time is equal to -1, this mean that the previous function is called for the first time.
-    If more that 200 ms passed since the last time, seek to the beginning of the track,
-    otherwise, go to the previous track.
-    */
-    if (lastTime == -1 || currentTime - lastTime > 1000) {
+    if (!PreviousTrack.canGoToPrevious()) {
         SAP.Player.seek(0)
-        lastTime = currentTime
     } else if (SAP.PlayingList.hasPrevious()) {
         SAP.PlayingList.previous()
         SAP.Player.open(SAP.PlayingList.listFromIndex())
         SAP.Player.play()
-        lastTime = currentTime
     }
 }
 
