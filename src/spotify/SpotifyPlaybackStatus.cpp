@@ -10,6 +10,7 @@
 #include <qurlquery.h>
 
 int SpotifyPlaybackStatus::_timerInterval = 2500;
+int SpotifyPlaybackStatus::_progressTimerInterval = 1000;
 const QString SpotifyPlaybackStatus::_packbackStateEndpointUrl =
     "https://api.spotify.com/v1/me/player";
 
@@ -19,14 +20,19 @@ SpotifyPlaybackStatus::SpotifyPlaybackStatus(
 
     QObject(parent),
     m_fetchStatusTimer(new QTimer()),
+    m_progressTimer(new QTimer(this)),
     m_spotifyAuth(spotifyAuth),
     m_spotifyPlayer(player),
     m_isPlaying(false),
     m_shuffleState(false),
     m_progressMS(0),
-    m_trackDurationMS(0)
+    m_trackDurationMS(0),
+    m_fetchProgressMS(0),
+    m_isFetchProgressUpdated(false)
 {
     connect(m_fetchStatusTimer, &QTimer::timeout, this, &SpotifyPlaybackStatus::fetchStatus);
+    connect(m_progressTimer, &QTimer::timeout, this, &SpotifyPlaybackStatus::incrementProgress);
+    connect(this, &SpotifyPlaybackStatus::isPlayingChanged, this, &SpotifyPlaybackStatus::startProgressTimer);
     connect(m_spotifyPlayer, &SpotifyPlayer::isPlaying, this, &SpotifyPlaybackStatus::playbackStartPlaying);
     connect(m_spotifyPlayer, &SpotifyPlayer::isResuming, this, &SpotifyPlaybackStatus::playbackStartResuming);
     connect(m_spotifyPlayer, &SpotifyPlayer::isPausing, this, &SpotifyPlaybackStatus::playbackStartPausing);
@@ -191,6 +197,12 @@ void SpotifyPlaybackStatus::setTrackDurationMS(int64_t durationMS)
     emit trackDurationMSChanged();
 }
 
+void SpotifyPlaybackStatus::setFetchProgressMS(int64_t progressMS)
+{
+    m_fetchProgressMS = progressMS;
+    m_isFetchProgressUpdated = true;
+}
+
 void SpotifyPlaybackStatus::fetchStatus()
 {
     if (!m_spotifyAuth) return;
@@ -258,7 +270,7 @@ bool SpotifyPlaybackStatus::parsePlaybackStatus(const QJsonObject& rootObject)
     const int64_t progressMS = rootObject.value("progress_ms").toInteger();
     const bool isPlaying = rootObject.value("is_playing").toBool();
 
-    setProgressMS(progressMS);
+    setFetchProgressMS(progressMS);
     setIsPlaying(isPlaying);
     setShuffleState(shuffleState);
     return true;
@@ -346,4 +358,28 @@ void SpotifyPlaybackStatus::resetInfos()
     setTrackHref(QString());
     setAlbumImage(QUrl());
     setTrackDurationMS(0);
+}
+
+void SpotifyPlaybackStatus::incrementProgress()
+{
+    if (m_isFetchProgressUpdated)
+    {
+        setProgressMS(m_fetchProgressMS);
+        m_isFetchProgressUpdated = false;
+        return;
+    }
+
+    setProgressMS(m_progressMS + _progressTimerInterval);
+}
+
+void SpotifyPlaybackStatus::startProgressTimer()
+{
+    if (m_isPlaying)
+    {
+        m_progressTimer->start(_progressTimerInterval);
+    }
+    else 
+    {
+        m_progressTimer->stop();
+    }
 }

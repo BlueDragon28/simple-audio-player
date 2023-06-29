@@ -77,9 +77,13 @@ private:
     void setTrackHref(const QString& trackHref);
     void setAlbumImage(const QUrl& albumImage);
     void setTrackDurationMS(int64_t durationMS);
+    void setFetchProgressMS(int64_t progressMS);
 
     void fetchStatus();
     void handleFetchStatusResponse(QNetworkReply* reply);
+
+    void incrementProgress();
+    void startProgressTimer();
 
     bool parseDeviceInfo(const QJsonValue& value);
     bool parsePlaybackStatus(const QJsonObject& rootObject);
@@ -110,7 +114,13 @@ private:
     QUrl m_albumImage;
     int64_t m_trackDurationMS;
 
+    int64_t m_fetchProgressMS;
+    bool m_isFetchProgressUpdated;
+
+    QTimer* m_progressTimer;
+
     static int _timerInterval;
+    static int _progressTimerInterval;
     static const QString _packbackStateEndpointUrl;
 };
 
