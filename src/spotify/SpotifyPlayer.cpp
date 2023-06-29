@@ -10,6 +10,7 @@
 
 static const QString m_shuffleStateEndPoint("https://api.spotify.com/v1/me/player/shuffle");
 static const QString m_seekEndpoint("https://api.spotify.com/v1/me/player/seek");
+static const QString m_nextEndpoint("https://api.spotify.com/v1/me/player/next");
 
 SpotifyPlayer::SpotifyPlayer(SpotifyAuthorizationPKCE* spotifyAccess, QObject* parent) :
     QObject(parent),
@@ -208,6 +209,28 @@ void SpotifyPlayer::handleSeekResponse(QNetworkReply* reply)
     {
         qDebug() << "Failed to seek to a new position in the stream";
     };
+}
+
+void SpotifyPlayer::next()
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    QNetworkRequest request = QNetworkRequest(QUrl(m_nextEndpoint));
+    QNetworkReply* reply = m_spotifyAccess->post(request, QByteArray());
+    connect(reply, &QNetworkReply::finished, [reply, this]() {
+        this->handleNextResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handleNextResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+    
+    if (_isResponseAnError(data))
+    {
+        qDebug() << "Failed to go to the next stream";
+    }
 }
 
 void SpotifyPlayer::fetchAvailableDevices()

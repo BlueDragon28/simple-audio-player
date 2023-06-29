@@ -570,6 +570,10 @@ void PlaybackControlSystem::next()
     {
         m_salPlayer->next();
     }
+    else 
+    {
+        m_spotifyAPI->spotifyPlayer()->next();
+    }
 }
 
 void PlaybackControlSystem::previous()

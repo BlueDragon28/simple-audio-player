@@ -99,7 +99,7 @@ Item {
 
             onClicked: PlaybackControlSystem.currentBackend == PlaybackControlSystem.StreamBackend.SAL ? 
                         SAL.next() : 
-                        console.log("oups5")
+                        PlaybackControlSystem.next()
         }
 
         // Label showing the position time of the stream.
