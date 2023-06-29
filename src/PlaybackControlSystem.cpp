@@ -558,6 +558,10 @@ void PlaybackControlSystem::seek(long long pos)
     {
         m_salPlayer->seek(pos);
     }
+    else if (isSpotify() && pos >= 0)
+    {
+        m_spotifyAPI->spotifyPlayer()->seek(pos);
+    }
 }
 
 void PlaybackControlSystem::next()

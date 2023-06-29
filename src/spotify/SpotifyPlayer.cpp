@@ -9,6 +9,7 @@
 #include <qurlquery.h>
 
 static const QString m_shuffleStateEndPoint("https://api.spotify.com/v1/me/player/shuffle");
+static const QString m_seekEndpoint("https://api.spotify.com/v1/me/player/seek");
 
 SpotifyPlayer::SpotifyPlayer(SpotifyAuthorizationPKCE* spotifyAccess, QObject* parent) :
     QObject(parent),
@@ -183,6 +184,30 @@ void SpotifyPlayer::handleToggleShuffleResponse(QNetworkReply* reply)
     reply->deleteLater();
 
     if (_isResponseAnError(data)) return;
+}
+
+void SpotifyPlayer::seek(long long pos)
+{
+    if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
+
+    const QString fullUrl = m_seekEndpoint + "?position_ms=" + QString::number(pos);
+    
+    QNetworkRequest request = QNetworkRequest(QUrl(fullUrl));
+    QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray());
+    connect(reply, &QNetworkReply::finished, [reply, this]() {
+        this->handleSeekResponse(reply);
+    });
+}
+
+void SpotifyPlayer::handleSeekResponse(QNetworkReply* reply)
+{
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    if (_isResponseAnError(data))
+    {
+        qDebug() << "Failed to seek to a new position in the stream";
+    };
 }
 
 void SpotifyPlayer::fetchAvailableDevices()

@@ -23,6 +23,7 @@ public slots:
     void resume();
     void pause();
     void toggleShuffle(bool shuffleState);
+    void seek(long long pos);
 
 signals:
     void isPlaying();
@@ -34,6 +35,7 @@ private:
     void handleResumeResponse(QNetworkReply* reply);
     void handlePauseResponse(QNetworkReply* reply);
     void handleToggleShuffleResponse(QNetworkReply* reply);
+    void handleSeekResponse(QNetworkReply* reply);
 
     void fetchAvailableDevices();
     void handleAvailableDeviceResponse(QNetworkReply* reply);
