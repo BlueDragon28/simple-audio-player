@@ -42,6 +42,11 @@ Item {
                 selectByMouse: true
             }
 
+            CheckBox {
+                id: saveCredentials
+                text: "Save login details (may not be safe)"
+            }
+
             Button {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 120
@@ -50,7 +55,7 @@ Item {
 
                 onClicked: function() {
                     SpotifyAPI.setClientID(clientID.text);
-                    SpotifyAPI.authenticate(true);
+                    SpotifyAPI.authenticate(saveCredentials.checked);
                 }
             }
         }
