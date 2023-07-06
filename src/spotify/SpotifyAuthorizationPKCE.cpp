@@ -1,8 +1,5 @@
 #include "spotify/SpotifyAuthorizationPKCE.h"
 #include "spotify/SpotifyHttpCodeListener.h"
-#include <QtNetworkAuth/qabstractoauth2.h>
-#include <QtNetworkAuth/qoauth2authorizationcodeflow.h>
-#include <bits/chrono.h>
 #include <chrono>
 #include <cstdlib>
 #include <ctime>

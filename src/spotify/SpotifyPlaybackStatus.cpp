@@ -3,7 +3,6 @@
 #include "SpotifyPlayer.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
-#include <bits/chrono.h>
 #include <chrono>
 #include <cstdint>
 #include <qjsondocument.h>
