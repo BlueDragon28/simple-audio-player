@@ -27,6 +27,8 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.margins: 8
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
 
                 // Model with the section list.
                 model: SectionListModel {}
