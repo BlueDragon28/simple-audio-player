@@ -160,6 +160,9 @@ elseif(WIN32)
         endif()
 		
     set (WIN32_EXECUTABLE WIN32)
+
+    # Fix cpp-httplib not compiling because windows.h is included before httplib.h
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
 endif()
 
 # Set the headers and sources files.
