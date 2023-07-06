@@ -293,7 +293,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInner
     }
 
     bool getAlbumFailed;
-    const QString albumName = retrieveAlbumName(trackObject.value("album").toObject(), &getArtistsFailed);
+    const QString albumName = retrieveAlbumName(trackObject.value("album").toObject(), &getAlbumFailed);
 
     if (getAlbumFailed)
     {
