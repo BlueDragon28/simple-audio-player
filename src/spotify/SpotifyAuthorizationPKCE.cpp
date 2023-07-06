@@ -369,7 +369,7 @@ QNetworkReply* SpotifyAuthorizationPKCE::put(const QNetworkRequest& request, con
 
 QNetworkReply* SpotifyAuthorizationPKCE::deleteResource(const QNetworkRequest& request)
 {
-    return fetchSpotify(HttpVerb::DELETE, request);
+    return fetchSpotify(HttpVerb::_DELETE, request);
 }
 
 QNetworkReply* SpotifyAuthorizationPKCE::fetchSpotify(HttpVerb httpVerb, const QNetworkRequest& userRequest, const QByteArray& bodyData)
@@ -400,7 +400,7 @@ QNetworkReply* SpotifyAuthorizationPKCE::fetchSpotify(HttpVerb httpVerb, const Q
     {
         reply = m_accessManager->put(request, bodyData);
     }
-    else if (httpVerb == HttpVerb::DELETE)
+    else if (httpVerb == HttpVerb::_DELETE)
     {
         reply = m_accessManager->deleteResource(request);
     }

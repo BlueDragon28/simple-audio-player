@@ -63,7 +63,7 @@ private:
         GET,
         POST,
         PUT,
-        DELETE
+        _DELETE
     };
 
     void prepareAuthorization();
