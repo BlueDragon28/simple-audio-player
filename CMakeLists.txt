@@ -30,7 +30,17 @@ elseif (WIN32)
 endif()
 
 # Find Qt6
-find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets REQUIRED)
+find_package(Qt6 6.3.0 COMPONENTS Core Gui Quick QuickControls2 Sql ${FIND_QT_DBUS_MODULE} Widgets Network REQUIRED)
+find_package(Qt6Keychain REQUIRED)
+
+# Include the include directory
+include_directories(
+    include/ 
+    include/options 
+    include/network 
+    include/spotify 
+    "${CMAKE_SOURCE_DIR}/dependencies/httplib"
+    "${CMAKE_BINARY_DIR}/include")
 
 if (UNIX)
 	# Find simple-audio-library
@@ -150,6 +160,9 @@ elseif(WIN32)
         endif()
 		
     set (WIN32_EXECUTABLE WIN32)
+
+    # Fix cpp-httplib not compiling because windows.h is included before httplib.h
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
 endif()
 
 # Set the headers and sources files.
@@ -172,9 +185,25 @@ set(HEADERS
     "include/PlaylistModel.h"
     "include/AddToPlaylistInterface.h"
     "include/SystemFileDialog.h"
+    "include/PlaybackControlSystem.h"
 	"include/options/SAPOptions.h"
 	"include/options/AboutDialog.h"
-	"include/options/LicenseDialog.h")
+	"include/options/LicenseDialog.h"
+    "include/network/NetworkManager.h"
+    "include/spotify/SpotifyAPI.h"
+    "include/spotify/SpotifyAuthorizationPKCE.h"
+    "include/spotify/SpotifyHttpCodeListener.h"
+    "include/spotify/SpotifyUserInfo.h"
+    "include/spotify/SpotifyTokenSaver.h"
+    "include/spotify/SpotifyPlaylist.h"
+    "include/spotify/SpotifyPlaylistItem.h"
+    "include/spotify/SpotifyUserPlaylistsListModel.h"
+    "include/spotify/SpotifyPlaylistListModel.h"
+    "include/spotify/SpotifyReceivedPlaylistElement.h"
+    "include/spotify/SpotifyPlayer.h"
+    "include/spotify/EventCallback.h"
+    "include/spotify/SpotifyPlaybackStatus.h"
+    "dependencies/httplib/httplib.h")
 
 set(SOURCES
     "src/main.cpp"
@@ -196,17 +225,29 @@ set(SOURCES
     "src/PlaylistModel.cpp"
     "src/AddToPlaylistInterface.cpp"
     "src/SystemFileDialog.cpp"
+    "src/PlaybackControlSystem.cpp"
 	"src/options/SAPOptions.cpp"
 	"src/options/AboutDialog.cpp"
-	"src/options/LicenseDialog.cpp")
+	"src/options/LicenseDialog.cpp"
+    "src/network/NetworkManager.cpp"
+    "src/spotify/SpotifyAPI.cpp"
+    "src/spotify/SpotifyAuthorizationPKCE.cpp"
+    "src/spotify/SpotifyHttpCodeListener.cpp"
+    "src/spotify/SpotifyUserInfo.cpp"
+    "src/spotify/SpotifyTokenSaver.cpp"
+    "src/spotify/SpotifyPlaylist.cpp"
+    "src/spotify/SpotifyPlaylistItem.cpp"
+    "src/spotify/SpotifyUserPlaylistsListModel.cpp"
+    "src/spotify/SpotifyPlaylistListModel.cpp"
+    "src/spotify/SpotifyReceivedPlaylistElement.cpp"
+    "src/spotify/SpotifyPlayer.cpp"
+    "src/spotify/EventCallback.cpp"
+    "src/spotify/SpotifyPlaybackStatus.cpp")
 
 set(RESOURCES "simple-audio-player.qrc")
 
 # Configure the config.h.in file.
 configure_file(include/config.h.in "${CMAKE_BINARY_DIR}/include/config.h")
-
-# Include the include directory
-include_directories(include/ include/options "${CMAKE_BINARY_DIR}/include")
 
 # Create the executable.
 qt_add_executable(${PROJECT_NAME} ${WIN32_EXECUTABLE} ${HEADERS} ${SOURCES} ${RESOURCES} ${DBUS_HEADERS} ${DBUS_SRC} ${LISTEN_MEDIA_KEYS_SRC} ${SMTC_INTERFACE_SRC})
@@ -217,6 +258,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::QuickControls2
     Qt6::Sql
 	Qt6::Widgets
+    Qt6::Network
+    ${QTKEYCHAIN_LIBRARIES}
     ${FIND_QT_DBUS_LIBS}
     ${SAL_LIBRARIES}
     ${TAGLIB_LIBRARIES}

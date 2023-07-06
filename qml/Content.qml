@@ -32,5 +32,5 @@ Item {
             */
             sectionType: sidePanel.sectionType
         }
-    }
+   }
 }

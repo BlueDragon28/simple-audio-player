@@ -2,6 +2,7 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
+import "spotify/"
 
 // This is where the audio file, album, etc... is available.
 Item {
@@ -19,6 +20,8 @@ Item {
             state = "Albums"
         } else if (sectionType === SectionListModel.PLAYLIST) {
             state = "Playlist"
+        } else if (sectionType === SectionListModel.SPOTIFY) {
+            state = "Spotify"
         } else {
             state = ""
         }
@@ -40,6 +43,10 @@ Item {
         State {
             name: "Playlist"
             PropertyChanges { target: stackLayout; currentIndex: 2; }
+        },
+        State {
+            name: "Spotify"
+            PropertyChanges { target: stackLayout; currentIndex: 3; }
         }
     ]
 
@@ -55,5 +62,6 @@ Item {
         FileSystemView {}
         AlbumsSection {}
         PlayList {}
+        SpotifyMainView {}
     }
 }

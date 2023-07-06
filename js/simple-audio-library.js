@@ -4,6 +4,7 @@ Wrapper to the SAL C++ module.
 
 .pragma library
 .import SimpleAudioPlayer 1.0 as SAP
+.import "previousTrack.js" as PreviousTrack
 
 // Pointer storing the original list when randomize it.
 let originalList = []
@@ -69,14 +70,14 @@ function randomize(playingList, firstToPlay) {
 // Open a new list.
 function open(filePath, firstElement = "", shuffleChanged = false) {
     if (typeof filePath === "string") {
-        if (SAP.Player.isReadable(filePath)) {
-            SAP.Player.open(filePath)
-            SAP.Player.play()
+        if (SAP.PlaybackControlSystem.isReadable(filePath)) {
+            SAP.PlaybackControlSystem.open(filePath)
+            SAP.PlaybackControlSystem.play()
         }
     } else if (filePath.length > 0) {
         let validFiles = []
         for (let i = 0; i < filePath.length; i++) {
-            if (SAP.Player.isReadable(filePath[i])) {
+            if (SAP.PlaybackControlSystem.isReadable(filePath[i])) {
                 validFiles.push(filePath[i])
             }
         }
@@ -91,30 +92,18 @@ function open(filePath, firstElement = "", shuffleChanged = false) {
         if (firstElement.length > 0) {
             SAP.PlayingList.next(firstElement) // Move the list to the selected item.
         }
-        SAP.Player.open(SAP.PlayingList.listFromIndex(), shuffleChanged)
-        SAP.Player.play()
+        SAP.PlaybackControlSystem.open(SAP.PlayingList.listFromIndex(), shuffleChanged)
+        SAP.PlaybackControlSystem.play()
     }
 }
 
-// Time since the last time the previous function was called.
-let lastTime = -1
-
-// Retart the current track or if the user double click, go to the previous track.
 function previous() {
-    let currentTime = new Date().getTime()
-    /*
-    If the last time is equal to -1, this mean that the previous function is called for the first time.
-    If more that 200 ms passed since the last time, seek to the beginning of the track,
-    otherwise, go to the previous track.
-    */
-    if (lastTime == -1 || currentTime - lastTime > 1000) {
+    if (!PreviousTrack.canGoToPrevious()) {
         SAP.Player.seek(0)
-        lastTime = currentTime
     } else if (SAP.PlayingList.hasPrevious()) {
         SAP.PlayingList.previous()
         SAP.Player.open(SAP.PlayingList.listFromIndex())
         SAP.Player.play()
-        lastTime = currentTime
     }
 }
 

@@ -35,7 +35,8 @@ SectionListModel::SectionListModel(QObject* parent) :
     m_data({
         SectionListType("File system", FILE_SYSTEM),
         SectionListType("Albums", ALBUMS),
-        SectionListType("Playlist", PLAYLIST)
+        SectionListType("Playlist", PLAYLIST),
+        SectionListType("Spotify", SPOTIFY)
     })
 {}
 

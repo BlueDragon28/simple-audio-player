@@ -76,6 +76,9 @@ Item {
                 Display the title of the track.
                 If the track doesn't have a title, use the file name.
             */
+
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
+
             let title = TrackTag.title
             let filePath = TrackTag.filePath
 
@@ -93,6 +96,8 @@ Item {
                 Display the name of the album.
                 If there is no album name, use "Unknown" instead.
             */
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
+
             let album = TrackTag.album
             let filePath = TrackTag.filePath
 
@@ -110,6 +115,9 @@ Item {
                 Display the artist name.
                 If there is no artist name, use "Unknown" instead.
             */
+
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
+
             let artist = TrackTag.artist
             let filePath = TrackTag.filePath
 
@@ -126,6 +134,9 @@ Item {
             /*
             Display the album cover (if any).
             */
+
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
+
             let albumName = TrackTag.album
             albumCover.source = "image://coverArt/" + albumName
         }
@@ -134,7 +145,54 @@ Item {
             /*
             Display default image.
             */
+
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SAL) return;
+
             albumCover.source = "image://coverArt/empty"
+        }
+    }
+
+    Connections {
+        target: PlaybackControlSystem
+
+        function onTrackNameChanged() {
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
+
+            if (PlaybackControlSystem.currentStream.length) {
+                trackTitle.text = PlaybackControlSystem.trackName;
+            } else {
+                trackTitle.text = "";
+            }
+        }
+
+        function onTrackArtistsChanged() {
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
+
+            if (PlaybackControlSystem.currentStream.length) {
+                trackArtist.text = PlaybackControlSystem.trackArtists;
+            } else {
+                trackArtist.text = "";
+            }
+        }
+
+        function onTrackAlbumNameChanged() {
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
+
+            if (PlaybackControlSystem.currentStream.length) {
+                trackAlbum.text = PlaybackControlSystem.trackAlbumName;
+            } else {
+                trackAlbum.text = "";
+            }
+        }
+
+        function onTrackAlbumCoverChanged() {
+            if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
+
+            if (PlaybackControlSystem.trackAlbumCover.length) {
+                albumCover.source = PlaybackControlSystem.trackAlbumCover;
+            } else {
+                albumCover.source = "image://coverArt/empty";
+            }
         }
     }
 }

@@ -26,9 +26,22 @@
         <file>qml/PlayListContextMenu.qml</file>
         <file>qml/PlayListContentHeader.qml</file>
         <file>qml/SystemDialog.qml</file>
+        <file>qml/spotify/SpotifyMainView.qml</file>
+        <file>qml/spotify/SpotifyLoginScreen.qml</file>
+        <file>qml/spotify/SpotifyUserProfile.qml</file>
+        <file>qml/spotify/SpotifyUserProfileToolbar.qml</file>
+        <file>qml/spotify/SpotifyUserPlaylist.qml</file>
+        <file>qml/spotify/SpotifyPlaylistView.qml</file>
+        <file>qml/spotify/PreviousNextPlaylist.qml</file>
+        <file>qml/spotify/SpotifyPlaylistDetails.qml</file>
+        <file>qml/spotify/SpotifyPlaylistDetailsToolbar.qml</file>
+        <file>qml/spotify/SpotifyPlaylistDetailsHeader.qml</file>
+        <file>qml/spotify/SpotifyPlaylistDetailsTracks.qml</file>
+        <file>qml/spotify/SpotifyPlaylistTracksHeader.qml</file>
 
         <file>js/simple-audio-library.js</file>
         <file>js/config.js</file>
+        <file>js/previousTrack.js</file>
 
         <file>images/musiqueIcon.png</file>
         <file>images/musiqueIcon.svg</file>
@@ -44,5 +57,6 @@
         <file>images/diskette.png</file>
         <file>images/folder.png</file>
         <file>images/new-document.png</file>
+        <file>images/userProfile.svg</file>
     </qresource>
 </RCC>
