@@ -44,6 +44,8 @@ private:
     void fetchAvailableDevices();
     void handleAvailableDeviceResponse(QNetworkReply* reply);
 
+    QString getDeviceIDQuery(const QMap<QString,QString>& query = {}) const;
+
     static bool _isResponseAnError(const QByteArray& data);
     static bool _isError(const QJsonDocument& jsonDocument);
     static QJsonDocument _parseJSon(const QByteArray& data, bool* isError = nullptr);

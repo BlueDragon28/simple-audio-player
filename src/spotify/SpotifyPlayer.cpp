@@ -53,13 +53,7 @@ void SpotifyPlayer::play(const QVariantMap& playArguments)
     const QString contexUri = vContexUri.toString();
     const int offset = vOffset.toInt();
 
-    QUrlQuery urlQuery;
-    if (!m_deviceID.isEmpty()) 
-    {
-        urlQuery.addQueryItem("device_id", m_deviceID);
-    }
-
-    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play?" + urlQuery.query(QUrl::FullyEncoded)));
+    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play" + getDeviceIDQuery()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QVariantMap jsonOffset;
@@ -121,7 +115,7 @@ void SpotifyPlayer::resume()
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play"));
+    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play" + getDeviceIDQuery()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray(u8"{}"));
@@ -147,7 +141,7 @@ void SpotifyPlayer::pause()
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/pause"));
+    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/pause" + getDeviceIDQuery()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray(u8"{}"));
@@ -173,8 +167,9 @@ void SpotifyPlayer::toggleShuffle(bool shuffleState)
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    const QString fullUrl = m_shuffleStateEndPoint + "?state=" +
-        (shuffleState ? "true" : "false");
+    QMap<QString,QString> query;
+    query["state"] = shuffleState ? "true" : "false";
+    const QString fullUrl = m_shuffleStateEndPoint + getDeviceIDQuery(query);
 
     QNetworkRequest request = QNetworkRequest(QUrl(fullUrl));
     QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray());
@@ -195,7 +190,9 @@ void SpotifyPlayer::seek(long long pos)
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    const QString fullUrl = m_seekEndpoint + "?position_ms=" + QString::number(pos);
+    QMap<QString,QString> query;
+    query["position_ms"] = QString::number(pos);
+    const QString fullUrl = m_seekEndpoint + getDeviceIDQuery(query);
     
     QNetworkRequest request = QNetworkRequest(QUrl(fullUrl));
     QNetworkReply* reply = m_spotifyAccess->put(request, QByteArray());
@@ -219,7 +216,7 @@ void SpotifyPlayer::next()
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    QNetworkRequest request = QNetworkRequest(QUrl(m_nextEndpoint));
+    QNetworkRequest request = QNetworkRequest(QUrl(m_nextEndpoint + getDeviceIDQuery()));
     QNetworkReply* reply = m_spotifyAccess->post(request, QByteArray());
     connect(reply, &QNetworkReply::finished, [reply, this]() {
         this->handleNextResponse(reply);
@@ -241,7 +238,7 @@ void SpotifyPlayer::previous()
 {
     if (!m_spotifyAccess || !m_spotifyAccess->isAuthenticated()) return;
 
-    const QNetworkRequest request = QNetworkRequest(QUrl(m_previousEndpoint));
+    const QNetworkRequest request = QNetworkRequest(QUrl(m_previousEndpoint + getDeviceIDQuery()));
     QNetworkReply* reply = m_spotifyAccess->post(request, QByteArray());
     connect(reply, &QNetworkReply::finished, [reply, this]() {
         this->handlePreviousResponse(reply);
@@ -426,4 +423,20 @@ bool SpotifyPlayer::_isResponseAnError(const QByteArray& data)
     if (isError) return true;
 
     return _isError(jsonDocument);
+}
+
+QString SpotifyPlayer::getDeviceIDQuery(const QMap<QString,QString>& query) const
+{
+    QUrlQuery queryString;
+    if (!m_deviceID.isEmpty())
+    {
+        queryString.addQueryItem("device_id", m_deviceID);
+    }
+
+    for (auto it = query.cbegin(); it != query.cend(); it++) 
+    {
+        queryString.addQueryItem(it.key(), it.value());
+    }
+
+    return "?" + queryString.query(QUrl::FullyEncoded);
 }
