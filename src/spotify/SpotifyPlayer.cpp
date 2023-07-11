@@ -54,7 +54,10 @@ void SpotifyPlayer::play(const QVariantMap& playArguments)
     const int offset = vOffset.toInt();
 
     QUrlQuery urlQuery;
-    urlQuery.addQueryItem("device_id", m_deviceID);
+    if (!m_deviceID.isEmpty()) 
+    {
+        urlQuery.addQueryItem("device_id", m_deviceID);
+    }
 
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/play?" + urlQuery.query(QUrl::FullyEncoded)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
