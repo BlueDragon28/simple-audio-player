@@ -216,6 +216,7 @@ void SpotifyPlaybackStatus::fetchStatus()
 
     QUrlQuery urlQuery;
     urlQuery.addQueryItem("additional_types", "track");
+    urlQuery.addQueryItem("market", m_userInfo->country());
 
     const QNetworkRequest request(_packbackStateEndpointUrl + "?" +
             urlQuery.query(QUrl::FullyEncoded));
