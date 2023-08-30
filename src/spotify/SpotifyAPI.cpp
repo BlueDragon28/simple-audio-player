@@ -243,7 +243,14 @@ void SpotifyAPI::displayPlaylistDetails(const QUrl& playlistHRef)
 {
     if (!playlistHRef.isValid()) return;
 
-    QNetworkRequest request(playlistHRef);
+    QUrlQuery queryValues(playlistHRef);
+    queryValues.addQueryItem("market", m_userInfo->country());
+
+    QString url = 
+        playlistHRef.toString(QUrl::FullyEncoded) + "?" +
+        queryValues.query(QUrl::FullyEncoded);
+
+    QNetworkRequest request((QUrl(url)));
     QNetworkReply* reply = m_spotifyAuth->get(request);
     connect(reply, &QNetworkReply::finished, [reply, this]() {
         this->handlePlaylistDetails(reply);
