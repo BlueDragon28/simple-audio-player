@@ -225,6 +225,18 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInner
         return {};
     };
 
+    if (!trackObject.contains("is_playable")) {
+        qDebug() << "is_playable not available";
+        return callError();
+    }
+
+    const bool isPlayable = trackObject.value("is_playable").toBool(false);
+
+    if (!isPlayable) {
+        qDebug() << "this track is not playable in the current market";
+        return callError();
+    }
+
     if (!trackObject.contains("is_local")) 
     {
         qDebug() << "is_local do not exists";
