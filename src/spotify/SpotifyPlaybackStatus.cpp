@@ -3,6 +3,7 @@
 #include "SpotifyPlayer.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyReceivedPlaylistElement.h"
+#include "SpotifyUserInfo.h"
 #include <chrono>
 #include <cstdint>
 #include <qjsondocument.h>
@@ -17,13 +18,17 @@ const QString SpotifyPlaybackStatus::_packbackStateEndpointUrl =
 
 SpotifyPlaybackStatus::SpotifyPlaybackStatus(
         SpotifyAuthorizationPKCE* spotifyAuth, 
-        SpotifyPlayer* player, QObject* parent) :
+        SpotifyPlayer* player, 
+        SpotifyUserInfo* userInfo,
+        QObject* parent
+) :
 
     QObject(parent),
     m_fetchStatusTimer(new QTimer(this)),
     m_progressTimer(new QTimer(this)),
     m_spotifyAuth(spotifyAuth),
     m_spotifyPlayer(player),
+    m_userInfo(userInfo),
     m_isPlaying(false),
     m_shuffleState(false),
     m_progressMS(0),

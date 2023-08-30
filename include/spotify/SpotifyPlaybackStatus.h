@@ -3,6 +3,7 @@
 
 #include "SpotifyAuthorizationPKCE.h"
 #include "SpotifyPlayer.h"
+#include "SpotifyUserInfo.h"
 #include <cstdint>
 #include <qobject.h>
 #include <qtimer.h>
@@ -29,7 +30,10 @@ class SpotifyPlaybackStatus : public QObject
 
 public:
     SpotifyPlaybackStatus(SpotifyAuthorizationPKCE* spotifyAuth, 
-            SpotifyPlayer* player, QObject* parent = nullptr);
+            SpotifyPlayer* player, 
+            SpotifyUserInfo* userInfo,
+            QObject* parent = nullptr
+        );
     virtual ~SpotifyPlaybackStatus();
 
     QString deviceID() const;
@@ -100,6 +104,7 @@ private:
     QTimer* m_fetchStatusTimer;
     SpotifyAuthorizationPKCE* m_spotifyAuth;
     SpotifyPlayer* m_spotifyPlayer;
+    SpotifyUserInfo* m_userInfo;
 
     QString m_deviceID;
     bool m_isPlaying;
