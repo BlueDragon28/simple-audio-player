@@ -203,6 +203,7 @@ set(HEADERS
     "include/spotify/SpotifyPlayer.h"
     "include/spotify/EventCallback.h"
     "include/spotify/SpotifyPlaybackStatus.h"
+    "include/spotify/CoverCache.h"
     "dependencies/httplib/httplib.h")
 
 set(SOURCES
@@ -242,7 +243,9 @@ set(SOURCES
     "src/spotify/SpotifyReceivedPlaylistElement.cpp"
     "src/spotify/SpotifyPlayer.cpp"
     "src/spotify/EventCallback.cpp"
-    "src/spotify/SpotifyPlaybackStatus.cpp")
+    "src/spotify/SpotifyPlaybackStatus.cpp"
+    "src/spotify/CoverCache.cpp"
+)
 
 set(RESOURCES "simple-audio-player.qrc")
 

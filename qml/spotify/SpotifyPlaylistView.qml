@@ -40,7 +40,7 @@ Item {
 
                 Image {
                     id: cover
-                    source: imageUrl
+                    source: CoverCache.getImage(id, imageUrl)
                     asynchronous: true
                     fillMode: Image.PreserveAspectFit
                     width: parent.width - 20

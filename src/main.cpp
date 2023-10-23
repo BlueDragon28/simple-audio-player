@@ -10,6 +10,7 @@
 #include "SystemMediaControl.h"
 #include "config.h"
 #include "network/NetworkManager.h"
+#include "spotify/CoverCache.h"
 #ifdef WIN32
 #include "windows/ListenMediaKeys.h"
 #endif
@@ -35,6 +36,9 @@ int main(int argc, char** argv)
     // Initialize Network Manager
     NetworkManager::createAccessManager();
 
+    // Initialize cover cache system
+    CoverCache::createInstance();
+
     QQmlApplicationEngine engine;
     engine.addImageProvider("coverArt", new CoverImageProvider());
     engine.addImportPath("qrc:/imports");
@@ -43,6 +47,7 @@ int main(int argc, char** argv)
     if (engine.rootObjects().isEmpty())
     {
         qDebug() << "Failed to create the main window!";
+        CoverCache::destroyInstance();
         return EXIT_FAILURE;
     }
 
@@ -63,6 +68,8 @@ int main(int argc, char** argv)
 
     // Destroy Network Manager
     NetworkManager::destroyAccessManager();
+
+    CoverCache::destroyInstance();
 
     return result;
 }
