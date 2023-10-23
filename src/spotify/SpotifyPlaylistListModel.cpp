@@ -1,4 +1,5 @@
 #include "spotify/SpotifyPlaylistListModel.h"
+#include "CoverCache.h"
 #include "SelectionModel.h"
 #include "SpotifyPlaylistListModel.h"
 #include "SpotifyReceivedPlaylistElement.h"
@@ -6,7 +7,13 @@
 SpotifyPlaylistListModel::SpotifyPlaylistListModel(QObject* parent) :
     SelectionModel(parent),
     m_playlist(nullptr)
-{}
+{
+    connect(
+        CoverCache::instance(),
+        &CoverCache::imageReceived,
+        this,
+        &SpotifyPlaylistListModel::coverImageReceived);
+}
 
 SpotifyPlaylistListModel::~SpotifyPlaylistListModel()
 {}
@@ -237,4 +244,11 @@ void SpotifyPlaylistListModel::parsePlaylistData()
     setItemList(tracksData);
 
     endInsertRows();
+}
+
+void SpotifyPlaylistListModel::coverImageReceived(const QString& id, const QUrl& imagePath)
+{
+    if (id != this->id()) return;
+    m_playlist->m_imageHref = imagePath.toString(QUrl::FullyEncoded);
+    emit imageHrefChanged();
 }

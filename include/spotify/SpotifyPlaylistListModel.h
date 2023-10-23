@@ -61,6 +61,7 @@ private:
     void getAuthorsAndDuration();
     void parsePlaylistData();
     QString parseDuration(uint64_t duration) const;
+    void coverImageReceived(const QString& id, const QUrl& imagePath);
 
     SpotifyReceivedPlaylistElement* m_playlist;
     QString m_authors;

@@ -47,6 +47,8 @@ private:
     static QString retrieveArtistsName(const QJsonArray& artistsArray, bool* error = nullptr);
     static QString retrieveAlbumName(const QJsonObject& albumObject, bool* error = nullptr);
 
+    friend class SpotifyPlaylistListModel;
+
     bool m_failed;
     QString m_name;
     QUrl m_imageHref;
