@@ -15,6 +15,7 @@ public:
     struct Track
     {
         QString album;
+        QString albumID;
         QString artists;
         QString id;
         QString uri;
@@ -45,7 +46,7 @@ private:
     QList<Track> parseTracks(const QJsonObject& tracksJSonArray);
     static Track parseTrack(const QJsonObject& trackObject, bool* error = nullptr);
     static QString retrieveArtistsName(const QJsonArray& artistsArray, bool* error = nullptr);
-    static QString retrieveAlbumName(const QJsonObject& albumObject, bool* error = nullptr);
+    static QList<QString> retrieveAlbumNameAndID(const QJsonObject& albumObject, bool* error = nullptr);
 
     friend class SpotifyPlaylistListModel;
 

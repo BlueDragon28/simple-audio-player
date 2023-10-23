@@ -77,6 +77,11 @@ QString SpotifyPlaybackStatus::albumName() const
     return m_albumName;
 }
 
+QString SpotifyPlaybackStatus::albumID() const
+{
+    return m_albumID;
+}
+
 QString SpotifyPlaybackStatus::artistsNames() const
 {
     return m_artistsNames;
@@ -151,6 +156,13 @@ void SpotifyPlaybackStatus::setAlbumName(const QString& albumName)
     if (albumName == m_albumName) return;
     m_albumName = albumName;
     emit albumNameChanged();
+}
+
+void SpotifyPlaybackStatus::setAlbumID(const QString& id)
+{
+    if (id == m_albumID) return;
+    m_albumID = id;
+    emit albumIDChanged();
 }
 
 void SpotifyPlaybackStatus::setArtistsNames(const QString& artistsNames)
@@ -312,6 +324,7 @@ bool SpotifyPlaybackStatus::parseCurrentTrack(const QJsonObject& rootObject)
     setTrackHref(track.href);
     setTrackUri(track.uri);
     setAlbumName(track.album);
+    setAlbumID(track.albumID);
     setArtistsNames(track.artists);
     setTrackName(track.name);
     setAlbumImage(albumImage);

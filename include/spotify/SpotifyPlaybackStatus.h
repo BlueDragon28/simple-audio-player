@@ -20,6 +20,7 @@ class SpotifyPlaybackStatus : public QObject
     Q_PROPERTY(bool shuffleState READ shuffleState NOTIFY shuffleStateChanged)
 
     Q_PROPERTY(QString albumName READ albumName NOTIFY albumNameChanged)
+    Q_PROPERTY(QString albumID READ albumID NOTIFY albumIDChanged)
     Q_PROPERTY(QString artistsNames READ artistsNames NOTIFY artistsNamesChanged)
     Q_PROPERTY(QString trackID READ trackID NOTIFY trackIDChanged)
     Q_PROPERTY(QString trackUri READ trackUri NOTIFY trackUriChanged)
@@ -43,6 +44,7 @@ public:
     bool shuffleState() const;
 
     QString albumName() const;
+    QString albumID() const;
     QString artistsNames() const;
     QString trackID() const;
     QString trackUri() const;
@@ -61,6 +63,7 @@ signals:
     void shuffleStateChanged();
 
     void albumNameChanged();
+    void albumIDChanged();
     void artistsNamesChanged();
     void trackIDChanged();
     void trackUriChanged();
@@ -75,6 +78,7 @@ private:
     void setShuffleState(bool state);
 
     void setAlbumName(const QString& albumName);
+    void setAlbumID(const QString& id);
     void setArtistsNames(const QString& artistsNames);
     void setTrackID(const QString& trackID);
     void setTrackUri(const QString& trackUri);
@@ -112,6 +116,7 @@ private:
     int64_t m_progressMS;
 
     QString m_albumName;
+    QString m_albumID;
     QString m_artistsNames;
     QString m_trackID;
     QString m_trackUri;

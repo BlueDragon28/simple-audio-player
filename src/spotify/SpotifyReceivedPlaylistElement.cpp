@@ -301,7 +301,7 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInner
     }
 
     bool getAlbumFailed;
-    const QString albumName = retrieveAlbumName(trackObject.value("album").toObject(), &getAlbumFailed);
+    const QList<QString> albumInfo = retrieveAlbumNameAndID(trackObject.value("album").toObject(), &getAlbumFailed);
 
     if (getAlbumFailed)
     {
@@ -310,7 +310,8 @@ SpotifyReceivedPlaylistElement::Track SpotifyReceivedPlaylistElement::parseInner
     }
 
     Track track;
-    track.album = albumName;
+    track.album = albumInfo.at(0);
+    track.albumID = albumInfo.at(1);
     track.artists = artistsName;
     track.id = id;
     track.uri = uri;
@@ -370,11 +371,11 @@ QString SpotifyReceivedPlaylistElement::retrieveArtistsName(const QJsonArray& ar
     return artistsName;
 }
 
-QString SpotifyReceivedPlaylistElement::retrieveAlbumName(const QJsonObject& albumObject, bool* error)
+QList<QString> SpotifyReceivedPlaylistElement::retrieveAlbumNameAndID(const QJsonObject& albumObject, bool* error)
 {
-    const auto callError = [error]() -> QString {
+    const auto callError = [error]() -> QList<QString> {
         if (error) *error = true;
-        return QString();
+        return {QString(), QString()};
     };
 
     if (albumObject.isEmpty() || !albumObject.contains("name"))
@@ -389,6 +390,12 @@ QString SpotifyReceivedPlaylistElement::retrieveAlbumName(const QJsonObject& alb
         return callError();
     }
 
+    const QString albumID = albumObject.value("id").toString();
+
+    if (albumID.isEmpty()) {
+        return callError();
+    }
+
     if (error) *error = false;
-    return albumName;
+    return {albumName, albumID};
 }
