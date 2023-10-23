@@ -5,8 +5,13 @@
 #include <qdir.h>
 #include <qimage.h>
 #include <qjsengine.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
+#include <qjsonvalue.h>
 #include <qnetworkreply.h>
 #include <qstandardpaths.h>
+#include <qsavefile.h>
 
 CoverCache* CoverCache::_instance = nullptr;
 QJSEngine* CoverCache::_jsEngine = nullptr;
@@ -15,7 +20,11 @@ QString CoverCache::_imagesJsonPath = "coversPath.json";
 
 CoverCache::CoverCache() :
     m_appDataPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
-{}
+{
+    makeSureAppLocationIsCreated(m_appDataPath);
+    makeSureAppLocationIsCreated(m_appDataPath + "/" + _imagesDirectory);
+    loadCoversConfigFile();
+}
 CoverCache::~CoverCache() {}
 
 void CoverCache::createInstance() {
@@ -25,6 +34,7 @@ void CoverCache::createInstance() {
 
 void CoverCache::destroyInstance() {
     if (!_instance) return;
+    _instance->saveCoversConfigFile();
     delete _instance;
     _instance = nullptr;
 }
@@ -60,7 +70,6 @@ QUrl CoverCache::getImage(const QString& id, const QUrl& imageURL) {
 
 std::optional<QString> CoverCache::getImagePathFromCache(const QString& id) {
     Q_ASSERT(m_appDataPath.size() > 0);
-    makeSureAppLocationIsCreated(m_appDataPath);
 
     for (const auto& cover : m_allCoversInfo) {
         if (id != cover.id) continue;
@@ -84,11 +93,11 @@ void CoverCache::handleImageResponse(QNetworkReply* reply, const QString& id) {
     QByteArray data = reply->readAll();
     reply->deleteLater();
 
-    makeSureAppLocationIsCreated(m_appDataPath + "/" + _imagesDirectory);
-
     auto image = QImage::fromData(data);
     if (!image.isNull()) {
-        image.save(m_appDataPath + "/" + _imagesDirectory + "/" + id + ".jpg", "jpg");
+        bool result = image.save(m_appDataPath + "/" + _imagesDirectory + "/" + id + ".jpg", "jpg");
+        if (!result) return;
+
         CoverStruct coverStruct = {
             .id = id,
             .name = id + ".jpg",
@@ -102,4 +111,68 @@ void CoverCache::makeSureAppLocationIsCreated(const QString path) {
     if (!dir.exists()) {
         dir.mkpath(".");
     }
+}
+
+void CoverCache::loadCoversConfigFile() {
+    const QString configPath = m_appDataPath + "/" + _imagesJsonPath;
+
+    QFile file(configPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    const QByteArray data = file.readAll();
+    QJsonParseError jsonError;
+    const QJsonDocument jsonDocument = QJsonDocument::fromJson(data, &jsonError);
+
+    if (jsonError.error != QJsonParseError::NoError || !jsonDocument.isArray()) {
+        return;
+    }
+
+    QList<CoverStruct> covers;
+
+    for (const QJsonValue value : jsonDocument.array()) {
+        if (!value.isObject()) return;
+
+        const QJsonObject coverObject = value.toObject();
+
+        if (
+            !coverObject.contains("id") ||
+            !coverObject.contains("name")
+        ) {
+            return;
+        }
+
+        covers.append(CoverStruct{
+            .id = coverObject.value("id").toString(),
+            .name = coverObject.value("name").toString()
+        });
+    }
+
+    m_allCoversInfo = covers;
+}
+
+void CoverCache::saveCoversConfigFile() {
+    const QString configPath = m_appDataPath + "/" + _imagesJsonPath;
+
+    QJsonArray jsonArray;
+    for (const auto& cover : m_allCoversInfo) {
+        QJsonObject jsonObject = {
+            {"id", cover.id},
+            {"name", cover.name},
+        };
+        jsonArray.append(jsonObject);
+    }
+
+
+    const QByteArray data = 
+        QJsonDocument(jsonArray).toJson(QJsonDocument::Indented);
+
+    QSaveFile file(configPath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+
+    file.write(data);
+    file.commit();
 }

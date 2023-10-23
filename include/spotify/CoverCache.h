@@ -13,8 +13,8 @@ class CoverCache : public QObject {
     QML_ELEMENT
     QML_SINGLETON
 
-public:
     CoverCache();
+public:
     ~CoverCache();
 
     struct CoverStruct {
@@ -34,6 +34,9 @@ private:
     std::optional<QString> getImagePathFromCache(const QString& id);
     void retrieveImageFromEndpoint(const QString& id, const QUrl& imageURL);
     void handleImageResponse(QNetworkReply* reply, const QString& id);
+
+    void loadCoversConfigFile();
+    void saveCoversConfigFile();
 
     QList<CoverStruct> m_allCoversInfo;
     QString m_appDataPath;
