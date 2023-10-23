@@ -32,6 +32,7 @@ class PlaybackControlSystem : public QObject
     Q_PROPERTY(QString trackArtists READ spotifyTrackArtists NOTIFY spotifyTrackArtistsChanged)
     Q_PROPERTY(QString trackAlbumName READ spotifyTrackAlbumName NOTIFY spotifyTrackAlbumNameChanged)
     Q_PROPERTY(QString trackAlbumCover READ spotifyAlbumCover NOTIFY spotifyAlbumCoverChanged)
+    Q_PROPERTY(QString trackAlbumID READ spotifyAlbumID NOTIFY spotifyAlbumIDChanged)
 
 public:
     enum class StreamBackend
@@ -65,6 +66,7 @@ public:
     QString spotifyTrackArtists() const;
     QString spotifyTrackAlbumName() const;
     QString spotifyAlbumCover() const;
+    QString spotifyAlbumID() const;
 
 public slots:
     void setSalPlayer(Player* player);
@@ -106,6 +108,7 @@ signals:
     void spotifyTrackArtistsChanged();
     void spotifyTrackAlbumNameChanged();
     void spotifyAlbumCoverChanged();
+    void spotifyAlbumIDChanged();
 
 private:
     void setIsRunning(bool isRunning);
@@ -124,6 +127,7 @@ private:
     void setSpotifyTrackArtists(const QString& trackArtists);
     void setSpotifyTrackAlbumName(const QString& trackAlbum);
     void setSpotifyAlbumCover(const QString& albumCover);
+    void setSpotifyAlbumID(const QString& albumID);
 
     void setSignalsOfSalPlayer();
     void setSignalsOfSpotifyAPI();
@@ -142,9 +146,12 @@ private:
     void handleSpotifyTrackProgressChange();
     void handleSpotifyTrackNameChange();
     void handleSpotifyTrackAlbumChange();
+    void handleSpotifyTrackAlbumIDChange();
     void handleSpotifyTrackArtistsChange();
     void handleSpotifyTrackAlbumCoverChange();
     void handleSpotifyShuffleStateChange();
+
+    void handleSpotifyCoverImageReceived(const QString& id, const QUrl& imagePath);
 
     void handleSpotifyIsPlayingStatusChange();
     void spotifyIsBeingUsed();
@@ -175,6 +182,7 @@ private:
     QString m_spotifyTrackArtists;
     QString m_spotifyTrackAlbumName;
     QString m_spotifyTrackAlbumCover;
+    QString m_spotifyAlbumID;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYBACK_CONTROL_SYSTEM_H_

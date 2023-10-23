@@ -189,7 +189,10 @@ Item {
             if (PlaybackControlSystem.currentBackend !== PlaybackControlSystem.SPOTIFY) return;
 
             if (PlaybackControlSystem.trackAlbumCover.length) {
-                albumCover.source = PlaybackControlSystem.trackAlbumCover;
+                albumCover.source = CoverCache.getImage(
+                    PlaybackControlSystem.trackAlbumID,
+                    PlaybackControlSystem.trackAlbumCover
+                );
             } else {
                 albumCover.source = "image://coverArt/empty";
             }

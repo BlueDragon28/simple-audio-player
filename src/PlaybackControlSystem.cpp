@@ -1,3 +1,4 @@
+#include "CoverCache.h"
 #include "SpotifyAPI.h"
 #include "SpotifyPlayer.h"
 #include <PlaybackControlSystem.h>
@@ -21,7 +22,14 @@ PlaybackControlSystem::PlaybackControlSystem() :
     m_streamPos(0),
     m_streamPosSeconds(0),
     m_streamPosUpdatingBuffer(0)
-{}
+{
+    connect(
+        CoverCache::instance(),
+        &CoverCache::imageReceived,
+        this,
+        &PlaybackControlSystem::handleSpotifyCoverImageReceived
+    );
+}
 
 PlaybackControlSystem::~PlaybackControlSystem()
 {}
@@ -99,6 +107,11 @@ QString PlaybackControlSystem::spotifyTrackArtists() const
 QString PlaybackControlSystem::spotifyTrackAlbumName() const
 {
     return m_spotifyTrackAlbumName;
+}
+
+QString PlaybackControlSystem::spotifyAlbumID() const
+{
+    return m_spotifyAlbumID;
 }
 
 QString PlaybackControlSystem::spotifyAlbumCover() const
@@ -243,6 +256,14 @@ void PlaybackControlSystem::setSpotifyTrackAlbumName(const QString& albumName)
     emit spotifyTrackAlbumNameChanged();
 }
 
+void PlaybackControlSystem::setSpotifyAlbumID(const QString& id)
+{
+    if (id == m_spotifyAlbumID) return;
+
+    m_spotifyAlbumID = id;
+    emit spotifyAlbumIDChanged();
+}
+
 void PlaybackControlSystem::setSpotifyAlbumCover(const QString& albumCoverPath)
 {
     if (albumCoverPath == m_spotifyTrackAlbumCover) return;
@@ -281,6 +302,7 @@ void PlaybackControlSystem::setSignalsOfSpotifyAPI()
     connect(playbackStatus, &SpotifyPlaybackStatus::trackNameChanged, this, &PlaybackControlSystem::handleSpotifyTrackNameChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::artistsNamesChanged, this, &PlaybackControlSystem::handleSpotifyTrackArtistsChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::albumNameChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumChange);
+    connect(playbackStatus, &SpotifyPlaybackStatus::albumIDChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumIDChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::albumImageChanged, this, &PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange);
     connect(playbackStatus, &SpotifyPlaybackStatus::shuffleStateChanged, this, &PlaybackControlSystem::handleSpotifyShuffleStateChange);
 }
@@ -450,6 +472,14 @@ void PlaybackControlSystem::handleSpotifyTrackAlbumChange()
     setSpotifyTrackAlbumName(albumName);
 }
 
+void PlaybackControlSystem::handleSpotifyTrackAlbumIDChange()
+{
+    if (!isSpotify()) return;
+
+    const QString albumID = m_spotifyAPI->playbackStatus()->albumID();
+    setSpotifyAlbumID(albumID);
+}
+
 void PlaybackControlSystem::handleSpotifyTrackAlbumCoverChange()
 {
     if (!isSpotify()) return;
@@ -464,6 +494,14 @@ void PlaybackControlSystem::handleSpotifyShuffleStateChange()
 
     const bool shuffleState = m_spotifyAPI->playbackStatus()->shuffleState();
     setIsShuffled(shuffleState);
+}
+
+void PlaybackControlSystem::handleSpotifyCoverImageReceived(const QString& id, const QUrl& imagePath)
+{
+    if (!isSpotify()) return;
+
+    if (id != m_spotifyAlbumID) return;
+    setSpotifyAlbumCover(imagePath.toString(QUrl::FullyEncoded));
 }
 
 bool PlaybackControlSystem::isReadable(const QString& filePath) const
