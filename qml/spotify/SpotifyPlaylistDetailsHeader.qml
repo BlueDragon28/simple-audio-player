@@ -12,6 +12,7 @@ Rectangle {
     property string name
     property string authors
     property string duration
+    property string playlistID
 
     function concartAuthorsAndDuration(authors, duration) {
         const displayedAuthors = 
@@ -34,7 +35,7 @@ Rectangle {
             sourceSize.width: Layout.preferredWidth
             sourceSize.height: Layout.preferredHeight
             source: href.toString().length > 0 ? 
-                href :
+                CoverCache.getImage(playlistID, href) :
                 "qrc:///images/musiqueIcon.png"
             smooth: true
             mipmap: true

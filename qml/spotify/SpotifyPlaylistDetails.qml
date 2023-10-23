@@ -54,6 +54,10 @@ Item {
                     onDurationChanged: {
                         playlistHeader.duration = duration;
                     }
+
+                    onIdChanged: {
+                        playlistHeader.playlistID = id;
+                    }
                 }
             }
         }
