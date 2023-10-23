@@ -51,6 +51,7 @@ protected:
 
 private:
     void retrievePlaylists();
+    void coverImageReceived(const QString& id, const QUrl& imagePath);
 
     SpotifyPlaylist* m_playlistApiInfo;
     QList<QVariant> m_items;

@@ -65,7 +65,7 @@ QUrl CoverCache::getImage(const QString& id, const QUrl& imageURL) {
     }
     retrieveImageFromEndpoint(id, imageURL);
 
-    return imageURL;
+    return QUrl();
 }
 
 std::optional<QString> CoverCache::getImagePathFromCache(const QString& id) {
@@ -95,7 +95,8 @@ void CoverCache::handleImageResponse(QNetworkReply* reply, const QString& id) {
 
     auto image = QImage::fromData(data);
     if (!image.isNull()) {
-        bool result = image.save(m_appDataPath + "/" + _imagesDirectory + "/" + id + ".jpg", "jpg");
+        const QString imagePath = m_appDataPath + "/" + _imagesDirectory + "/" + id + ".jpg";
+        bool result = image.save(imagePath, "jpg");
         if (!result) return;
 
         CoverStruct coverStruct = {
@@ -103,6 +104,7 @@ void CoverCache::handleImageResponse(QNetworkReply* reply, const QString& id) {
             .name = id + ".jpg",
         };
         m_allCoversInfo.append(coverStruct);
+        emit imageReceived(id, QUrl::fromLocalFile(imagePath));
     }
 }
 

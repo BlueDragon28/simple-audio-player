@@ -27,6 +27,9 @@ public:
     static CoverCache* create(QQmlEngine* qmlEngine, QJSEngine* jsEngine);
     static CoverCache* instance();
 
+signals:
+    void imageReceived(const QString& id, const QUrl& path);
+
 public slots:
     QUrl getImage(const QString& id, const QUrl& imageURL);
 

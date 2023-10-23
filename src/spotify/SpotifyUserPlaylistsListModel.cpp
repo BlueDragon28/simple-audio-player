@@ -1,13 +1,21 @@
 #include "SpotifyUserPlaylistsListModel.h"
+#include "CoverCache.h"
 #include "SpotifyPlaylist.h"
 #include "SpotifyPlaylistItem.h"
+#include <cstdint>
 #include <qabstractitemmodel.h>
 #include <qvariant.h>
 
 SpotifyUserPlaylistsListModel::SpotifyUserPlaylistsListModel(QObject* parent) :
     QAbstractListModel(parent),
     m_playlistApiInfo(nullptr)
-{}
+{
+    connect(
+        CoverCache::instance(), 
+        &CoverCache::imageReceived,
+        this,
+        &SpotifyUserPlaylistsListModel::coverImageReceived);
+}
 
 SpotifyUserPlaylistsListModel::~SpotifyUserPlaylistsListModel()
 {}
@@ -125,4 +133,23 @@ QVariantMap SpotifyUserPlaylistsListModel::get(int i) const
         map[cit.value()] = index.data(cit.key());
     }
     return map;
+}
+
+void SpotifyUserPlaylistsListModel::coverImageReceived(const QString& id, const QUrl& imagePath) {
+    if (m_items.isEmpty()) return;
+
+    for (size_t i = 0; i < m_items.size(); i++) {
+
+        if (!m_items.at(i).canConvert<PlaylistItem>() || !m_items[i].convert(QMetaType::fromType<PlaylistItem>())) {
+            continue;
+        }
+
+        PlaylistItem item = qvariant_cast<PlaylistItem>(m_items.at(i));
+        if (item.id != id) continue;
+
+        item.imageUrl = imagePath;
+        m_items[i] = QVariant::fromValue(item);
+        emit dataChanged(index(i), index(i), { IMAGE_URL });
+        break;
+    }
 }
