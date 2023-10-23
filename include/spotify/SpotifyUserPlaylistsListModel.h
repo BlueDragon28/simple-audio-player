@@ -20,7 +20,8 @@ public:
     {
         TITLE = Qt::UserRole+1,
         IMAGE_URL,
-        HREF
+        HREF,
+        ID,
     };
 
     SpotifyUserPlaylistsListModel(QObject* parent = nullptr);
@@ -45,6 +46,7 @@ protected:
         QString title;
         QUrl imageUrl;
         QUrl href;
+        QString id;
     };
 
 private:
