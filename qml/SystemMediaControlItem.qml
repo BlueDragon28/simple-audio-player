@@ -3,6 +3,7 @@ import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
 import SimpleAudioPlayer 1.0
 import "qrc:///js/simple-audio-library.js" as SAL
+import "qrc:///js/previousTrack.js" as PreviousTrack
 
 /*
 A simple item to interface with the SystemMediaControl C++ interface.
@@ -104,17 +105,33 @@ Item {
 
         // When the System Media Control ask to PlayPause.
         function onPlayPause() {
-            SAL.playPause();
+            if (PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL) {
+                SAL.playPause();
+            } else {
+                PlaybackControlSystem.playPause();
+            }
         }
 
         // Restart or going to the previous track.
         function onPrevious() {
-            SAL.previous();
+            if (PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL) {
+                SAL.previous();
+            } else {
+                if (PreviousTrack.canGoToPrevious()) {
+                    PlaybackControlSystem.previous();
+                } else {
+                    PlaybackControlSystem.seek(0);
+                }
+            }
         }
 
         // Going to the next track.
         function onNext() {
-            SAL.next();
+            if (PlaybackControlSystem.currentBackend === PlaybackControlSystem.SAL) {
+                SAL.next();
+            } else {
+                PlaybackControlSystem.next();
+            }
         }
     }
 }
