@@ -8,6 +8,8 @@ Rectangle {
     id: root
     color: palette.base
 
+    property bool isRestored: false
+
     states: [
         State {
             name: ""
@@ -62,8 +64,12 @@ Rectangle {
         }
     }
 
-    Component.onCompleted: function() {
-        // Try to restore credential if available
-        SpotifyAPI.restoreCredential();
+    onVisibleChanged: {
+        if (visible && !isRestored) {
+            console.log("Restoring credentials");
+            // Try to restore credential if available
+            SpotifyAPI.restoreCredential();
+            isRestored = true;
+        }
     }
 }
