@@ -55,7 +55,7 @@ signals:
     void requestToken();
     void authenticated();
     void refreshTokenReceived();
-    void errorThrown();
+    void errorThrown(const QString& errorMessage = "Something went wrong while connecting to Spotify. Try again!");
 
 private:
     enum class HttpVerb

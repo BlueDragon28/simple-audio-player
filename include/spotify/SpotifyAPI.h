@@ -36,7 +36,7 @@ public:
     SpotifyPlaybackStatus* playbackStatus();
 
 signals:
-    void error();
+    void error(const QString& errorMessage = "Something went wrong while connecting to Spotify. Try again!");
     void authenticated();
     void loggedout();
 

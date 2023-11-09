@@ -63,13 +63,16 @@ Item {
 
     MessageDialog {
         id: errorDialog
-        text: "Something went wrong while connecting to Spotify. Try again!"
+        property string errorMessage: ""
+        text: "Something Went Wrong!"
+        informativeText: errorMessage
     }
 
     Connections {
         target: SpotifyAPI
 
-        function onError() {
+        function onError(errorMessage) {
+            errorDialog.errorMessage = errorMessage;
             errorDialog.open()
         }
     }

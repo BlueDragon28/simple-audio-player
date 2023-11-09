@@ -25,7 +25,7 @@ SpotifyAPI::SpotifyAPI() :
     m_playbackStatus(new SpotifyPlaybackStatus(m_spotifyAuth, m_spotifyPlayer, m_userInfo, this))
 {
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::errorThrown, this, &SpotifyAPI::error);
-    connect(m_userPlaylist, &SpotifyPlaylist::error, this, &SpotifyAPI::error);
+    connect(m_userPlaylist, &SpotifyPlaylist::error, [this](){ emit this->error(); });
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, this, &SpotifyAPI::authenticated);
     connect(m_spotifyAuth, &SpotifyAuthorizationPKCE::authenticated, [this](){m_firstTokenRefresh = false;});
 
