@@ -308,7 +308,10 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
     if (jsonError.error != QJsonParseError::NoError)
     {
         m_isAuthenticated = false;
-        emit errorThrown();
+        emit errorThrown(
+            QString("An error occured while refreshing the token:\n %1")
+                .arg(JSONDocument.toJson())
+        );
         return;
     }
 
@@ -316,8 +319,10 @@ void SpotifyAuthorizationPKCE::refreshTokenReceivedHandler(QNetworkReply* networ
 
     if (!rootObject.contains("access_token"))
     {
-        qDebug() << "Invalid refresh token!";
-        emit errorThrown();
+        emit errorThrown(
+            QString("access_token field is not available in refresh token response:\n %1")
+                .arg(JSONDocument.toJson())
+        );
         return;
     }
 
