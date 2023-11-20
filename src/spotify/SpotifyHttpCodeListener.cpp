@@ -56,7 +56,7 @@ bool SpotifyHttpCodeListener::listen(int port)
         m_localServer->listen_after_bind();
     });
 
-        return result;
+    return result;
 }
 
 void SpotifyHttpCodeListener::codeRouteRequest(const QString& code, const QString& state)
