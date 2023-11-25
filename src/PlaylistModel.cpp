@@ -537,6 +537,8 @@ void PlaylistModel::moveSelectedDown() {
             ARTISTS
         }
     );
+
+    m_isModified = true;
 }
 
 void PlaylistModel::moveSelectedUp() {
@@ -582,4 +584,6 @@ void PlaylistModel::moveSelectedUp() {
             ARTISTS,
         }
     );
+
+    m_isModified = true;
 }
