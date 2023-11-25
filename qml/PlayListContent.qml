@@ -37,6 +37,14 @@ Item {
     function newPlaylist() {
         playlistContentModel.newPlaylist();
     }
+    
+    function moveSelectionDown() {
+        playlistContentModel.moveSelectedDown();
+    }
+    
+    function moveSelectionUp() {
+        playlistContentModel.moveSelectedUp();
+    }
 
     PlayListContextMenu {
         id: contextMenu

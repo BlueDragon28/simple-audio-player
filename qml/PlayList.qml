@@ -122,6 +122,24 @@ Item {
                     icon.color: palette.buttonText
                     onClicked: root.openPlaylist()
                 }
+
+                Button {
+                    width: height
+                    height: parent.height
+                    icon.source: "qrc:///images/down.png"
+                    icon.width: topBar.height
+                    icon.color: palette.buttonText
+                    onClicked: playListContent.moveSelectionDown()
+                }
+
+                Button {
+                    width: height
+                    height: parent.height
+                    icon.source: "qrc:///images/up.png"
+                    icon.width: topBar.height
+                    icon.color: palette.buttonText
+                    onClicked: playListContent.moveSelectionUp()
+                }
             }
         }
 
