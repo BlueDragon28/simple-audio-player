@@ -2,6 +2,7 @@
 #include "SelectionModel.h"
 #include "AppConfig.h"
 #include "TrackTag.h"
+#include <algorithm>
 #include <qabstractitemmodel.h>
 #include <qfileinfo.h>
 #include <qjsonarray.h>
@@ -491,4 +492,94 @@ void PlaylistModel::setIsModified(bool value)
     m_isModified = value;
     emit isModifiedChanged();
     emit playlistTitleChanged();
+}
+
+void PlaylistModel::moveSelectedDown() {
+    // Get selected indices and sort them.
+    QList<int> selectedIndices = this->selectedIndices();
+    std::sort(
+        selectedIndices.begin(), 
+        selectedIndices.end(), 
+        [](const int nb1, const int nb2) -> int {
+            return nb1 < nb2;
+        }
+    );
+
+    clearSelection();
+
+    int minIndex = rowCount()-1;
+    int maxIndex = 0;
+
+    // Move index down, if it didn't work, discard it.
+    for (int i = selectedIndices.length()-1; i >= 0; i--) {
+        bool result = moveItemDown(selectedIndices.at(i));
+        if (result) {
+            selectedIndices[i] = selectedIndices[i]+1;
+
+            if (selectedIndices[i] < minIndex) minIndex = selectedIndices[i];
+            if (selectedIndices[i] > maxIndex) maxIndex = selectedIndices[i];
+        } else {
+            selectedIndices.removeAt(i);
+        }
+    }
+
+    // Apply selection to moved items
+    setSelections(selectedIndices);
+
+    // Notify views of the changes.
+    emit dataChanged(
+        index(std::max(0, minIndex-1)), 
+        index(std::min(maxIndex, rowCount()-1)),
+        {
+            IS_SELECTED,
+            FILEPATH,
+            NAME,
+            ARTISTS
+        }
+    );
+}
+
+void PlaylistModel::moveSelectedUp() {
+    // Get selected indices and sort them.
+    QList<int> selectedIndices = this->selectedIndices();
+    std::sort(
+        selectedIndices.begin(),
+        selectedIndices.end(),
+        [](const int nb1, const int nb2) -> int {
+            return nb1 > nb2;
+        }
+    );
+
+    clearSelection();
+
+    int minIndex = rowCount()-1;
+    int maxIndex = 0;
+
+    // Move index up, if it didn't work, discard it.
+    for (int i = selectedIndices.length()-1; i >= 0; i--) {
+        bool result = moveItemUp(selectedIndices.at(i));
+        if (result) {
+            selectedIndices[i] = selectedIndices[i]-1;
+
+            if (selectedIndices[i] < minIndex) minIndex = selectedIndices[i];
+            if (selectedIndices[i] > maxIndex) maxIndex = selectedIndices[i];
+        } else {
+            selectedIndices.removeAt(i);
+        }
+    }
+
+    // Apply selection to moved items
+    setSelections(selectedIndices);
+
+    // Notify views of the changes.
+    emit dataChanged(
+        index(0),//index(std::max(0, minIndex)), 
+        index(rowCount()-1),//index(std::min(maxIndex+1, rowCount()-1)),
+        {
+            IS_SELECTED,
+            FILEPATH,
+            NAME,
+            ARTISTS,
+        }
+    );
 }

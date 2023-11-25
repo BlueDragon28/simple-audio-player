@@ -81,6 +81,16 @@ void SelectionModel::clearSelection()
     emit dataChanged(index(0), index(m_listData.size()-1));
 }
 
+void SelectionModel::setSelections(const QList<int>& indices) {
+    for (int index : indices) {
+        if (index < 0 || index > rowCount()-1) continue;
+
+        m_listData[index].isSelected = true;
+    }
+
+    m_selectionOrder = indices;
+}
+
 void SelectionModel::selectAtIndex(int index)
 {
     // Check if the index is valid.
@@ -260,4 +270,31 @@ void SelectionModel::removeSelectedItems()
     }
 
     clearSelection();
+}
+
+bool SelectionModel::moveItemDown(int index) {
+    // Check if index is out of range or at the last place.
+    // If it is at the last index, it will go beyond scope.
+    if (index < 0 || index >= rowCount()-1) {
+        return false;
+    }
+
+    const auto temporaryItem = m_listData.at(index);
+    m_listData[index] = m_listData.at(index+1);
+    m_listData[index+1] = temporaryItem;
+
+    return true;
+}
+
+bool SelectionModel::moveItemUp(int index) {
+    // Check if index is out of range or at the first place.
+    // If it is at the first place, it will go beyond scope.
+    if (index <= 0 || index > rowCount()-1) {
+        return false;
+    }
+
+    const auto temporaryItem = m_listData.at(index);
+    m_listData[index] = m_listData.at(index-1);
+    m_listData[index-1] = temporaryItem;
+    return true;
 }

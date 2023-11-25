@@ -74,6 +74,16 @@ public slots:
     */
     void retrieveLastOpenedFile();
 
+    /*
+    Move selected elements down the list.
+    */
+    void moveSelectedDown();
+
+    /*
+    Move selected elements up the list.
+    */
+    void moveSelectedUp();
+
 signals:
     void playlistTitleChanged();
     void filePathChanged();

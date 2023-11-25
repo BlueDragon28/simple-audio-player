@@ -39,6 +39,11 @@ public:
     Q_INVOKABLE void clearSelection();
 
     /*
+    Set selection manually.
+    */
+    Q_INVOKABLE void setSelections(const QList<int>& indices);
+
+    /*
     Select an item and clear all other selection.
     */
     Q_INVOKABLE void selectAtIndex(int index);
@@ -87,6 +92,9 @@ public:
     Remove selected items from the list.
     */
     Q_INVOKABLE void removeSelectedItems();
+
+    bool moveItemDown(int index);
+    bool moveItemUp(int index);
 
 protected:
     /*
