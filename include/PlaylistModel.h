@@ -120,7 +120,6 @@ private:
     QString m_filePath;
     bool m_isFromFile;
     bool m_isModified;
-    bool m_isModifed;
 };
 
 #endif // SIMPLEAUDIOPLAYER_PLAYLISTMODEL_H_
